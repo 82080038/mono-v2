@@ -11,7 +11,7 @@ class Config {
     const DB_USER = 'root';
     const DB_PASS = 'root';
     const DB_CHARSET = 'utf8mb4';
-    const DB_SOCKET = '/opt/lampp/var/mysql/mysql.sock';
+    const DB_SOCKET = '/run/mysqld/mysqld.sock';
     
     // Application Configuration
     const APP_NAME = 'KSP Lam Gabe Jaya';

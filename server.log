@@ -1,0 +1,103 @@
+[Thu Mar 19 19:58:25 2026] PHP 8.1.2-1ubuntu2.23 Development Server (http://localhost:8000) started
+[Thu Mar 19 19:58:32 2026] [::1]:42558 Accepted
+[Thu Mar 19 19:58:32 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 19:58:32 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 19:58:32 2026] [::1]:42558 [302]: GET /
+[Thu Mar 19 19:58:32 2026] [::1]:42558 Closing
+[Thu Mar 19 19:58:37 2026] [::1]:42566 Accepted
+[Thu Mar 19 19:58:37 2026] [::1]:42566 [200]: GET /index.html
+[Thu Mar 19 19:58:37 2026] [::1]:42566 Closing
+[Thu Mar 19 19:58:39 2026] [::1]:42572 Accepted
+[Thu Mar 19 19:58:39 2026] [::1]:42572 [200]: GET /login.html
+[Thu Mar 19 19:58:39 2026] [::1]:42572 Closing
+[Thu Mar 19 19:58:43 2026] [::1]:45670 Accepted
+[Thu Mar 19 19:58:43 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 19:58:43 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 19:58:43 2026] [::1]:45670 [400]: POST /api/auth.php
+[Thu Mar 19 19:58:43 2026] [::1]:45670 Closing
+[Thu Mar 19 19:58:45 2026] [::1]:45682 Accepted
+[Thu Mar 19 19:58:45 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 19:58:45 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 19:58:45 2026] [::1]:45682 [200]: POST /api/auth.php
+[Thu Mar 19 19:58:45 2026] [::1]:45682 Closing
+[Thu Mar 19 19:58:59 2026] [::1]:34042 Accepted
+[Thu Mar 19 19:58:59 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 19:58:59 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 19:58:59 2026] [::1]:34042 [401]: POST /api/auth.php
+[Thu Mar 19 19:58:59 2026] [::1]:34042 Closing
+[Thu Mar 19 19:59:29 2026] [::1]:44848 Accepted
+[Thu Mar 19 19:59:29 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 19:59:29 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 19:59:29 2026] [::1]:44848 [401]: POST /api/auth.php
+[Thu Mar 19 19:59:29 2026] [::1]:44848 Closing
+[Thu Mar 19 19:59:37 2026] [::1]:35022 Accepted
+[Thu Mar 19 19:59:37 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 19:59:37 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 19:59:37 2026] [::1]:35022 [401]: POST /api/auth.php
+[Thu Mar 19 19:59:37 2026] [::1]:35022 Closing
+[Thu Mar 19 19:59:49 2026] [::1]:60756 Accepted
+[Thu Mar 19 19:59:49 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 19:59:49 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 19:59:49 2026] [::1]:60756 [401]: POST /api/auth.php
+[Thu Mar 19 19:59:49 2026] [::1]:60756 Closing
+[Thu Mar 19 20:00:03 2026] [::1]:37712 Accepted
+[Thu Mar 19 20:00:03 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 20:00:03 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 20:00:03 2026] PHP Warning:  Undefined array key "status" in /var/www/html/mono-v2/api/auth.php on line 149
+[Thu Mar 19 20:00:03 2026] [::1]:37712 [403]: POST /api/auth.php
+[Thu Mar 19 20:00:03 2026] [::1]:37712 Closing
+[Thu Mar 19 20:00:12 2026] [::1]:52012 Accepted
+[Thu Mar 19 20:00:12 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 20:00:12 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 20:00:12 2026] PHP Warning:  Undefined array key "status" in /var/www/html/mono-v2/api/auth.php on line 149
+[Thu Mar 19 20:00:12 2026] [::1]:52012 [403]: POST /api/auth.php
+[Thu Mar 19 20:00:12 2026] [::1]:52012 Closing
+[Thu Mar 19 20:00:18 2026] [::1]:52028 Accepted
+[Thu Mar 19 20:00:18 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 20:00:18 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 20:00:18 2026] PHP Warning:  Undefined array key "name" in /var/www/html/mono-v2/api/auth.php on line 653
+[Thu Mar 19 20:00:18 2026] PHP Warning:  Undefined array key "name" in /var/www/html/mono-v2/api/auth.php on line 169
+[Thu Mar 19 20:00:18 2026] [::1]:52028 [200]: POST /api/auth.php
+[Thu Mar 19 20:00:18 2026] [::1]:52028 Closing
+[Thu Mar 19 20:00:24 2026] [::1]:38584 Accepted
+[Thu Mar 19 20:00:24 2026] [::1]:38584 [200]: GET /pages/admin/dashboard.html
+[Thu Mar 19 20:00:24 2026] [::1]:38584 Closing
+[Thu Mar 19 20:00:26 2026] [::1]:38594 Accepted
+[Thu Mar 19 20:00:26 2026] [::1]:38594 [200]: GET /pages/staff/dashboard-teller.html
+[Thu Mar 19 20:00:26 2026] [::1]:38594 Closing
+[Thu Mar 19 20:00:28 2026] [::1]:38602 Accepted
+[Thu Mar 19 20:00:28 2026] [::1]:38602 [200]: GET /pages/member/dashboard.html
+[Thu Mar 19 20:00:28 2026] [::1]:38602 Closing
+[Thu Mar 19 20:00:32 2026] [::1]:58770 Accepted
+[Thu Mar 19 20:00:32 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 20:00:32 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 20:00:32 2026] [::1]:58770 [400]: GET /api/members.php
+[Thu Mar 19 20:00:32 2026] [::1]:58770 Closing
+[Thu Mar 19 20:00:36 2026] [::1]:58774 Accepted
+[Thu Mar 19 20:00:36 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 20:00:36 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 20:00:36 2026] [::1]:58774 [400]: GET /api/members.php?action=get_all
+[Thu Mar 19 20:00:36 2026] [::1]:58774 Closing
+[Thu Mar 19 20:00:38 2026] [::1]:58786 Accepted
+[Thu Mar 19 20:00:38 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 20:00:38 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 20:00:38 2026] [::1]:58786 [200]: GET /api/members.php?action=get_members
+[Thu Mar 19 20:00:38 2026] [::1]:58786 Closing
+[Thu Mar 19 20:00:40 2026] [::1]:58788 Accepted
+[Thu Mar 19 20:00:40 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 20:00:40 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 20:00:40 2026] [::1]:58788 [200]: GET /api/loans.php?action=get_loans
+[Thu Mar 19 20:00:40 2026] [::1]:58788 Closing
+[Thu Mar 19 20:00:42 2026] [::1]:55500 Accepted
+[Thu Mar 19 20:00:42 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 20:00:42 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 20:00:42 2026] [::1]:55500 [200]: GET /api/savings.php?action=get_accounts
+[Thu Mar 19 20:00:42 2026] [::1]:55500 Closing
+[Thu Mar 19 20:00:57 2026] [::1]:41620 Accepted
+[Thu Mar 19 20:00:57 2026] [::1]:41620 [200]: GET /uploads/test.txt
+[Thu Mar 19 20:00:57 2026] [::1]:41620 Closing
+[Thu Mar 19 20:23:33 2026] [::1]:41852 Accepted
+[Thu Mar 19 20:23:33 2026] Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.
+[Thu Mar 19 20:23:33 2026] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[Thu Mar 19 20:23:33 2026] [::1]:41852 [302]: GET /
+[Thu Mar 19 20:23:33 2026] [::1]:41852 Closing

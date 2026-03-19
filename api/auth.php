@@ -126,7 +126,7 @@ function handleLogin($pdo, &$response) {
     }
     
     // Query user from database
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? OR name = ?");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? OR username = ?");
     $stmt->execute([$username, $username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
@@ -146,7 +146,7 @@ function handleLogin($pdo, &$response) {
     }
     
     // Check if user is active
-    if ($user['status'] !== 'active' || $user['is_active'] != 1) {
+    if ($user['is_active'] != 1) {
         $response['message'] = 'Akun tidak aktif';
         $response['errors'][] = 'Akun tidak aktif';
         http_response_code(403);
