@@ -1,0 +1,65 @@
+# Environment and secrets
+.env
+.env.local
+.env.production
+
+# Logs
+logs/
+*.log
+
+# Uploads
+uploads/
+!uploads/.gitkeep
+
+# Database backups
+backups/
+!backups/.gitkeep
+
+# IDE/OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules (if any)
+node_modules/
+
+# Composer (if any)
+vendor/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Cache
+cache/
+*.cache
+
+# Backup files created by system
+*~
+*.bak
+*.backup
+
+# Test files
+test-*.html
+test-basepath.html
+test-logout.html
+test.html
+
+# Local development
+info.php
+install-dev-environment.sh
+
+# Local config overrides
+config/local.*
+
+# API keys and sensitive files
+api/config.php
+api/keys/
+
+# Exclude some large generated files
+*.sql.gz
+*.zip
+*.tar.gz

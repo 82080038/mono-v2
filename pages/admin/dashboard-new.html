@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard-layout.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <!-- Dashboard Wrapper -->
+    <div class="dashboard-wrapper">
+        <!-- Sticky Header -->
+        <header class="dashboard-header navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center">
+                    <!-- Mobile Menu Toggle -->
+                    <button class="btn btn-link text-white mobile-menu-toggle d-lg-none me-3" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <!-- Logo/Brand -->
+                    <a class="navbar-brand" href="../../index.html">
+                        <i class="fas fa-building me-2"></i>
+                        KSP Lam Gabe Jaya
+                    </a>
+                    
+                    <!-- Sidebar Toggle (Desktop) -->
+                    <button class="btn btn-link text-white ms-3 d-none d-lg-block" onclick="toggleSidebarCollapse()" title="Toggle Sidebar">
+                        <i class="fas fa-outdent" id="sidebarToggleIcon"></i>
+                    </button>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="navbar-nav ms-auto">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span id="userName">Administrator</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">
+                                <i class="fas fa-user me-2"></i>Profil
+                            </a></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="fas fa-cog me-2"></i>Pengaturan
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Keluar
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar" id="dashboardSidebar">
+                <div class="sidebar-header">
+                    <h6 class="mb-0 text-muted">Menu Navigasi</h6>
+                </div>
+                <nav class="sidebar-nav">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="dashboard.html">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="fas fa-users"></i>
+                                <span>Pengguna</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="members.html">
+                                <i class="fas fa-user-friends"></i>
+                                <span>Anggota</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="loans.html">
+                                <i class="fas fa-hand-holding-usd"></i>
+                                <span>Pinjaman</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="savings.html">
+                                <i class="fas fa-piggy-bank"></i>
+                                <span>Simpanan</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="transactions.html">
+                                <i class="fas fa-exchange-alt"></i>
+                                <span>Transaksi</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="reports.html">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Laporan</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="fas fa-cog"></i>
+                                <span>Pengaturan</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="dashboard-main">
+                <!-- Page Header (Sticky) -->
+                <div class="main-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="h3 mb-1">Dashboard Admin</h1>
+                            <p class="text-muted mb-0">Selamat datang di dashboard administrasi KSP Lam Gabe Jaya</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="refreshDashboard()">
+                                <i class="fas fa-sync-alt me-1"></i>
+                                Refresh
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fas fa-calendar me-1"></i>
+                                Periode
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="changePeriod('today')">Hari Ini</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changePeriod('week')">Minggu Ini</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changePeriod('month')">Bulan Ini</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changePeriod('year')">Tahun Ini</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stat-card primary">
+                                <div class="stat-value" id="totalMembers">1,234</div>
+                                <div class="stat-label">Total Anggota</div>
+                                <div class="mt-2">
+                                    <small class="text-success">
+                                        <i class="fas fa-arrow-up"></i> 12% dari bulan lalu
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stat-card success">
+                                <div class="stat-value" id="activeLoans">456</div>
+                                <div class="stat-label">Pinjaman Aktif</div>
+                                <div class="mt-2">
+                                    <small class="text-success">
+                                        <i class="fas fa-arrow-up"></i> 8% dari bulan lalu
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stat-card warning">
+                                <div class="stat-value">Rp 2.5M</div>
+                                <div class="stat-label">Total Simpanan</div>
+                                <div class="mt-2">
+                                    <small class="text-warning">
+                                        <i class="fas fa-arrow-right"></i> Sama dengan bulan lalu
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stat-card danger">
+                                <div class="stat-value">Rp 1.8M</div>
+                                <div class="stat-label">Pinjaman Berjalan</div>
+                                <div class="mt-2">
+                                    <small class="text-success">
+                                        <i class="fas fa-arrow-up"></i> 15% dari bulan lalu
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="row mb-4">
+                        <div class="col-lg-8 mb-4">
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Grafik Pertumbuhan</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="growthChart" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-4">
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Distribusi Anggota</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="memberChart" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activities -->
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Aktivitas Terbaru</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item d-flex justify-content-between align-items-start">
+                                            <div class="ms-2 me-auto">
+                                                <div class="fw-bold">Anggota Baru</div>
+                                                <small class="text-muted">Budi Santoso bergabung</small>
+                                            </div>
+                                            <small class="text-muted">2 jam lalu</small>
+                                        </div>
+                                        <div class="list-group-item d-flex justify-content-between align-items-start">
+                                            <div class="ms-2 me-auto">
+                                                <div class="fw-bold">Pinjaman Disetujui</div>
+                                                <small class="text-muted">Rp 5,000,000 untuk Siti Rahayu</small>
+                                            </div>
+                                            <small class="text-muted">3 jam lalu</small>
+                                        </div>
+                                        <div class="list-group-item d-flex justify-content-between align-items-start">
+                                            <div class="ms-2 me-auto">
+                                                <div class="fw-bold">Simpanan Masuk</div>
+                                                <small class="text-muted">Rp 1,000,000 dari Ahmad Fadli</small>
+                                            </div>
+                                            <small class="text-muted">5 jam lalu</small>
+                                        </div>
+                                        <div class="list-group-item d-flex justify-content-between align-items-start">
+                                            <div class="ms-2 me-auto">
+                                                <div class="fw-bold">Pinjaman Lunas</div>
+                                                <small class="text-muted">Rp 2,500,000 lunas oleh Joko Widodo</small>
+                                            </div>
+                                            <small class="text-muted">1 hari lalu</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-4">
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Tugas Pending</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-1">Verifikasi 3 Anggota Baru</h6>
+                                                    <small class="text-muted">Menunggu verifikasi dokumen</small>
+                                                </div>
+                                                <span class="badge bg-warning">Pending</span>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-1">Survey Lapangan</h6>
+                                                    <small class="text-muted">5 aplikasi pinjaman perlu survey</small>
+                                                </div>
+                                                <span class="badge bg-info">Survey</span>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-1">Laporan Bulanan</h6>
+                                                    <small class="text-muted">Laporan Maret 2026</small>
+                                                </div>
+                                                <span class="badge bg-danger">Urgent</span>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-1">Collection Reminder</h6>
+                                                    <small class="text-muted">12 anggota telat bayar</small>
+                                                </div>
+                                                <span class="badge bg-secondary">Collection</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Content untuk Testing Scroll -->
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Data Tambahan (untuk testing scroll)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Ini adalah konten tambahan untuk testing scrollbar pada main content area. Scroll pada area ini tidak akan mempengaruhi sidebar.</p>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stat-card primary">
+                                                <div class="stat-value">856</div>
+                                                <div class="stat-label">Total Transaksi Hari Ini</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="stat-card success">
+                                                <div class="stat-value">92%</div>
+                                                <div class="stat-label">Tingkat Kolektabilitas</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="stat-card warning">
+                                                <div class="stat-value">45</div>
+                                                <div class="stat-label">Aplikasi Pending</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4">
+                                        <h6>Rincian Transaksi Terbaru</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Tanggal</th>
+                                                        <th>Jenis</th>
+                                                        <th>Jumlah</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr><td>001</td><td>2026-03-19</td><td>Simpanan</td><td>Rp 500,000</td><td><span class="badge bg-success">Selesai</span></td></tr>
+                                                    <tr><td>002</td><td>2026-03-19</td><td>Pinjaman</td><td>Rp 1,000,000</td><td><span class="badge bg-warning">Proses</span></td></tr>
+                                                    <tr><td>003</td><td>2026-03-19</td><td>Simpanan</td><td>Rp 750,000</td><td><span class="badge bg-success">Selesai</span></td></tr>
+                                                    <tr><td>004</td><td>2026-03-19</td><td>Pinjaman</td><td>Rp 2,000,000</td><td><span class="badge bg-info">Survey</span></td></tr>
+                                                    <tr><td>005</td><td>2026-03-19</td><td>Simpanan</td><td>Rp 300,000</td><td><span class="badge bg-success">Selesai</span></td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Configuration -->
+    <script src="../../assets/js/config.js"></script>
+    <!-- Authentication -->
+    <script src="../../assets/js/auth.js"></script>
+    <script>
+        // Dashboard Functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('dashboardSidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        function toggleSidebarCollapse() {
+            const sidebar = document.getElementById('dashboardSidebar');
+            const icon = document.getElementById('sidebarToggleIcon');
+            
+            sidebar.classList.toggle('collapsed');
+            
+            if (sidebar.classList.contains('collapsed')) {
+                icon.className = 'fas fa-indent';
+            } else {
+                icon.className = 'fas fa-outdent';
+            }
+        }
+
+        function refreshDashboard() {
+            // Simulate refresh
+            const cards = document.querySelectorAll('.stat-card');
+            cards.forEach(card => {
+                card.classList.add('loading');
+            });
+            
+            setTimeout(() => {
+                cards.forEach(card => {
+                    card.classList.remove('loading');
+                });
+                showAlert('success', 'Dashboard berhasil diperbarui!');
+            }, 1000);
+        }
+
+        function changePeriod(period) {
+            showAlert('info', `Periode diubah ke: ${period}`);
+        }
+
+        function showAlert(type, message) {
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3" style="z-index: 9999;" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', alertHtml);
+            
+            setTimeout(() => {
+                const alerts = document.querySelectorAll('.alert');
+                if (alerts.length > 0) {
+                    alerts[0].remove();
+                }
+            }, 3000);
+        }
+
+        // Initialize Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Growth Chart
+            const growthCtx = document.getElementById('growthChart').getContext('2d');
+            new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Anggota',
+                        data: [1000, 1100, 1150, 1200, 1234, 1234],
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Pinjaman',
+                        data: [300, 350, 400, 420, 456, 456],
+                        borderColor: '#198754',
+                        backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Member Distribution Chart
+            const memberCtx = document.getElementById('memberChart').getContext('2d');
+            new Chart(memberCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Aktif', 'Tidak Aktif', 'Baru'],
+                    datasets: [{
+                        data: [1234, 56, 234],
+                        backgroundColor: ['#0d6efd', '#dc3545', '#ffc107']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+</body>
+</html>
