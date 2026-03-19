@@ -1,17 +1,20 @@
-# Environment and secrets
+# Environment and secrets (keep template for development)
 .env
-.env.local
 .env.production
+# .env.development - REMOVED: Needed for development setup
 
-# Logs
+# Logs (keep structure but not actual logs)
 logs/
 *.log
+!logs/.gitkeep
 
-# Uploads
+# Uploads (keep structure but not actual uploads)
 uploads/
 !uploads/.gitkeep
+!uploads/avatars/.gitkeep
+!uploads/documents/.gitkeep
 
-# Database backups
+# Database backups (keep structure but not actual backups)
 backups/
 !backups/.gitkeep
 
@@ -42,24 +45,30 @@ cache/
 *.bak
 *.backup
 
-# Test files
-test-*.html
-test-basepath.html
-test-logout.html
-test.html
+# Test files (keep for development)
+# test-*.html - REMOVED: Needed for development
+# test-basepath.html - REMOVED: Needed for development  
+# test-logout.html - REMOVED: Needed for development
+# test.html - REMOVED: Needed for development
 
-# Local development
-info.php
-install-dev-environment.sh
+# Local development (keep for setup)
+# info.php - REMOVED: Needed for development debugging
+# install-dev-environment.sh - REMOVED: Needed for development setup
 
-# Local config overrides
+# Local config overrides (keep template)
 config/local.*
+!config/local.example.php
 
-# API keys and sensitive files
+# API keys and sensitive files (keep structure but not actual keys)
 api/config.php
 api/keys/
+!api/keys/.gitkeep
+!api/config.example.php
 
 # Exclude some large generated files
 *.sql.gz
 *.zip
 *.tar.gz
+
+# Development database (keep for setup)
+# database/ksp_lamgabejaya_v2.sql - REMOVED: Needed for development
