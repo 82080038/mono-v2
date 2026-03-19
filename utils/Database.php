@@ -23,9 +23,15 @@ class Database {
     
     private function connect() {
         try {
-            $dsn = "mysql:host=" . Config::DB_HOST . 
-                   ";dbname=" . Config::DB_NAME . 
-                   ";charset=" . Config::DB_CHARSET;
+            if (!empty(Config::DB_SOCKET)) {
+                $dsn = "mysql:unix_socket=" . Config::DB_SOCKET . 
+                       ";dbname=" . Config::DB_NAME . 
+                       ";charset=" . Config::DB_CHARSET;
+            } else {
+                $dsn = "mysql:host=" . Config::DB_HOST . 
+                       ";dbname=" . Config::DB_NAME . 
+                       ";charset=" . Config::DB_CHARSET;
+            }
             
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

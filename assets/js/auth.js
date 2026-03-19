@@ -43,7 +43,7 @@ function updateUserNameDisplay(user) {
 }
 
 // Initialize authentication module
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeAuth();
     bindEventListeners();
     checkExistingSession();
@@ -65,7 +65,7 @@ function initializeAuth() {
     domElements.alertContainer = document.querySelector('.alert-container');
     domElements.forgotPasswordForm = document.getElementById('forgotPasswordForm');
     domElements.resetEmailInput = document.getElementById('resetEmailInput');
-    
+
     console.log('Authentication system initialized');
 }
 
@@ -76,23 +76,23 @@ function bindEventListeners() {
     if (domElements.loginForm) {
         domElements.loginForm.addEventListener('submit', handleLogin);
     }
-    
+
     if (domElements.togglePasswordBtn) {
         domElements.togglePasswordBtn.addEventListener('click', togglePasswordVisibility);
     }
-    
+
     if (domElements.emailInput) {
         domElements.emailInput.addEventListener('input', clearFieldError);
     }
-    
+
     if (domElements.passwordInput) {
         domElements.passwordInput.addEventListener('input', clearFieldError);
     }
-    
+
     if (domElements.forgotPasswordForm) {
         domElements.forgotPasswordForm.addEventListener('submit', handleForgotPassword);
     }
-    
+
     console.log('Event listeners bound');
 }
 
@@ -102,7 +102,7 @@ function bindEventListeners() {
 function checkExistingSession() {
     const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
     const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
-    
+
     if (token && userData) {
         authState.isAuthenticated = true;
         authState.token = token;
@@ -127,30 +127,30 @@ function checkExistingSession() {
  */
 async function handleLogin(event) {
     event.preventDefault();
-    
+
     // Check if account is locked
     if (isAccountLocked()) {
         showAlert('danger', 'Akun terkunci. Silakan coba lagi dalam 15 menit.');
         return;
     }
-    
+
     // Get form data
     const email = domElements.emailInput.value.trim();
     const password = domElements.passwordInput.value;
     const rememberMe = domElements.rememberMeCheckbox.checked;
-    
+
     // Validate form
     if (!validateLoginForm(email, password)) {
         return;
     }
-    
+
     // Show loading state
     setLoginLoading(true);
-    
+
     try {
         // Simulate API call (replace with actual API)
         const response = await simulateLoginAPI(email, password);
-        
+
         if (response.success) {
             // Login successful
             handleLoginSuccess(response.data, rememberMe);
@@ -171,19 +171,20 @@ async function handleLogin(event) {
  */
 function validateLoginForm(email, password) {
     let isValid = true;
-    
+
     // Reset previous errors
     clearFormErrors();
-    
-    // Validate email
+
+    // Validate email/username
     if (!email) {
-        showFieldError(domElements.emailInput, 'Email harus diisi');
+        showFieldError(domElements.emailInput, 'Email atau username harus diisi');
         isValid = false;
-    } else if (!isValidEmail(email)) {
+    } else if (email.includes('@') && !isValidEmail(email)) {
+        // Only validate email format if it contains @ symbol
         showFieldError(domElements.emailInput, 'Email tidak valid');
         isValid = false;
     }
-    
+
     // Validate password
     if (!password) {
         showFieldError(domElements.passwordInput, 'Kata sandi harus diisi');
@@ -192,7 +193,7 @@ function validateLoginForm(email, password) {
         showFieldError(domElements.passwordInput, 'Kata sandi minimal 6 karakter');
         isValid = false;
     }
-    
+
     return isValid;
 }
 
@@ -204,7 +205,7 @@ function handleLoginSuccess(data, rememberMe) {
     // Reset login attempts
     authState.loginAttempts = 0;
     authState.lockoutUntil = null;
-    
+
     // Set authentication state
     authState.isAuthenticated = true;
     authState.currentUser = user;
@@ -214,15 +215,15 @@ function handleLoginSuccess(data, rememberMe) {
 
     // Set authentication token
     authState.token = data.token;
-    
+
     // Store session data
     const storage = rememberMe ? localStorage : sessionStorage;
     storage.setItem('authToken', data.token);
     storage.setItem('userData', JSON.stringify(user));
-    
+
     // Show success message
     showAlert('success', 'Login berhasil! Mengalihkan ke dashboard...');
-    
+
     // Redirect to dashboard after delay
     setTimeout(() => {
         redirectToDashboard();
@@ -235,7 +236,7 @@ function handleLoginSuccess(data, rememberMe) {
 function handleLoginFailure(message) {
     // Increment login attempts
     authState.loginAttempts++;
-    
+
     // Check if should lock account
     if (authState.loginAttempts >= authState.maxLoginAttempts) {
         authState.lockoutUntil = Date.now() + authState.lockoutTime;
@@ -244,7 +245,7 @@ function handleLoginFailure(message) {
         const remainingAttempts = authState.maxLoginAttempts - authState.loginAttempts;
         showAlert('danger', `${message}. Sisa percobaan: ${remainingAttempts}`);
     }
-    
+
     // Clear password field
     domElements.passwordInput.value = '';
     domElements.passwordInput.focus();
@@ -257,9 +258,9 @@ function togglePasswordVisibility() {
     const passwordField = domElements.passwordInput;
     const currentType = passwordField.getAttribute('type');
     const newType = currentType === 'password' ? 'text' : 'password';
-    
+
     passwordField.setAttribute('type', newType);
-    
+
     // Update icon
     if (domElements.passwordIcon) {
         const iconClass = newType === 'password' ? 'fa-eye' : 'fa-eye-slash';
@@ -287,7 +288,7 @@ function setLoginLoading(isLoading) {
  */
 function showFieldError(field, message) {
     field.classList.add('is-invalid');
-    
+
     // Find or create error message element
     let errorElement = field.parentNode.querySelector('.invalid-feedback');
     if (!errorElement) {
@@ -295,7 +296,7 @@ function showFieldError(field, message) {
         errorElement.className = 'invalid-feedback';
         field.parentNode.appendChild(errorElement);
     }
-    
+
     errorElement.textContent = message;
 }
 
@@ -343,7 +344,7 @@ function showAlert(type, message) {
         domElements.alertContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
         document.body.appendChild(domElements.alertContainer);
     }
-    
+
     const alertHtml = `
         <div class="alert alert-${type} alert-dismissible fade show custom-alert" role="alert">
             <i class="fas fa-${getAlertIcon(type)} me-2"></i>
@@ -351,9 +352,9 @@ function showAlert(type, message) {
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     `;
-    
+
     domElements.alertContainer.insertAdjacentHTML('beforeend', alertHtml);
-    
+
     // Auto-dismiss after 5 seconds
     setTimeout(() => {
         const alerts = domElements.alertContainer.querySelectorAll('.alert');
@@ -381,11 +382,11 @@ function getAlertIcon(type) {
  */
 function redirectToDashboard() {
     const userRole = authState.currentUser.role;
-    
+
     // Use dynamic routing with BASE_PATH
     let dashboardPath;
-    
-    switch(userRole) {
+
+    switch (userRole) {
         case 'super_admin':
         case 'admin':
             dashboardPath = 'pages/admin/dashboard.html';
@@ -411,7 +412,7 @@ function redirectToDashboard() {
         default:
             dashboardPath = 'pages/member/dashboard.html';
     }
-    
+
     // Build URL with dynamic base path
     const dashboardUrl = window.buildUrl ? window.buildUrl(dashboardPath) : dashboardPath;
     window.location.href = dashboardUrl;
@@ -424,17 +425,17 @@ async function simulateLoginAPI(email, password) {
     try {
         const formData = new FormData();
         formData.append('action', 'login');
-        formData.append('email', email);
+        formData.append('username', email); // Changed from email to username
         formData.append('password', password);
-        
+
         // Build dynamic API URL
         const apiUrl = window.buildApiUrl ? window.buildApiUrl('AUTH') : 'api/auth.php';
-        
+
         const response = await fetch(apiUrl, {
             method: 'POST',
             body: formData
         });
-        
+
         const result = await response.json();
         return result;
     } catch (error) {
@@ -459,22 +460,22 @@ function showForgotPassword() {
  */
 async function sendResetLink() {
     const email = domElements.resetEmailInput.value.trim();
-    
+
     if (!email || !isValidEmail(email)) {
         showAlert('danger', 'Email tidak valid');
         return;
     }
-    
+
     try {
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
+
         showAlert('success', 'Link reset kata sandi telah dikirim ke email Anda');
-        
+
         // Close modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal'));
         modal.hide();
-        
+
         // Clear form
         domElements.resetEmailInput.value = '';
     } catch (error) {
@@ -523,7 +524,7 @@ function logout() {
         localStorage.removeItem('userData');
         sessionStorage.removeItem('authToken');
         sessionStorage.removeItem('userData');
-        
+
         // Reset auth state
         authState = {
             isAuthenticated: false,
@@ -534,12 +535,12 @@ function logout() {
             lockoutTime: 15 * 60 * 1000,
             lockoutUntil: null
         };
-        
+
         // Show logout message
         if (typeof showAlert === 'function') {
             showAlert('info', 'Anda telah keluar dari sistem. Mengalihkan ke halaman login...');
         }
-        
+
         // Redirect to login after short delay
         setTimeout(() => {
             // Use dynamic base path for redirect

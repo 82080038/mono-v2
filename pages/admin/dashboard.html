@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,33 +10,62 @@
     <link href="../../assets/css/dashboard-layout.css" rel="stylesheet">
     <link href="../../assets/css/dashboard.css" rel="stylesheet">
 </head>
+
 <body class="bg-light">
     <div class="dashboard-wrapper">
         <!-- Sticky Header -->
         <header class="dashboard-header navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="../../index.html">
-                    <i class="fas fa-building me-2"></i>
-                    KSP Lam Gabe Jaya
-                </a>
-                <div class="navbar-nav ms-auto">
-                    <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-1"></i>
-                            <span id="userName">Administrator</span>
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div class="d-flex align-items-center">
+                        <!-- Mobile Menu Toggle -->
+                        <button class="btn btn-link text-white mobile-menu-toggle d-lg-none me-3"
+                            onclick="toggleSidebar()">
+                            <i class="fas fa-bars"></i>
+                        </button>
+
+                        <!-- Logo/Brand -->
+                        <a class="navbar-brand" href="../../index.html">
+                            <i class="fas fa-building me-2"></i>
+                            KSP Lam Gabe Jaya
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">
-                                <i class="fas fa-user me-2"></i>Profil
-                            </a></li>
-                            <li><a class="dropdown-item" href="#">
-                                <i class="fas fa-cog me-2"></i>Pengaturan
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" onclick="logout()">
-                                <i class="fas fa-sign-out-alt me-2"></i>Keluar
-                            </a></li>
-                        </ul>
+
+                        <!-- Sidebar Toggle (Desktop) -->
+                        <button class="btn btn-link text-white ms-3 d-none d-lg-block" onclick="toggleSidebarCollapse()"
+                            title="Toggle Sidebar">
+                            <i class="fas fa-outdent" id="sidebarToggleIcon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Center: Date/Time Display (Always Visible) -->
+                    <div class="header-datetime-center text-white">
+                        <span id="headerDateTime" class="fw-bold"></span>
+                    </div>
+
+                    <!-- Right: User Info (Desktop Only) -->
+                    <div class="d-none d-xl-flex align-items-center gap-4 text-white">
+                        <!-- User Info -->
+                        <div class="header-user-info d-flex align-items-center gap-2">
+                            <div class="text-end">
+                                <div class="small fw-semibold" id="headerUserName">Loading...</div>
+                                <div class="small text-white-50" id="headerUserRole">Loading...</div>
+                            </div>
+                            <div class="user-avatar bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 32px; height: 32px;">
+                                <i class="fas fa-user text-white small"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile User Info Only -->
+                    <div class="d-flex d-xl-none align-items-center">
+                        <div class="text-end text-white me-2">
+                            <div class="small fw-semibold d-none d-md-block" id="headerUserNameMobile">Loading...</div>
+                        </div>
+                        <div class="user-avatar bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center"
+                            style="width: 32px; height: 32px;">
+                            <i class="fas fa-user text-white small"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,7 +93,8 @@
                             <div class="flex-grow-1">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                    <input type="text" class="form-control" placeholder="Cari nama / ID / email" aria-label="Pencarian">
+                                    <input type="text" class="form-control" placeholder="Cari nama / ID / email"
+                                        aria-label="Pencarian">
                                 </div>
                             </div>
                             <div class="d-flex gap-2 flex-wrap">
@@ -99,8 +130,10 @@
                                 <small class="text-muted">Tabel dengan paginasi & aksi massal</small>
                             </div>
                             <div class="d-flex gap-2">
-                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-plus me-1"></i>Tambah</button>
-                                <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-file-export me-1"></i>Export</button>
+                                <button class="btn btn-sm btn-outline-primary"><i
+                                        class="fas fa-plus me-1"></i>Tambah</button>
+                                <button class="btn btn-sm btn-outline-secondary"><i
+                                        class="fas fa-file-export me-1"></i>Export</button>
                             </div>
                         </div>
                         <div class="card-body p-0">
@@ -125,9 +158,12 @@
                                             <td>2024-01-15</td>
                                             <td class="text-end">
                                                 <div class="btn-group btn-group-sm" role="group">
-                                                    <button class="btn btn-outline-secondary"><i class="fas fa-eye"></i></button>
-                                                    <button class="btn btn-outline-secondary"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-outline-secondary"><i class="fas fa-ellipsis-v"></i></button>
+                                                    <button class="btn btn-outline-secondary"><i
+                                                            class="fas fa-eye"></i></button>
+                                                    <button class="btn btn-outline-secondary"><i
+                                                            class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-secondary"><i
+                                                            class="fas fa-ellipsis-v"></i></button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -139,9 +175,12 @@
                                             <td>2024-01-18</td>
                                             <td class="text-end">
                                                 <div class="btn-group btn-group-sm" role="group">
-                                                    <button class="btn btn-outline-secondary"><i class="fas fa-eye"></i></button>
-                                                    <button class="btn btn-outline-secondary"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-outline-secondary"><i class="fas fa-ellipsis-v"></i></button>
+                                                    <button class="btn btn-outline-secondary"><i
+                                                            class="fas fa-eye"></i></button>
+                                                    <button class="btn btn-outline-secondary"><i
+                                                            class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-secondary"><i
+                                                            class="fas fa-ellipsis-v"></i></button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -153,9 +192,12 @@
                                             <td>2024-01-20</td>
                                             <td class="text-end">
                                                 <div class="btn-group btn-group-sm" role="group">
-                                                    <button class="btn btn-outline-secondary"><i class="fas fa-eye"></i></button>
-                                                    <button class="btn btn-outline-secondary"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-outline-secondary"><i class="fas fa-ellipsis-v"></i></button>
+                                                    <button class="btn btn-outline-secondary"><i
+                                                            class="fas fa-eye"></i></button>
+                                                    <button class="btn btn-outline-secondary"><i
+                                                            class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-secondary"><i
+                                                            class="fas fa-ellipsis-v"></i></button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -187,7 +229,7 @@
                         </div>
                     </div>
                     <!-- Stats Cards -->
-                    <div class="row mb-4">
+                    <div class="row mb-4" id="dashboardStats">
                         <div class="col-xl-3 col-sm-6 mb-4">
                             <div class="dashboard-card">
                                 <div class="card-body d-flex align-items-center">
@@ -198,7 +240,7 @@
                                     </div>
                                     <div>
                                         <h6 class="text-uppercase text-muted mb-1">Total Anggota</h6>
-                                        <h3 class="mb-0">1,234</h3>
+                                        <h3 class="mb-0" id="totalMembers">-</h3>
                                     </div>
                                 </div>
                             </div>
@@ -213,7 +255,7 @@
                                     </div>
                                     <div>
                                         <h6 class="text-uppercase text-muted mb-1">Pinjaman Aktif</h6>
-                                        <h3 class="mb-0">456</h3>
+                                        <h3 class="mb-0" id="activeLoans">-</h3>
                                     </div>
                                 </div>
                             </div>
@@ -228,7 +270,7 @@
                                     </div>
                                     <div>
                                         <h6 class="text-uppercase text-muted mb-1">Total Simpanan</h6>
-                                        <h3 class="mb-0">Rp 2.5M</h3>
+                                        <h3 class="mb-0" id="totalSavings">-</h3>
                                     </div>
                                 </div>
                             </div>
@@ -243,7 +285,7 @@
                                     </div>
                                     <div>
                                         <h6 class="text-uppercase text-muted mb-1">Transaksi Hari Ini</h6>
-                                        <h3 class="mb-0">89</h3>
+                                        <h3 class="mb-0" id="todayTransactions">-</h3>
                                     </div>
                                 </div>
                             </div>
@@ -357,7 +399,7 @@
 
     <script>
         // Dynamic content loader for main-content area
-        (function() {
+        (function () {
             let pageMap = {};
             let menuItems = [];
 
@@ -399,8 +441,25 @@
             function extractContent(html) {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
-                const container = doc.querySelector('main') || doc.querySelector('.container') || doc.body;
-                return container ? container.innerHTML : '';
+
+                // Try multiple selectors for better compatibility
+                const container = doc.querySelector('main') ||
+                    doc.querySelector('.container') ||
+                    doc.querySelector('.card') ||
+                    doc.querySelector('body');
+
+                if (container) {
+                    // If we got body, return innerHTML excluding scripts
+                    if (container.tagName === 'BODY') {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = container.innerHTML;
+                        // Remove scripts for security
+                        tempDiv.querySelectorAll('script').forEach(script => script.remove());
+                        return tempDiv.innerHTML;
+                    }
+                    return container.innerHTML;
+                }
+                return '';
             }
 
             function renderFallback(message) {
@@ -433,7 +492,7 @@
                         const parsed = JSON.parse(stored);
                         return parsed.role || 'admin';
                     }
-                } catch (e) {}
+                } catch (e) { }
                 return 'admin';
             }
 
@@ -457,17 +516,25 @@
             function renderMenu(items) {
                 pageMap = {};
                 sidebarMenu.innerHTML = items.map(item => {
+                    if (item.key === 'divider') {
+                        return `<li class="nav-item"><hr class="my-2"></li>`;
+                    }
+
                     const icon = item.icon || 'fas fa-circle';
                     const active = item.key === 'dashboard' ? 'active' : '';
                     const url = item.url || `${item.key}.html`;
+                    const cssClass = item.class || '';
+                    const onclick = item.onclick || '';
+
                     pageMap[item.key] = url;
                     return `
                         <li class="nav-item">
-                            <a class="nav-link ${active}" href="#" data-page="${item.key}">
-                                <i class="${icon}"></i>
+                            <a class="nav-link ${active} ${cssClass}" href="#" data-page="${item.key}" ${onclick ? `onclick="${onclick}"` : ''}>
+                                <i class="${icon} me-2"></i>
                                 <span>${item.title}</span>
                             </a>
-                        </li>`;
+                        </li>
+                    `;
                 }).join('');
             }
 
@@ -476,6 +543,13 @@
                     link.addEventListener('click', (e) => {
                         e.preventDefault();
                         const pageKey = link.getAttribute('data-page');
+
+                        // Auto-close sidebar on mobile after menu click
+                        if (window.innerWidth < 992) {
+                            const sidebar = document.getElementById('dashboardSidebar');
+                            sidebar.classList.remove('show');
+                        }
+
                         if (pageKey === 'dashboard') {
                             mainContentEl.innerHTML = initialContent;
                             setActive(link);
@@ -487,8 +561,220 @@
                 });
             }
 
-            loadMenu();
-        })();
+            window.toggleSidebar = function () {
+                const sidebar = document.getElementById('dashboardSidebar');
+                sidebar.classList.toggle('show');
+            };
+
+            window.toggleSidebarCollapse = function () {
+                const sidebar = document.getElementById('dashboardSidebar');
+                const icon = document.getElementById('sidebarToggleIcon');
+                sidebar.classList.toggle('collapsed');
+                icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-indent' : 'fas fa-outdent';
+            };
+
+            // Sync user name with sidebar and header
+            function updateSidebarUserName() {
+                const sidebarUserName = document.getElementById('sidebarUserName');
+                const headerUserName = document.getElementById('headerUserName');
+                const headerUserRole = document.getElementById('headerUserRole');
+                const headerUserNameMobile = document.getElementById('headerUserNameMobile');
+
+                // Try to get user name from localStorage or sessionStorage
+                try {
+                    const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+                    if (userData) {
+                        const parsed = JSON.parse(userData);
+                        const userName = parsed.name || 'Administrator';
+                        const userRole = parsed.role || 'admin';
+                        const formattedRole = userRole.charAt(0).toUpperCase() + userRole.slice(1);
+
+                        // Update sidebar
+                        if (sidebarUserName) {
+                            sidebarUserName.textContent = userName;
+                        }
+
+                        // Update header (desktop)
+                        if (headerUserName) {
+                            headerUserName.textContent = userName;
+                        }
+                        if (headerUserRole) {
+                            headerUserRole.textContent = formattedRole;
+                        }
+
+                        // Update header (mobile)
+                        if (headerUserNameMobile) {
+                            headerUserNameMobile.textContent = userName;
+                        }
+                    }
+                } catch (e) {
+                    // Fallback to default
+                    const defaultName = 'Administrator';
+                    const defaultRole = 'Admin';
+
+                    if (sidebarUserName) {
+                        sidebarUserName.textContent = defaultName;
+                    }
+                    if (headerUserName) {
+                        headerUserName.textContent = defaultName;
+                    }
+                    if (headerUserRole) {
+                        headerUserRole.textContent = defaultRole;
+                    }
+                    if (headerUserNameMobile) {
+                        headerUserNameMobile.textContent = defaultName;
+                    }
+                }
+            }
+
+            // Update date and time display
+            function updateDateTime() {
+                const dateTimeElement = document.getElementById('headerDateTime');
+                if (dateTimeElement) {
+                    const now = new Date();
+
+                    // Format day name in Indonesian
+                    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                    const dayName = days[now.getDay()];
+
+                    // Format date
+                    const day = now.getDate().toString().padStart(2, '0');
+                    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                    const year = now.getFullYear();
+
+                    // Format time (24-hour)
+                    const hours = now.getHours().toString().padStart(2, '0');
+                    const minutes = now.getMinutes().toString().padStart(2, '0');
+                    const seconds = now.getSeconds().toString().padStart(2, '0');
+
+                    const formattedDateTime = `${dayName}, ${day}-${month}-${year} | ${hours}:${minutes}:${seconds}`;
+                    dateTimeElement.textContent = formattedDateTime;
+                }
+                // Load dashboard data
+                async function loadDashboardData() {
+                    try {
+                        // Load members data
+                        const membersResponse = await fetch('../../api/members.php?action=get_members&limit=1');
+                        const membersResult = await membersResponse.json();
+                        if (membersResult.success) {
+                            document.getElementById('totalMembers').textContent = membersResult.data.pagination.total.toLocaleString('id-ID');
+                        }
+
+                        // Load loans data
+                        const loansResponse = await fetch('../../api/loans.php?action=get_loans&limit=1');
+                        const loansResult = await loansResponse.json();
+                        if (loansResult.success) {
+                            const activeLoans = loansResult.data.data.filter(loan => ['Active', 'Late'].includes(loan.status)).length;
+                            document.getElementById('activeLoans').textContent = activeLoans.toLocaleString('id-ID');
+                        }
+
+                        // Load accounts data for total savings
+                        const accountsResponse = await fetch('../../api/savings.php?action=get_accounts&limit=1');
+                        const accountsResult = await accountsResponse.json();
+                        if (accountsResult.success) {
+                            const totalSavings = accountsResult.data.data.reduce((sum, account) => sum + parseFloat(account.balance || 0), 0);
+                            document.getElementById('totalSavings').textContent = 'Rp ' + formatCurrency(totalSavings);
+                        }
+
+                        // Load today's transactions
+                        const today = new Date().toISOString().split('T')[0];
+                        const transactionsResponse = await fetch(`../../api/savings.php?action=get_transactions&account_id=1&start_date=${today}&end_date=${today}&limit=1`);
+                        const transactionsResult = await transactionsResponse.json();
+                        if (transactionsResult.success) {
+                            document.getElementById('todayTransactions').textContent = transactionsResult.data.pagination.total.toLocaleString('id-ID');
+                        }
+
+                    } catch (error) {
+                        console.error('Error loading dashboard data:', error);
+                        // Set default values on error
+                        document.getElementById('totalMembers').textContent = '0';
+                        document.getElementById('activeLoans').textContent = '0';
+                        document.getElementById('totalSavings').textContent = 'Rp 0';
+                        document.getElementById('todayTransactions').textContent = '0';
+                    }
+                }
+
+                // Format currency helper
+                function formatCurrency(amount) {
+                    return parseInt(amount || 0).toLocaleString('id-ID');
+                }
+
+                // Initialize dashboard
+                document.addEventListener('DOMContentLoaded', function () {
+                    loadMenu();
+                    updateSidebarUserName();
+                    updateDateTime();
+                    setInterval(updateDateTime, 1000);
+
+                    // Load dashboard data
+                    loadDashboardData();
+
+                    // Refresh dashboard data every 30 seconds
+                    setInterval(loadDashboardData, 30000);
+                });
+
+                // Initialize header functions
+                function initializeHeader() {
+                    updateSidebarUserName();
+                    updateDateTime();
+
+                    // Update time every second
+                    setInterval(updateDateTime, 1000);
+
+                    // Listen for storage changes (for multi-tab sync)
+                    window.addEventListener('storage', function (e) {
+                        if (e.key === 'userData' || e.key === 'sessionStorage') {
+                            updateSidebarUserName();
+                        }
+                    });
+                }
+
+                // Update user name when page loads
+                updateSidebarUserName();
+
+                // Initialize header when DOM is ready
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initializeHeader);
+                } else {
+                    initializeHeader();
+                }
+
+                // Handle window resize for mobile/desktop transitions
+                window.addEventListener('resize', function () {
+                    if (window.innerWidth >= 992) {
+                        // Desktop mode - ensure sidebar is visible
+                        const sidebar = document.getElementById('dashboardSidebar');
+                        sidebar.classList.remove('show');
+                    }
+                });
+
+                // Missing functions for menu items
+                window.showProfile = function () {
+                    // Show profile modal or navigate to profile page
+                    alert('Fitur Profil akan segera tersedia');
+                };
+
+                window.showSettings = function () {
+                    // Show settings modal or navigate to settings page
+                    alert('Fitur Pengaturan akan segera tersedia');
+                };
+
+                window.logout = function () {
+                    // Handle logout
+                    if (confirm('Apakah Anda yakin ingin keluar?')) {
+                        // Clear session data
+                        localStorage.removeItem('userData');
+                        sessionStorage.removeItem('userData');
+
+                        // Redirect to login page using BASE_PATH
+                        const loginUrl = window.buildUrl ? window.buildUrl('login.html') : '../../login.html';
+                        window.location.href = loginUrl;
+                    }
+                };
+
+                loadMenu();
+            });
     </script>
 </body>
+
 </html>

@@ -11,12 +11,12 @@ class Config {
     const DB_USER = 'root';
     const DB_PASS = 'root';
     const DB_CHARSET = 'utf8mb4';
-    const DB_SOCKET = '';
+    const DB_SOCKET = '/opt/lampp/var/mysql/mysql.sock';
     
     // Application Configuration
     const APP_NAME = 'KSP Lam Gabe Jaya';
     const APP_VERSION = '2.0.0';
-    const APP_URL = 'http://localhost/ksp-lamgabejaya';
+    const APP_URL = 'http://localhost/mono-v2';
     const APP_ENV = 'production'; // development, staging, production
     
     // Security Configuration

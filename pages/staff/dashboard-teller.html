@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="../../assets/css/dashboard-layout.css" rel="stylesheet">
 </head>
+
 <body class="bg-light">
     <div class="dashboard-wrapper">
         <header class="dashboard-header navbar navbar-expand-lg navbar-dark bg-primary">
@@ -19,7 +21,9 @@
         </header>
         <div class="dashboard-content">
             <aside class="dashboard-sidebar" id="dashboardSidebar">
-                <div class="sidebar-header"><h6 class="mb-0 text-muted">Menu Teller</h6></div>
+                <div class="sidebar-header">
+                    <h6 class="mb-0 text-muted">Menu Teller</h6>
+                </div>
                 <nav class="sidebar-nav">
                     <ul class="nav flex-column" id="sidebarMenu"></ul>
                 </nav>
@@ -40,23 +44,66 @@
     <script src="../../assets/js/config.js"></script>
     <script src="../../assets/js/auth.js"></script>
     <script>
-        (function(){
+        (function () {
             let pageMap = {}; let menuItems = [];
             const mainContentEl = document.querySelector('#mainContentRoot');
             const sidebarMenu = document.getElementById('sidebarMenu');
             const initialContent = mainContentEl ? mainContentEl.innerHTML : '';
-            if(!mainContentEl || !sidebarMenu) return;
-            function setActive(link){ sidebarMenu.querySelectorAll('.nav-link').forEach(a=>a.classList.remove('active')); if(link) link.classList.add('active'); }
-            async function loadPage(pageKey, linkEl){ const url=pageMap[pageKey]; if(!url){ renderFallback(`Halaman untuk "${pageKey}" belum tersedia.`); setActive(linkEl); return;} try{ const resp=await fetch(url,{cache:'no-cache'}); if(!resp.ok) throw new Error(`Status ${resp.status}`); const html=await resp.text(); const fragment=extractContent(html); mainContentEl.innerHTML=fragment||html; setActive(linkEl); window.scrollTo({top:0,behavior:'smooth'});}catch(err){ renderFallback(`Gagal memuat halaman: ${err.message}`); setActive(linkEl);} }
-            function extractContent(html){ const parser=new DOMParser(); const doc=parser.parseFromString(html,'text/html'); const container=doc.querySelector('main')||doc.querySelector('.container')||doc.body; return container?container.innerHTML:''; }
-            function renderFallback(msg){ mainContentEl.innerHTML=`<div class="alert alert-warning mb-3"><i class="fas fa-info-circle me-2"></i>${msg}</div>`; }
-            function getRoleKey(){ try{ const stored=localStorage.getItem('userData')||sessionStorage.getItem('userData'); if(stored){ const parsed=JSON.parse(stored); return parsed.role||'staff'; } }catch(e){} return 'staff'; }
-            async function loadMenu(){ try{ const resp=await fetch('../../assets/config/menus.json',{cache:'no-cache'}); const json=await resp.json(); const roleKey=getRoleKey(); menuItems=(json && json[roleKey])|| (json && json.staff)||[]; }catch(e){ menuItems=[{key:'dashboard',title:'Dashboard',icon:'fas fa-tachometer-alt',url:'dashboard-teller.html'}]; }
-                renderMenu(menuItems); bindMenuEvents(); }
-            function renderMenu(items){ pageMap={}; sidebarMenu.innerHTML=items.map(item=>{ const icon=item.icon||'fas fa-circle'; const active=item.key==='dashboard'?'active':''; const url=item.url||`${item.key}.html`; pageMap[item.key]=url; return `<li class="nav-item"><a class="nav-link ${active}" href="#" data-page="${item.key}"><i class="${icon}"></i><span>${item.title}</span></a></li>`; }).join(''); }
-            function bindMenuEvents(){ sidebarMenu.querySelectorAll('a[data-page]').forEach(link=>{ link.addEventListener('click',(e)=>{ e.preventDefault(); const pageKey=link.getAttribute('data-page'); if(pageKey==='dashboard'){ mainContentEl.innerHTML=initialContent; setActive(link); window.scrollTo({top:0,behavior:'smooth'}); return;} loadPage(pageKey,link); }); }); }
+            if (!mainContentEl || !sidebarMenu) return;
+            function setActive(link) { sidebarMenu.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active')); if (link) link.classList.add('active'); }
+            async function loadPage(pageKey, linkEl) { const url = pageMap[pageKey]; if (!url) { renderFallback(`Halaman untuk "${pageKey}" belum tersedia.`); setActive(linkEl); return; } try { const resp = await fetch(url, { cache: 'no-cache' }); if (!resp.ok) throw new Error(`Status ${resp.status}`); const html = await resp.text(); const fragment = extractContent(html); mainContentEl.innerHTML = fragment || html; setActive(linkEl); window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (err) { renderFallback(`Gagal memuat halaman: ${err.message}`); setActive(linkEl); } }
+            function extractContent(html) { const parser = new DOMParser(); const doc = parser.parseFromString(html, 'text/html'); const container = doc.querySelector('main') || doc.querySelector('.container') || doc.body; return container ? container.innerHTML : ''; }
+            function renderFallback(msg) { mainContentEl.innerHTML = `<div class="alert alert-warning mb-3"><i class="fas fa-info-circle me-2"></i>${msg}</div>`; }
+            function getRoleKey() { try { const stored = localStorage.getItem('userData') || sessionStorage.getItem('userData'); if (stored) { const parsed = JSON.parse(stored); return parsed.role || 'staff'; } } catch (e) { } return 'staff'; }
+            async function loadMenu() {
+                try { const resp = await fetch('../../assets/config/menus.json', { cache: 'no-cache' }); const json = await resp.json(); const roleKey = getRoleKey(); menuItems = (json && json[roleKey]) || (json && json.staff) || []; } catch (e) { menuItems = [{ key: 'dashboard', title: 'Dashboard', icon: 'fas fa-tachometer-alt', url: 'dashboard-teller.html' }]; }
+                renderMenu(menuItems); bindMenuEvents();
+            }
+            function renderMenu(items) { pageMap = {}; sidebarMenu.innerHTML = items.map(item => { const icon = item.icon || 'fas fa-circle'; const active = item.key === 'dashboard' ? 'active' : ''; const url = item.url || `${item.key}.html`; pageMap[item.key] = url; return `<li class="nav-item"><a class="nav-link ${active}" href="#" data-page="${item.key}"><i class="${icon}"></i><span>${item.title}</span></a></li>`; }).join(''); }
+            function bindMenuEvents() {
+                sidebarMenu.querySelectorAll('a[data-page]').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const pageKey = link.getAttribute('data-page');
+
+                        // Auto-close sidebar on mobile after menu click
+                        if (window.innerWidth < 992) {
+                            const sidebar = document.getElementById('dashboardSidebar');
+                            sidebar.classList.remove('show');
+                        }
+
+                        if (pageKey === 'dashboard') {
+                            mainContentEl.innerHTML = initialContent;
+                            setActive(link);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            return;
+                        }
+                        loadPage(pageKey, link);
+                    });
+                });
+            }
+
+            // Missing functions for menu items
+            window.showProfile = function () {
+                alert('Fitur Profil akan segera tersedia');
+            };
+
+            window.showSettings = function () {
+                alert('Fitur Pengaturan akan segera tersedia');
+            };
+
+            window.logout = function () {
+                if (confirm('Apakah Anda yakin ingin keluar?')) {
+                    localStorage.removeItem('userData');
+                    sessionStorage.removeItem('userData');
+                    const loginUrl = window.buildUrl ? window.buildUrl('login.html') : '../../login.html';
+                    window.location.href = loginUrl;
+                }
+            };
+
             loadMenu();
         })();
     </script>
 </body>
+
 </html>

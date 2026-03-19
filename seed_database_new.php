@@ -83,65 +83,80 @@ class DatabaseSeeder {
         
         $users = [
             [
-                'name' => 'Super Admin',
+                'cooperative_id' => 5,
+                'username' => 'superadmin',
                 'email' => 'test_super_admin@lamabejaya.coop',
-                'password' => password_hash('password123', PASSWORD_DEFAULT),
-                'role' => 'super_admin',
-                'status' => 'active',
-                'created_at' => date('Y-m-d H:i:s')
-            ],
-            [
-                'name' => 'Admin User',
-                'email' => 'test_admin@lamabejaya.coop',
-                'password' => password_hash('password123', PASSWORD_DEFAULT),
+                'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+                'full_name' => 'Super Admin',
                 'role' => 'admin',
                 'status' => 'active',
                 'created_at' => date('Y-m-d H:i:s')
             ],
             [
-                'name' => 'Mantri User',
-                'email' => 'test_mantri@lamabejaya.coop',
-                'password' => password_hash('password123', PASSWORD_DEFAULT),
-                'role' => 'mantri',
+                'cooperative_id' => 5,
+                'username' => 'admin',
+                'email' => 'test_admin@lamabejaya.coop',
+                'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+                'full_name' => 'Admin User',
+                'role' => 'admin',
                 'status' => 'active',
                 'created_at' => date('Y-m-d H:i:s')
             ],
             [
-                'name' => 'Member User',
+                'cooperative_id' => 5,
+                'username' => 'mantri',
+                'email' => 'test_mantri@lamabejaya.coop',
+                'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+                'full_name' => 'Mantri User',
+                'role' => 'collector',
+                'status' => 'active',
+                'created_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'cooperative_id' => 5,
+                'username' => 'member',
                 'email' => 'test_member@lamabejaya.coop',
-                'password' => password_hash('password123', PASSWORD_DEFAULT),
+                'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+                'full_name' => 'Member User',
                 'role' => 'member',
                 'status' => 'active',
                 'created_at' => date('Y-m-d H:i:s')
             ],
             [
-                'name' => 'Kasir User',
+                'cooperative_id' => 5,
+                'username' => 'kasir',
                 'email' => 'test_kasir@lamabejaya.coop',
-                'password' => password_hash('password123', PASSWORD_DEFAULT),
-                'role' => 'kasir',
+                'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+                'full_name' => 'Kasir User',
+                'role' => 'staff',
                 'status' => 'active',
                 'created_at' => date('Y-m-d H:i:s')
             ],
             [
-                'name' => 'Teller User',
+                'cooperative_id' => 5,
+                'username' => 'teller',
                 'email' => 'test_teller@lamabejaya.coop',
-                'password' => password_hash('password123', PASSWORD_DEFAULT),
-                'role' => 'teller',
+                'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+                'full_name' => 'Teller User',
+                'role' => 'staff',
                 'status' => 'active',
                 'created_at' => date('Y-m-d H:i:s')
             ],
             [
-                'name' => 'Surveyor User',
+                'cooperative_id' => 5,
+                'username' => 'surveyor',
                 'email' => 'test_surveyor@lamabejaya.coop',
-                'password' => password_hash('password123', PASSWORD_DEFAULT),
-                'role' => 'surveyor',
+                'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+                'full_name' => 'Surveyor User',
+                'role' => 'staff',
                 'status' => 'active',
                 'created_at' => date('Y-m-d H:i:s')
             ],
             [
-                'name' => 'Collector User',
+                'cooperative_id' => 5,
+                'username' => 'collector',
                 'email' => 'test_collector@lamabejaya.coop',
-                'password' => password_hash('password123', PASSWORD_DEFAULT),
+                'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
                 'role' => 'collector',
                 'status' => 'active',
                 'created_at' => date('Y-m-d H:i:s')

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
 </head>
+
 <body class="bg-light">
     <!-- Navigation Header -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -49,16 +51,12 @@
                             <div class="form-group mb-3">
                                 <label for="emailInput" class="form-label">
                                     <i class="fas fa-envelope me-1"></i>
-                                    Email
+                                    Email atau Username
                                 </label>
-                                <input type="email" 
-                                       class="form-control form-control-lg" 
-                                       id="emailInput" 
-                                       name="email" 
-                                       placeholder="Masukkan email Anda"
-                                       required>
+                                <input type="text" class="form-control form-control-lg" id="emailInput" name="username"
+                                    placeholder="Masukkan email atau username" required>
                                 <div class="invalid-feedback">
-                                    Email tidak valid
+                                    Email atau username harus diisi
                                 </div>
                             </div>
 
@@ -69,16 +67,10 @@
                                     Kata Sandi
                                 </label>
                                 <div class="input-group">
-                                    <input type="password" 
-                                           class="form-control form-control-lg" 
-                                           id="passwordInput" 
-                                           name="password" 
-                                           placeholder="Masukkan kata sandi"
-                                           required>
-                                    <button class="btn btn-outline-secondary" 
-                                            type="button" 
-                                            id="togglePassword"
-                                            title="Tampilkan/Sembunyikan Kata Sandi">
+                                    <input type="password" class="form-control form-control-lg" id="passwordInput"
+                                        name="password" placeholder="Masukkan kata sandi" required>
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword"
+                                        title="Tampilkan/Sembunyikan Kata Sandi">
                                         <i class="fas fa-eye" id="passwordIcon"></i>
                                     </button>
                                 </div>
@@ -111,7 +103,7 @@
                             <!-- Register Link -->
                             <div class="text-center">
                                 <p class="mb-0">
-                                    Belum punya akun? 
+                                    Belum punya akun?
                                     <a href="#" class="text-decoration-none fw-bold" onclick="showRegister()">
                                         Daftar di sini
                                     </a>
@@ -133,86 +125,63 @@
                                 Login cepat untuk testing semua role sistem
                             </p>
                         </div>
-                        
+
                         <div class="row g-2">
                             <div class="col-6">
-                                <button class="btn btn-outline-primary btn-sm w-100 quick-login-btn" 
-                                        data-email="test_super_admin@lamabejaya.coop" 
-                                        data-password="password123"
-                                        data-role="Super Admin">
+                                <button class="btn btn-outline-primary btn-sm w-100 quick-login-btn"
+                                    data-email="Admin User" data-password="password" data-role="Admin">
                                     <i class="fas fa-crown me-1"></i>
-                                    Super Admin
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn btn-outline-success btn-sm w-100 quick-login-btn" 
-                                        data-email="test_admin@lamabejaya.coop" 
-                                        data-password="password123"
-                                        data-role="Admin">
-                                    <i class="fas fa-user-shield me-1"></i>
                                     Admin
                                 </button>
                             </div>
                             <div class="col-6">
-                                <button class="btn btn-outline-info btn-sm w-100 quick-login-btn" 
-                                        data-email="test_mantri@lamabejaya.coop" 
-                                        data-password="password123"
-                                        data-role="Mantri">
-                                    <i class="fas fa-user-tie me-1"></i>
+                                <button class="btn btn-outline-success btn-sm w-100 quick-login-btn"
+                                    data-email="Mantri User" data-password="password" data-role="Mantri">
+                                    <i class="fas fa-user-shield me-1"></i>
                                     Mantri
                                 </button>
                             </div>
                             <div class="col-6">
-                                <button class="btn btn-outline-warning btn-sm w-100 quick-login-btn" 
-                                        data-email="test_member@lamabejaya.coop" 
-                                        data-password="password123"
-                                        data-role="Member">
-                                    <i class="fas fa-users me-1"></i>
+                                <button class="btn btn-outline-info btn-sm w-100 quick-login-btn"
+                                    data-email="Member User" data-password="password" data-role="Member">
+                                    <i class="fas fa-user-tie me-1"></i>
                                     Member
                                 </button>
                             </div>
                             <div class="col-6">
-                                <button class="btn btn-outline-secondary btn-sm w-100 quick-login-btn" 
-                                        data-email="test_kasir@lamabejaya.coop" 
-                                        data-password="password123"
-                                        data-role="Kasir">
-                                    <i class="fas fa-cash-register me-1"></i>
+                                <button class="btn btn-outline-warning btn-sm w-100 quick-login-btn"
+                                    data-email="Kasir User" data-password="password" data-role="Kasir">
+                                    <i class="fas fa-users me-1"></i>
                                     Kasir
                                 </button>
                             </div>
                             <div class="col-6">
-                                <button class="btn btn-outline-dark btn-sm w-100 quick-login-btn" 
-                                        data-email="test_teller@lamabejaya.coop" 
-                                        data-password="password123"
-                                        data-role="Teller">
-                                    <i class="fas fa-hand-holding-usd me-1"></i>
+                                <button class="btn btn-outline-secondary btn-sm w-100 quick-login-btn"
+                                    data-email="Teller User" data-password="password" data-role="Teller">
+                                    <i class="fas fa-cash-register me-1"></i>
                                     Teller
                                 </button>
                             </div>
                             <div class="col-6">
-                                <button class="btn btn-outline-primary btn-sm w-100 quick-login-btn" 
-                                        data-email="test_surveyor@lamabejaya.coop" 
-                                        data-password="password123"
-                                        data-role="Surveyor">
-                                    <i class="fas fa-clipboard-list me-1"></i>
+                                <button class="btn btn-outline-dark btn-sm w-100 quick-login-btn"
+                                    data-email="Surveyor User" data-password="password" data-role="Surveyor">
+                                    <i class="fas fa-hand-holding-usd me-1"></i>
                                     Surveyor
                                 </button>
                             </div>
                             <div class="col-6">
-                                <button class="btn btn-outline-success btn-sm w-100 quick-login-btn" 
-                                        data-email="test_collector@lamabejaya.coop" 
-                                        data-password="password123"
-                                        data-role="Collector">
-                                    <i class="fas fa-hand-holding-medical me-1"></i>
+                                <button class="btn btn-outline-primary btn-sm w-100 quick-login-btn"
+                                    data-email="Collector User" data-password="password" data-role="Collector">
+                                    <i class="fas fa-clipboard-list me-1"></i>
                                     Collector
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="alert alert-info mt-3 mb-0 py-2">
                             <small class="mb-0">
                                 <i class="fas fa-info-circle me-1"></i>
-                                <strong>Password universal:</strong> password123
+                                <strong>Password universal:</strong> password
                             </small>
                         </div>
                     </div>
@@ -252,11 +221,8 @@
                     <form id="forgotPasswordForm">
                         <div class="form-group mb-3">
                             <label for="resetEmail" class="form-label">Email</label>
-                            <input type="email" 
-                                   class="form-control" 
-                                   id="resetEmail" 
-                                   placeholder="Masukkan email Anda"
-                                   required>
+                            <input type="email" class="form-control" id="resetEmail" placeholder="Masukkan email Anda"
+                                required>
                         </div>
                     </form>
                 </div>
@@ -281,10 +247,10 @@
     <script src="assets/js/config.js"></script>
     <!-- Custom JS -->
     <script src="assets/js/auth.js"></script>
-    
+
     <!-- Quick Login Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Quick Login Button Handler (auto-submit and clear previous session)
             const quickLoginButtons = document.querySelectorAll('.quick-login-btn');
             const loginForm = document.getElementById('loginForm');
@@ -298,7 +264,7 @@
             }
 
             quickLoginButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const email = this.getAttribute('data-email');
                     const password = this.getAttribute('data-password');
                     const role = this.getAttribute('data-role');
@@ -337,11 +303,11 @@
                 });
             });
         });
-        
+
         function showAlert(message, type = 'info') {
             const alertContainer = document.querySelector('.alert-container');
             const alertId = 'alert-' + Date.now();
-            
+
             const alertHtml = `
                 <div class="alert alert-${type} alert-dismissible fade show" id="${alertId}" role="alert">
                     <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
@@ -349,9 +315,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             `;
-            
+
             alertContainer.insertAdjacentHTML('beforeend', alertHtml);
-            
+
             // Auto-remove after 5 seconds
             setTimeout(() => {
                 const alert = document.getElementById(alertId);
@@ -363,4 +329,5 @@
         }
     </script>
 </body>
+
 </html>

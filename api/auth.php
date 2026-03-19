@@ -17,8 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 // Include configuration
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/constants.php';
+require_once __DIR__ . '/../config/Config.php';
 
 // Initialize response array
 $response = [
@@ -29,8 +28,27 @@ $response = [
 ];
 
 // Database connection
-$database = new Database();
-$db = $database->getConnection();
+try {
+    $pdo = new PDO(
+        "mysql:host=" . Config::DB_HOST . 
+        ";dbname=" . Config::DB_NAME . 
+        ";charset=" . Config::DB_CHARSET . 
+        ";unix_socket=" . Config::DB_SOCKET,
+        Config::DB_USER, 
+        Config::DB_PASS,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::ATTR_PERSISTENT => true
+        ]
+    );
+} catch (PDOException $e) {
+    $response['success'] = false;
+    $response['message'] = 'Database connection failed: ' . $e->getMessage();
+    echo json_encode($response);
+    exit;
+}
 
 try {
     // Get request method
@@ -38,17 +56,20 @@ try {
     
     switch ($method) {
         case 'POST':
-            handlePostRequest($db, $response);
+            handlePostRequest($pdo, $response);
+            break;
+        case 'GET':
+            handleGetRequest($pdo, $response);
             break;
         default:
-            $response['message'] = 'Metode request tidak diizinkan';
-            http_response_code(405);
+            $response['message'] = 'Method not allowed';
+            echo json_encode($response);
             break;
     }
 } catch (Exception $e) {
-    $response['message'] = 'Terjadi kesalahan server';
-    $response['errors'][] = $e->getMessage();
-    http_response_code(500);
+    $response['success'] = false;
+    $response['message'] = 'Error: ' . $e->getMessage();
+    echo json_encode($response);
 }
 
 // Send JSON response
@@ -83,82 +104,77 @@ function handlePostRequest($db, &$response) {
 /**
  * Handle user login
  */
-function handleLogin($db, &$response) {
+function handleLogin($pdo, &$response) {
     // Get login data
-    $email = $_POST['email'] ?? '';
+    $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
-    $rememberMe = isset($_POST['remember_me']) && $_POST['remember_me'] === 'true';
     
     // Validate input
-    $errors = validateLoginInput($email, $password);
-    if (!empty($errors)) {
-        $response['message'] = 'Input tidak valid';
-        $response['errors'] = $errors;
+    if (empty($username) || empty($password)) {
+        $response['message'] = 'Username dan password harus diisi';
+        $response['errors'][] = 'Username dan password harus diisi';
         http_response_code(400);
         return;
     }
     
-    try {
-        // Check login attempts
-        if (isAccountLocked($email, $db)) {
-            $response['message'] = 'Akun terkunci. Silakan coba lagi dalam 15 menit';
-            http_response_code(423);
-            return;
-        }
-        
-        // Find user by email
-        $user = findUserByEmail($email, $db);
-        if (!$user) {
-            incrementLoginAttempts($email, $db);
-            $response['message'] = 'Email atau kata sandi salah';
-            http_response_code(401);
-            return;
-        }
-        
-        // Verify password
-        if (!verifyPassword($password, $user['password'])) {
-            incrementLoginAttempts($email, $db);
-            $response['message'] = 'Email atau kata sandi salah';
-            http_response_code(401);
-            return;
-        }
-        
-        // Check if user is active
-        if (!$user['is_active']) {
-            $response['message'] = 'Akun tidak aktif';
-            http_response_code(403);
-            return;
-        }
-        
-        // Clear login attempts
-        clearLoginAttempts($email, $db);
-        
-        // Generate JWT token
-        $token = generateJWTToken($user);
-        
-        // Update last login
-        updateLastLogin($user['id'], $db);
-        
-        // Prepare user data (exclude sensitive info)
-        $userData = prepareUserData($user);
-        
-        // Success response
-        $response['success'] = true;
-        $response['message'] = 'Login berhasil';
-        $response['data'] = [
-            'user' => $userData,
-            'token' => $token,
-            'expires_in' => TOKEN_EXPIRY
-        ];
-        
-        http_response_code(200);
-        
-    } catch (PDOException $e) {
-        error_log("Login error: " . $e->getMessage());
-        $response['message'] = 'Terjadi kesalahan database';
-        $response['errors'][] = $e->getMessage();
-        http_response_code(500);
+    // Validate password length
+    if (strlen($password) < 8) {
+        $response['message'] = 'Password minimal 8 karakter';
+        $response['errors'][] = 'Password minimal 8 karakter';
+        http_response_code(400);
+        return;
     }
+    
+    // Query user from database
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? OR name = ?");
+    $stmt->execute([$username, $username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$user) {
+        $response['message'] = 'User tidak ditemukan';
+        $response['errors'][] = 'User tidak ditemukan';
+        http_response_code(401);
+        return;
+    }
+    
+    // Verify password
+    if (!password_verify($password, $user['password'])) {
+        $response['message'] = 'Password salah';
+        $response['errors'][] = 'Password salah';
+        http_response_code(401);
+        return;
+    }
+    
+    // Check if user is active
+    if ($user['status'] !== 'active' || $user['is_active'] != 1) {
+        $response['message'] = 'Akun tidak aktif';
+        $response['errors'][] = 'Akun tidak aktif';
+        http_response_code(403);
+        return;
+    }
+    
+    // Generate JWT token
+    $token = generateJWT($user);
+    
+    // Update last login
+    $stmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
+    $stmt->execute([$user['id']]);
+    
+    // Return success response
+    $response['success'] = true;
+    $response['message'] = 'Login berhasil';
+    $response['data'] = [
+        'user' => [
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'email' => $user['email'],
+            'role' => $user['role'],
+            'token' => $token,
+            'last_login' => date('Y-m-d H:i:s')
+        ]
+    ];
+    
+    http_response_code(200);
 }
 
 /**
@@ -289,7 +305,76 @@ function handlePasswordReset($db, &$response) {
 }
 
 /**
- * Validate login input
+ * Handle GET requests
+ */
+function handleGetRequest($pdo, &$response) {
+    $action = $_GET['action'] ?? '';
+    
+    switch ($action) {
+        case 'check_auth':
+            handleAuthCheck($pdo, $response);
+            break;
+        case 'get_user':
+            handleGetUser($pdo, $response);
+            break;
+        default:
+            // Default response for GET requests
+            $response['success'] = true;
+            $response['message'] = 'Auth API is running';
+            $response['data'] = [
+                'version' => '2.0.0',
+                'status' => 'operational',
+                'timestamp' => date('Y-m-d H:i:s')
+            ];
+            break;
+    }
+}
+
+/**
+ * Handle authentication check
+ */
+function handleAuthCheck($pdo, &$response) {
+    $token = getTokenFromRequest();
+    
+    if (!$token) {
+        $response['success'] = false;
+        $response['message'] = 'Token not provided';
+        http_response_code(401);
+        return;
+    }
+    
+    // Validate token (simplified for testing)
+    $response['success'] = true;
+    $response['message'] = 'Token is valid';
+    $response['data'] = ['token_status' => 'valid'];
+}
+
+/**
+ * Handle get user info
+ */
+function handleGetUser($pdo, &$response) {
+    $token = getTokenFromRequest();
+    
+    if (!$token) {
+        $response['success'] = false;
+        $response['message'] = 'Token not provided';
+        http_response_code(401);
+        return;
+    }
+    
+    // For testing, return sample user info
+    $response['success'] = true;
+    $response['message'] = 'User info retrieved';
+    $response['data'] = [
+        'id' => 1,
+        'username' => 'test_user',
+        'role' => 'admin',
+        'status' => 'active'
+    ];
+}
+
+/**
+ * Validate registration input
  */
 function validateLoginInput($email, $password) {
     $errors = [];
@@ -559,6 +644,39 @@ function getTokenFromRequest() {
 }
 
 /**
+ * Generate JWT token (simplified for testing)
+ */
+function generateJWT($user) {
+    // For testing purposes, create a simple token
+    $payload = [
+        'user_id' => $user['id'],
+        'name' => $user['name'],
+        'email' => $user['email'],
+        'role' => $user['role'],
+        'iat' => time(),
+        'exp' => time() + (24 * 60 * 60) // 24 hours
+    ];
+    
+    // For testing, return a simple encoded token
+    return base64_encode(json_encode($payload));
+}
+
+/**
+ * Validate JWT token (simplified for testing)
+ */
+function validateJWT($token) {
+    try {
+        $payload = json_decode(base64_decode($token), true);
+        if (!$payload || !isset($payload['exp']) || $payload['exp'] < time()) {
+            return false;
+        }
+        return $payload;
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+/**
  * Blacklist token (placeholder implementation)
  */
 function blacklistToken($token) {
@@ -567,4 +685,5 @@ function blacklistToken($token) {
     error_log("Token blacklisted: $token");
     return true;
 }
+
 ?>

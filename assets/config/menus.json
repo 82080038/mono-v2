@@ -1,98 +1,637 @@
 {
   "admin": [
-    { "key": "dashboard", "title": "Dashboard", "icon": "fas fa-tachometer-alt" },
-    { "key": "live-tracking", "title": "Live Tracking Mantri", "icon": "fas fa-map-marker-alt" },
-    { "key": "npl", "title": "Monitoring NPL", "icon": "fas fa-exclamation-triangle" },
-    { "key": "verifikasi", "title": "Verifikasi Berjenjang", "icon": "fas fa-check-circle" },
-    { "key": "laporan-shu", "title": "Laporan SHU", "icon": "fas fa-file-invoice-dollar" },
-    { "key": "bi-analytics", "title": "BI & KPI Analytics", "icon": "fas fa-chart-pie" },
-    { "key": "risk-fraud", "title": "Risk & Fraud", "icon": "fas fa-shield-alt" },
-    { "key": "capacity", "title": "Capacity Planning", "icon": "fas fa-server" },
-    { "key": "laporan-umum", "title": "Laporan Umum", "icon": "fas fa-clipboard-list" }
+    {
+      "key": "dashboard",
+      "title": "Dashboard",
+      "icon": "fas fa-tachometer-alt"
+    },
+    {
+      "key": "member-registration",
+      "title": "Registrasi Anggota",
+      "icon": "fas fa-user-plus",
+      "url": "member-registration.html"
+    },
+    {
+      "key": "savings-management",
+      "title": "Manajemen Simpanan",
+      "icon": "fas fa-piggy-bank",
+      "url": "savings-management.html"
+    },
+    {
+      "key": "loan-management",
+      "title": "Manajemen Pinjaman",
+      "icon": "fas fa-hand-holding-usd",
+      "url": "loan-management.html"
+    },
+    {
+      "key": "divider",
+      "title": "---",
+      "icon": "fas fa-minus"
+    },
+    {
+      "key": "live-tracking",
+      "title": "Live Tracking Mantri",
+      "icon": "fas fa-map-marker-alt"
+    },
+    {
+      "key": "npl",
+      "title": "Monitoring NPL",
+      "icon": "fas fa-exclamation-triangle"
+    },
+    {
+      "key": "verifikasi",
+      "title": "Verifikasi Berjenjang",
+      "icon": "fas fa-check-circle"
+    },
+    {
+      "key": "laporan-shu",
+      "title": "Laporan SHU",
+      "icon": "fas fa-file-invoice-dollar"
+    },
+    {
+      "key": "bi-analytics",
+      "title": "BI & KPI Analytics",
+      "icon": "fas fa-chart-pie"
+    },
+    {
+      "key": "risk-fraud",
+      "title": "Risk & Fraud",
+      "icon": "fas fa-shield-alt"
+    },
+    {
+      "key": "capacity",
+      "title": "Capacity Planning",
+      "icon": "fas fa-server"
+    },
+    {
+      "key": "laporan-umum",
+      "title": "Laporan Umum",
+      "icon": "fas fa-clipboard-list"
+    },
+    {
+      "key": "divider",
+      "title": "---",
+      "icon": "fas fa-minus"
+    },
+    {
+      "key": "profil",
+      "title": "Profil",
+      "icon": "fas fa-user",
+      "url": "#",
+      "onclick": "showProfile()"
+    },
+    {
+      "key": "pengaturan",
+      "title": "Pengaturan",
+      "icon": "fas fa-cog",
+      "url": "#",
+      "onclick": "showSettings()"
+    },
+    {
+      "key": "keluar",
+      "title": "Keluar",
+      "icon": "fas fa-sign-out-alt",
+      "url": "#",
+      "onclick": "logout()",
+      "class": "text-danger"
+    }
   ],
   "super_admin": [
-    { "key": "dashboard", "title": "Dashboard", "icon": "fas fa-tachometer-alt" },
-    { "key": "live-tracking", "title": "Live Tracking Mantri", "icon": "fas fa-map-marker-alt" },
-    { "key": "npl", "title": "Monitoring NPL", "icon": "fas fa-exclamation-triangle" },
-    { "key": "verifikasi", "title": "Verifikasi Berjenjang", "icon": "fas fa-check-circle" },
-    { "key": "laporan-shu", "title": "Laporan SHU", "icon": "fas fa-file-invoice-dollar" },
-    { "key": "bi-analytics", "title": "BI & KPI Analytics", "icon": "fas fa-chart-pie" },
-    { "key": "risk-fraud", "title": "Risk & Fraud", "icon": "fas fa-shield-alt" },
-    { "key": "capacity", "title": "Capacity Planning", "icon": "fas fa-server" },
-    { "key": "laporan-umum", "title": "Laporan Umum", "icon": "fas fa-clipboard-list" },
-    { "key": "system-config", "title": "Pengaturan Sistem", "icon": "fas fa-cogs" },
-    { "key": "role-access", "title": "Manajemen Role & Akses", "icon": "fas fa-user-shield" },
-    { "key": "audit-log", "title": "Audit Log", "icon": "fas fa-clipboard-check" },
-    { "key": "backup-restore", "title": "Backup & Restore", "icon": "fas fa-database" }
+    {
+      "key": "dashboard",
+      "title": "Dashboard",
+      "icon": "fas fa-tachometer-alt"
+    },
+    {
+      "key": "member-registration",
+      "title": "Registrasi Anggota",
+      "icon": "fas fa-user-plus",
+      "url": "member-registration.html"
+    },
+    {
+      "key": "savings-management",
+      "title": "Manajemen Simpanan",
+      "icon": "fas fa-piggy-bank",
+      "url": "savings-management.html"
+    },
+    {
+      "key": "loan-management",
+      "title": "Manajemen Pinjaman",
+      "icon": "fas fa-hand-holding-usd",
+      "url": "loan-management.html"
+    },
+    {
+      "key": "divider",
+      "title": "---",
+      "icon": "fas fa-minus"
+    },
+    {
+      "key": "live-tracking",
+      "title": "Live Tracking Mantri",
+      "icon": "fas fa-map-marker-alt"
+    },
+    {
+      "key": "npl",
+      "title": "Monitoring NPL",
+      "icon": "fas fa-exclamation-triangle"
+    },
+    {
+      "key": "verifikasi",
+      "title": "Verifikasi Berjenjang",
+      "icon": "fas fa-check-circle"
+    },
+    {
+      "key": "laporan-shu",
+      "title": "Laporan SHU",
+      "icon": "fas fa-file-invoice-dollar"
+    },
+    {
+      "key": "bi-analytics",
+      "title": "BI & KPI Analytics",
+      "icon": "fas fa-chart-pie"
+    },
+    {
+      "key": "risk-fraud",
+      "title": "Risk & Fraud",
+      "icon": "fas fa-shield-alt"
+    },
+    {
+      "key": "capacity",
+      "title": "Capacity Planning",
+      "icon": "fas fa-server"
+    },
+    {
+      "key": "laporan-umum",
+      "title": "Laporan Umum",
+      "icon": "fas fa-clipboard-list"
+    },
+    {
+      "key": "system-config",
+      "title": "Pengaturan Sistem",
+      "icon": "fas fa-cogs"
+    },
+    {
+      "key": "role-access",
+      "title": "Manajemen Role & Akses",
+      "icon": "fas fa-user-shield"
+    },
+    {
+      "key": "audit-log",
+      "title": "Audit Log",
+      "icon": "fas fa-clipboard-check"
+    },
+    {
+      "key": "backup-restore",
+      "title": "Backup & Restore",
+      "icon": "fas fa-database"
+    },
+    {
+      "key": "divider",
+      "title": "---",
+      "icon": "fas fa-minus"
+    },
+    {
+      "key": "profil",
+      "title": "Profil",
+      "icon": "fas fa-user",
+      "url": "#",
+      "onclick": "showProfile()"
+    },
+    {
+      "key": "pengaturan",
+      "title": "Pengaturan",
+      "icon": "fas fa-cog",
+      "url": "#",
+      "onclick": "showSettings()"
+    },
+    {
+      "key": "keluar",
+      "title": "Keluar",
+      "icon": "fas fa-sign-out-alt",
+      "url": "#",
+      "onclick": "logout()",
+      "class": "text-danger"
+    }
   ],
   "staff": [
-    { "key": "dashboard", "title": "Dashboard", "icon": "fas fa-tachometer-alt", "url": "dashboard.html" },
-    { "key": "route", "title": "Rute Penagihan", "icon": "fas fa-route", "url": "route.html" },
-    { "key": "setoran-qr", "title": "Setoran QR", "icon": "fas fa-qrcode", "url": "setoran-qr.html" },
-    { "key": "offline-sync", "title": "Mode Offline & Sync", "icon": "fas fa-wifi-slash", "url": "offline-sync.html" },
-    { "key": "cetak-struk", "title": "Cetak Struk", "icon": "fas fa-print", "url": "cetak-struk.html" },
-    { "key": "target-harian", "title": "Target Harian", "icon": "fas fa-bullseye", "url": "target-harian.html" },
-    { "key": "gps-log", "title": "GPS Log", "icon": "fas fa-map", "url": "gps-log.html" },
-    { "key": "transaksi-harian", "title": "Transaksi Harian", "icon": "fas fa-exchange-alt", "url": "transaksi-harian.html" }
+    {
+      "key": "dashboard",
+      "title": "Dashboard",
+      "icon": "fas fa-tachometer-alt",
+      "url": "dashboard.html"
+    },
+    {
+      "key": "member-registration",
+      "title": "Registrasi Anggota",
+      "icon": "fas fa-user-plus",
+      "url": "member-registration.html"
+    },
+    {
+      "key": "savings-management",
+      "title": "Manajemen Simpanan",
+      "icon": "fas fa-piggy-bank",
+      "url": "savings-management.html"
+    },
+    {
+      "key": "loan-management",
+      "title": "Manajemen Pinjaman",
+      "icon": "fas fa-hand-holding-usd",
+      "url": "loan-management.html"
+    },
+    {
+      "key": "divider",
+      "title": "---",
+      "icon": "fas fa-minus"
+    },
+    {
+      "key": "route",
+      "title": "Rute Penagihan",
+      "icon": "fas fa-route",
+      "url": "route.html"
+    },
+    {
+      "key": "setoran-qr",
+      "title": "Setoran QR",
+      "icon": "fas fa-qrcode",
+      "url": "setoran-qr.html"
+    },
+    {
+      "key": "offline-sync",
+      "title": "Mode Offline & Sync",
+      "icon": "fas fa-wifi-slash",
+      "url": "offline-sync.html"
+    },
+    {
+      "key": "cetak-struk",
+      "title": "Cetak Struk",
+      "icon": "fas fa-print",
+      "url": "cetak-struk.html"
+    },
+    {
+      "key": "target-harian",
+      "title": "Target Harian",
+      "icon": "fas fa-bullseye",
+      "url": "target-harian.html"
+    },
+    {
+      "key": "gps-log",
+      "title": "GPS Log",
+      "icon": "fas fa-map",
+      "url": "gps-log.html"
+    },
+    {
+      "key": "transaksi-harian",
+      "title": "Transaksi Harian",
+      "icon": "fas fa-exchange-alt",
+      "url": "transaksi-harian.html"
+    },
+    {
+      "key": "divider",
+      "title": "---",
+      "icon": "fas fa-minus"
+    },
+    {
+      "key": "profil",
+      "title": "Profil",
+      "icon": "fas fa-user",
+      "url": "#",
+      "onclick": "showProfile()"
+    },
+    {
+      "key": "pengaturan",
+      "title": "Pengaturan",
+      "icon": "fas fa-cog",
+      "url": "#",
+      "onclick": "showSettings()"
+    },
+    {
+      "key": "keluar",
+      "title": "Keluar",
+      "icon": "fas fa-sign-out-alt",
+      "url": "#",
+      "onclick": "logout()",
+      "class": "text-danger"
+    }
   ],
   "member": [
-    { "key": "dashboard", "title": "Dashboard", "icon": "fas fa-tachometer-alt", "url": "dashboard.html" },
-    { "key": "buku-kas", "title": "Buku Kas Digital", "icon": "fas fa-book", "url": "buku-kas.html" },
-    { "key": "simpanan-saya", "title": "Simpanan Saya", "icon": "fas fa-piggy-bank", "url": "simpanan-saya.html" },
-    { "key": "pinjaman-saya", "title": "Pinjaman Saya", "icon": "fas fa-hand-holding-usd", "url": "pinjaman-saya.html" },
-    { "key": "ajukan-pinjaman", "title": "Ajukan Pinjaman", "icon": "fas fa-plus-circle", "url": "ajukan-pinjaman.html" },
-    { "key": "riwayat", "title": "Riwayat Transaksi", "icon": "fas fa-list", "url": "riwayat.html" },
-    { "key": "pembayaran", "title": "Pembayaran", "icon": "fas fa-credit-card", "url": "pembayaran.html" },
-    { "key": "poin-reward", "title": "Poin & Reward", "icon": "fas fa-gift", "url": "poin-reward.html" }
+    {
+      "key": "dashboard",
+      "title": "Dashboard",
+      "icon": "fas fa-tachometer-alt",
+      "url": "dashboard.html"
+    },
+    {
+      "key": "simpanan-saya",
+      "title": "Simpanan Saya",
+      "icon": "fas fa-piggy-bank",
+      "url": "simpanan-saya.html"
+    },
+    {
+      "key": "pinjaman-saya",
+      "title": "Pinjaman Saya",
+      "icon": "fas fa-hand-holding-usd",
+      "url": "pinjaman-saya.html"
+    },
+    {
+      "key": "ajukan-pinjaman",
+      "title": "Ajukan Pinjaman",
+      "icon": "fas fa-plus-circle",
+      "url": "ajukan-pinjaman.html"
+    },
+    {
+      "key": "riwayat",
+      "title": "Riwayat Transaksi",
+      "icon": "fas fa-list",
+      "url": "riwayat.html"
+    },
+    {
+      "key": "pembayaran",
+      "title": "Pembayaran",
+      "icon": "fas fa-credit-card",
+      "url": "pembayaran.html"
+    },
+    {
+      "key": "poin-reward",
+      "title": "Poin & Reward",
+      "icon": "fas fa-gift",
+      "url": "poin-reward.html"
+    },
+    {
+      "key": "divider",
+      "title": "---",
+      "icon": "fas fa-minus"
+    },
+    {
+      "key": "profil",
+      "title": "Profil",
+      "icon": "fas fa-user",
+      "url": "#",
+      "onclick": "showProfile()"
+    },
+    {
+      "key": "pengaturan",
+      "title": "Pengaturan",
+      "icon": "fas fa-cog",
+      "url": "#",
+      "onclick": "showSettings()"
+    },
+    {
+      "key": "keluar",
+      "title": "Keluar",
+      "icon": "fas fa-sign-out-alt",
+      "url": "#",
+      "onclick": "logout()",
+      "class": "text-danger"
+    }
   ],
   "mantri": [
-    { "key": "dashboard", "title": "Dashboard", "icon": "fas fa-tachometer-alt", "url": "dashboard-mantri.html" },
-    { "key": "route", "title": "Rute Penagihan", "icon": "fas fa-route", "url": "route.html" },
-    { "key": "setoran-qr", "title": "Setoran QR", "icon": "fas fa-qrcode", "url": "setoran-qr.html" },
-    { "key": "offline-sync", "title": "Mode Offline & Sync", "icon": "fas fa-wifi-slash", "url": "offline-sync.html" },
-    { "key": "cetak-struk", "title": "Cetak Struk", "icon": "fas fa-print", "url": "cetak-struk.html" },
-    { "key": "target-harian", "title": "Target Harian", "icon": "fas fa-bullseye", "url": "target-harian.html" },
-    { "key": "gps-log", "title": "GPS Log", "icon": "fas fa-map", "url": "gps-log.html" },
-    { "key": "transaksi-harian", "title": "Transaksi Harian", "icon": "fas fa-exchange-alt", "url": "transaksi-harian.html" }
+    {
+      "key": "dashboard",
+      "title": "Dashboard",
+      "icon": "fas fa-tachometer-alt",
+      "url": "dashboard-mantri.html"
+    },
+    {
+      "key": "route",
+      "title": "Rute Penagihan",
+      "icon": "fas fa-route",
+      "url": "route.html"
+    },
+    {
+      "key": "setoran-qr",
+      "title": "Setoran QR",
+      "icon": "fas fa-qrcode",
+      "url": "setoran-qr.html"
+    },
+    {
+      "key": "offline-sync",
+      "title": "Mode Offline & Sync",
+      "icon": "fas fa-wifi-slash",
+      "url": "offline-sync.html"
+    },
+    {
+      "key": "cetak-struk",
+      "title": "Cetak Struk",
+      "icon": "fas fa-print",
+      "url": "cetak-struk.html"
+    },
+    {
+      "key": "target-harian",
+      "title": "Target Harian",
+      "icon": "fas fa-bullseye",
+      "url": "target-harian.html"
+    },
+    {
+      "key": "gps-log",
+      "title": "GPS Log",
+      "icon": "fas fa-map",
+      "url": "gps-log.html"
+    },
+    {
+      "key": "transaksi-harian",
+      "title": "Transaksi Harian",
+      "icon": "fas fa-exchange-alt",
+      "url": "transaksi-harian.html"
+    }
   ],
   "kasir": [
-    { "key": "dashboard", "title": "Dashboard", "icon": "fas fa-tachometer-alt", "url": "dashboard-kasir.html" },
-    { "key": "route", "title": "Rute Penagihan", "icon": "fas fa-route", "url": "route.html" },
-    { "key": "setoran-qr", "title": "Setoran QR", "icon": "fas fa-qrcode", "url": "setoran-qr.html" },
-    { "key": "offline-sync", "title": "Mode Offline & Sync", "icon": "fas fa-wifi-slash", "url": "offline-sync.html" },
-    { "key": "cetak-struk", "title": "Cetak Struk", "icon": "fas fa-print", "url": "cetak-struk.html" },
-    { "key": "target-harian", "title": "Target Harian", "icon": "fas fa-bullseye", "url": "target-harian.html" },
-    { "key": "gps-log", "title": "GPS Log", "icon": "fas fa-map", "url": "gps-log.html" },
-    { "key": "transaksi-harian", "title": "Transaksi Harian", "icon": "fas fa-exchange-alt", "url": "transaksi-harian.html" }
+    {
+      "key": "dashboard",
+      "title": "Dashboard",
+      "icon": "fas fa-tachometer-alt",
+      "url": "dashboard-kasir.html"
+    },
+    {
+      "key": "route",
+      "title": "Rute Penagihan",
+      "icon": "fas fa-route",
+      "url": "route.html"
+    },
+    {
+      "key": "setoran-qr",
+      "title": "Setoran QR",
+      "icon": "fas fa-qrcode",
+      "url": "setoran-qr.html"
+    },
+    {
+      "key": "offline-sync",
+      "title": "Mode Offline & Sync",
+      "icon": "fas fa-wifi-slash",
+      "url": "offline-sync.html"
+    },
+    {
+      "key": "cetak-struk",
+      "title": "Cetak Struk",
+      "icon": "fas fa-print",
+      "url": "cetak-struk.html"
+    },
+    {
+      "key": "target-harian",
+      "title": "Target Harian",
+      "icon": "fas fa-bullseye",
+      "url": "target-harian.html"
+    },
+    {
+      "key": "gps-log",
+      "title": "GPS Log",
+      "icon": "fas fa-map",
+      "url": "gps-log.html"
+    },
+    {
+      "key": "transaksi-harian",
+      "title": "Transaksi Harian",
+      "icon": "fas fa-exchange-alt",
+      "url": "transaksi-harian.html"
+    }
   ],
   "teller": [
-    { "key": "dashboard", "title": "Dashboard", "icon": "fas fa-tachometer-alt", "url": "dashboard-teller.html" },
-    { "key": "route", "title": "Rute Penagihan", "icon": "fas fa-route", "url": "route.html" },
-    { "key": "setoran-qr", "title": "Setoran QR", "icon": "fas fa-qrcode", "url": "setoran-qr.html" },
-    { "key": "offline-sync", "title": "Mode Offline & Sync", "icon": "fas fa-wifi-slash", "url": "offline-sync.html" },
-    { "key": "cetak-struk", "title": "Cetak Struk", "icon": "fas fa-print", "url": "cetak-struk.html" },
-    { "key": "target-harian", "title": "Target Harian", "icon": "fas fa-bullseye", "url": "target-harian.html" },
-    { "key": "gps-log", "title": "GPS Log", "icon": "fas fa-map", "url": "gps-log.html" },
-    { "key": "transaksi-harian", "title": "Transaksi Harian", "icon": "fas fa-exchange-alt", "url": "transaksi-harian.html" }
+    {
+      "key": "dashboard",
+      "title": "Dashboard",
+      "icon": "fas fa-tachometer-alt",
+      "url": "dashboard-teller.html"
+    },
+    {
+      "key": "route",
+      "title": "Rute Penagihan",
+      "icon": "fas fa-route",
+      "url": "route.html"
+    },
+    {
+      "key": "setoran-qr",
+      "title": "Setoran QR",
+      "icon": "fas fa-qrcode",
+      "url": "setoran-qr.html"
+    },
+    {
+      "key": "offline-sync",
+      "title": "Mode Offline & Sync",
+      "icon": "fas fa-wifi-slash",
+      "url": "offline-sync.html"
+    },
+    {
+      "key": "cetak-struk",
+      "title": "Cetak Struk",
+      "icon": "fas fa-print",
+      "url": "cetak-struk.html"
+    },
+    {
+      "key": "target-harian",
+      "title": "Target Harian",
+      "icon": "fas fa-bullseye",
+      "url": "target-harian.html"
+    },
+    {
+      "key": "gps-log",
+      "title": "GPS Log",
+      "icon": "fas fa-map",
+      "url": "gps-log.html"
+    },
+    {
+      "key": "transaksi-harian",
+      "title": "Transaksi Harian",
+      "icon": "fas fa-exchange-alt",
+      "url": "transaksi-harian.html"
+    }
   ],
   "surveyor": [
-    { "key": "dashboard", "title": "Dashboard", "icon": "fas fa-tachometer-alt", "url": "dashboard-surveyor.html" },
-    { "key": "route", "title": "Rute Penagihan", "icon": "fas fa-route", "url": "route.html" },
-    { "key": "setoran-qr", "title": "Setoran QR", "icon": "fas fa-qrcode", "url": "setoran-qr.html" },
-    { "key": "offline-sync", "title": "Mode Offline & Sync", "icon": "fas fa-wifi-slash", "url": "offline-sync.html" },
-    { "key": "cetak-struk", "title": "Cetak Struk", "icon": "fas fa-print", "url": "cetak-struk.html" },
-    { "key": "target-harian", "title": "Target Harian", "icon": "fas fa-bullseye", "url": "target-harian.html" },
-    { "key": "gps-log", "title": "GPS Log", "icon": "fas fa-map", "url": "gps-log.html" },
-    { "key": "transaksi-harian", "title": "Transaksi Harian", "icon": "fas fa-exchange-alt", "url": "transaksi-harian.html" }
+    {
+      "key": "dashboard",
+      "title": "Dashboard",
+      "icon": "fas fa-tachometer-alt",
+      "url": "dashboard-surveyor.html"
+    },
+    {
+      "key": "route",
+      "title": "Rute Penagihan",
+      "icon": "fas fa-route",
+      "url": "route.html"
+    },
+    {
+      "key": "setoran-qr",
+      "title": "Setoran QR",
+      "icon": "fas fa-qrcode",
+      "url": "setoran-qr.html"
+    },
+    {
+      "key": "offline-sync",
+      "title": "Mode Offline & Sync",
+      "icon": "fas fa-wifi-slash",
+      "url": "offline-sync.html"
+    },
+    {
+      "key": "cetak-struk",
+      "title": "Cetak Struk",
+      "icon": "fas fa-print",
+      "url": "cetak-struk.html"
+    },
+    {
+      "key": "target-harian",
+      "title": "Target Harian",
+      "icon": "fas fa-bullseye",
+      "url": "target-harian.html"
+    },
+    {
+      "key": "gps-log",
+      "title": "GPS Log",
+      "icon": "fas fa-map",
+      "url": "gps-log.html"
+    },
+    {
+      "key": "transaksi-harian",
+      "title": "Transaksi Harian",
+      "icon": "fas fa-exchange-alt",
+      "url": "transaksi-harian.html"
+    }
   ],
   "collector": [
-    { "key": "dashboard", "title": "Dashboard", "icon": "fas fa-tachometer-alt", "url": "dashboard-collector.html" },
-    { "key": "route", "title": "Rute Penagihan", "icon": "fas fa-route", "url": "route.html" },
-    { "key": "setoran-qr", "title": "Setoran QR", "icon": "fas fa-qrcode", "url": "setoran-qr.html" },
-    { "key": "offline-sync", "title": "Mode Offline & Sync", "icon": "fas fa-wifi-slash", "url": "offline-sync.html" },
-    { "key": "cetak-struk", "title": "Cetak Struk", "icon": "fas fa-print", "url": "cetak-struk.html" },
-    { "key": "target-harian", "title": "Target Harian", "icon": "fas fa-bullseye", "url": "target-harian.html" },
-    { "key": "gps-log", "title": "GPS Log", "icon": "fas fa-map", "url": "gps-log.html" },
-    { "key": "transaksi-harian", "title": "Transaksi Harian", "icon": "fas fa-exchange-alt", "url": "transaksi-harian.html" }
+    {
+      "key": "dashboard",
+      "title": "Dashboard",
+      "icon": "fas fa-tachometer-alt",
+      "url": "dashboard-collector.html"
+    },
+    {
+      "key": "route",
+      "title": "Rute Penagihan",
+      "icon": "fas fa-route",
+      "url": "route.html"
+    },
+    {
+      "key": "setoran-qr",
+      "title": "Setoran QR",
+      "icon": "fas fa-qrcode",
+      "url": "setoran-qr.html"
+    },
+    {
+      "key": "offline-sync",
+      "title": "Mode Offline & Sync",
+      "icon": "fas fa-wifi-slash",
+      "url": "offline-sync.html"
+    },
+    {
+      "key": "cetak-struk",
+      "title": "Cetak Struk",
+      "icon": "fas fa-print",
+      "url": "cetak-struk.html"
+    },
+    {
+      "key": "target-harian",
+      "title": "Target Harian",
+      "icon": "fas fa-bullseye",
+      "url": "target-harian.html"
+    },
+    {
+      "key": "gps-log",
+      "title": "GPS Log",
+      "icon": "fas fa-map",
+      "url": "gps-log.html"
+    },
+    {
+      "key": "transaksi-harian",
+      "title": "Transaksi Harian",
+      "icon": "fas fa-exchange-alt",
+      "url": "transaksi-harian.html"
+    }
   ]
 }
