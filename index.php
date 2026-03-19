@@ -6,6 +6,6 @@
 
 // Check if user is logged in via localStorage (JavaScript-based auth)
 // Since we're using JWT tokens stored in localStorage, we need to redirect to login first
-header('Location: frontend/pages/auth/login.html');
+header('Location: login.html');
 exit;
 ?>

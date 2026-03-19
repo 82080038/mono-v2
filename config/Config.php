@@ -9,9 +9,9 @@ class Config {
     const DB_HOST = 'localhost';
     const DB_NAME = 'ksp_lamgabejaya_v2';
     const DB_USER = 'root';
-    const DB_PASS = 'root';
+    const DB_PASS = '';
     const DB_CHARSET = 'utf8mb4';
-    const DB_SOCKET = '/run/mysqld/mysqld.sock';
+    const DB_SOCKET = '';
     
     // Application Configuration
     const APP_NAME = 'KSP Lam Gabe Jaya';

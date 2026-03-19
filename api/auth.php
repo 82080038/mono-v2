@@ -30,10 +30,7 @@ $response = [
 // Database connection
 try {
     $pdo = new PDO(
-        "mysql:host=" . Config::DB_HOST . 
-        ";dbname=" . Config::DB_NAME . 
-        ";charset=" . Config::DB_CHARSET . 
-        ";unix_socket=" . Config::DB_SOCKET,
+        "mysql:host=localhost;dbname=ksp_lamgabejaya_v2;charset=utf8mb4",
         Config::DB_USER, 
         Config::DB_PASS,
         [
