@@ -1,74 +1,11 @@
-# Environment and secrets (keep template for development)
-.env
+# Only exclude truly sensitive production files
 .env.production
-# .env.development - REMOVED: Needed for development setup
 
-# Logs (keep structure but not actual logs)
-logs/
-*.log
-!logs/.gitkeep
-
-# Uploads (keep structure but not actual uploads)
-uploads/
-!uploads/.gitkeep
-!uploads/avatars/.gitkeep
-!uploads/documents/.gitkeep
-
-# Database backups (keep structure but not actual backups)
-backups/
-!backups/.gitkeep
-
-# IDE/OS
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Node modules (if any)
-node_modules/
-
-# Composer (if any)
-vendor/
-
-# Temporary files
-*.tmp
-*.temp
-
-# Cache
-cache/
-*.cache
-
-# Backup files created by system
-*~
-*.bak
-*.backup
-
-# Test files (keep for development)
-# test-*.html - REMOVED: Needed for development
-# test-basepath.html - REMOVED: Needed for development  
-# test-logout.html - REMOVED: Needed for development
-# test.html - REMOVED: Needed for development
-
-# Local development (keep for setup)
-# info.php - REMOVED: Needed for development debugging
-# install-dev-environment.sh - REMOVED: Needed for development setup
-
-# Local config overrides (keep template)
-config/local.*
-!config/local.example.php
-
-# API keys and sensitive files (keep structure but not actual keys)
-api/config.php
-api/keys/
-!api/keys/.gitkeep
-!api/config.example.php
-
-# Exclude some large generated files
+# Exclude very large generated files
 *.sql.gz
 *.zip
 *.tar.gz
 
-# Development database (keep for setup)
-# database/ksp_lamgabejaya_v2.sql - REMOVED: Needed for development
+# IDE/OS system files
+.DS_Store
+Thumbs.db
