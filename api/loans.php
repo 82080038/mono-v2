@@ -16,9 +16,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once '../config/Config.php';
 
+// Input validation and sanitization
+function validateInput($data, $type = 'string') {
+    switch ($type) {
+        case 'int':
+            return filter_var($data, FILTER_VALIDATE_INT);
+        case 'email':
+            return filter_var($data, FILTER_VALIDATE_EMAIL);
+        case 'string':
+            return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
+        case 'alpha':
+            return preg_match('/^[a-zA-Z]+$/', $data) ? $data : false;
+        case 'alphanum':
+            return preg_match('/^[a-zA-Z0-9]+$/', $data) ? $data : false;
+        default:
+            return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
+    }
+}
+
+// Safe query execution
+function safeQuery($db, $sql, $params = []) {
+    try {
+        $stmt = $db->prepare($sql);
+        if ($params) {
+            foreach ($params as $key => $value) {
+                $paramType = is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+                $stmt->bindValue(is_int($key) ? $key + 1 : $key, $value, $paramType);
+            }
+        }
+        $stmt->execute();
+        return $stmt;
+    } catch (PDOException $e) {
+        error_log("Database error: " . $e->getMessage());
+        return false;
+    }
+}
+
 try {
     $db = Config::getDatabase();
-    $action = $_GET['action'] ?? '';
+    
+    // Validate action parameter
+    $action = validateInput($_GET['action'] ?? '', 'alphanum');
+    if (!$action) {
+        sendResponse(false, 'Invalid action parameter', null, 400);
+        exit;
+    }
     
     switch ($action) {
         case 'get_loan_types':
@@ -92,14 +134,18 @@ function getLoanTypes($db) {
  * Get loans list
  */
 function getLoans($db) {
-    $page = max(1, intval($_GET['page'] ?? 1));
-    $limit = max(1, min(100, intval($_GET['limit'] ?? 20)));
-    $offset = ($page - 1) * $limit;
+    // Validate and sanitize input parameters
+    $page = validateInput($_GET['page'] ?? '1', 'int');
+    $limit = validateInput($_GET['limit'] ?? '20', 'int');
+    $search = validateInput($_GET['search'] ?? '', 'string');
+    $status = validateInput($_GET['status'] ?? '', 'string');
+    $loanType = validateInput($_GET['loan_type_id'] ?? '', 'int');
+    $memberId = validateInput($_GET['member_id'] ?? '', 'int');
     
-    $search = $_GET['search'] ?? '';
-    $status = $_GET['status'] ?? '';
-    $loanType = $_GET['loan_type_id'] ?? '';
-    $memberId = $_GET['member_id'] ?? '';
+    // Validate ranges
+    if (!$page || $page < 1) $page = 1;
+    if (!$limit || $limit < 1 || $limit > 100) $limit = 20;
+    $offset = ($page - 1) * $limit;
     
     $where = [];
     $params = [];
@@ -111,16 +157,19 @@ function getLoans($db) {
     }
     
     if (!empty($status)) {
-        $where[] = "l.status = ?";
-        $params[] = $status;
+        $allowedStatuses = ['pending', 'approved', 'rejected', 'active', 'completed', 'defaulted'];
+        if (in_array($status, $allowedStatuses)) {
+            $where[] = "l.status = ?";
+            $params[] = $status;
+        }
     }
     
-    if (!empty($loanType)) {
+    if ($loanType && $loanType > 0) {
         $where[] = "l.loan_type_id = ?";
         $params[] = $loanType;
     }
     
-    if (!empty($memberId)) {
+    if ($memberId && $memberId > 0) {
         $where[] = "l.member_id = ?";
         $params[] = $memberId;
     }

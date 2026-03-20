@@ -1,0 +1,187 @@
+{
+    "timestamp": "2026-03-20 11:43:11",
+    "summary": {
+        "high_issues": 2,
+        "medium_issues": 22,
+        "recommendations": 3
+    },
+    "issues": [
+        {
+            "type": "HARDCODED_CREDENTIALS",
+            "file": ".\/tests\/api_test_suite.php",
+            "line": 135,
+            "description": "Potential hardcoded credentials found",
+            "code": "password='hacked'..."
+        },
+        {
+            "type": "HARDCODED_CREDENTIALS",
+            "file": ".\/seed_database_simple.php",
+            "line": 11,
+            "description": "Potential hardcoded credentials found",
+            "code": "password = 'root'..."
+        },
+        {
+            "type": "HARDCODED_CREDENTIALS",
+            "file": ".\/config\/Config.php",
+            "line": 55,
+            "description": "Potential hardcoded credentials found",
+            "code": "PASSWORD = 'your-email-password'..."
+        },
+        {
+            "type": "HARDCODED_CREDENTIALS",
+            "file": ".\/config\/Config.php",
+            "line": 23,
+            "description": "Potential hardcoded credentials found",
+            "code": "SECRET = 'your-super-secret-jwt-key-change-in-prod..."
+        },
+        {
+            "type": "HARDCODED_CREDENTIALS",
+            "file": ".\/config\/Config.php",
+            "line": 60,
+            "description": "Potential hardcoded credentials found",
+            "code": "API_KEY = 'your-qrism-api-key'..."
+        },
+        {
+            "type": "SQL_INJECTION",
+            "severity": "HIGH",
+            "file": ".\/security_audit.php",
+            "line": 72,
+            "description": "Potential SQL injection vulnerability",
+            "code": "mysql_query.*\\$_GET..."
+        },
+        {
+            "type": "SQL_INJECTION",
+            "severity": "HIGH",
+            "file": ".\/security_audit.php",
+            "line": 73,
+            "description": "Potential SQL injection vulnerability",
+            "code": "mysql_query.*\\$_POST..."
+        },
+        {
+            "type": "FILE_PERMISSIONS",
+            "severity": "MEDIUM",
+            "file": "config\/Config.php",
+            "description": "Insecure file permissions",
+            "current_permissions": "0775",
+            "recommended": "0644 (files) or 0755 (directories)"
+        },
+        {
+            "type": "FILE_PERMISSIONS",
+            "severity": "MEDIUM",
+            "file": "api\/auth.php",
+            "description": "Insecure file permissions",
+            "current_permissions": "0775",
+            "recommended": "0644 (files) or 0755 (directories)"
+        },
+        {
+            "type": "FILE_PERMISSIONS",
+            "severity": "MEDIUM",
+            "file": ".htaccess",
+            "description": "Insecure file permissions",
+            "current_permissions": "0664",
+            "recommended": "0644 (files) or 0755 (directories)"
+        },
+        {
+            "type": "SESSION_SECURITY",
+            "severity": "MEDIUM",
+            "description": "Session cookies are not HTTP-only",
+            "recommended": "Set session.cookie_httponly = 1"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/api\/loans.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/api\/members.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/api\/auth.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/api\/analytics.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/api\/savings.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/api\/ai_credit_scoring.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/api\/auth_simple.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/api\/offline_sync.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/api\/gps_tracking.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/api\/ai_ml.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/core\/api\/auth.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/core\/api\/monitoring.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        },
+        {
+            "type": "CORS_SECURITY",
+            "severity": "MEDIUM",
+            "file": ".\/core\/api\/crud.php",
+            "description": "CORS allows all origins (*)",
+            "recommended": "Restrict to specific domains in production"
+        }
+    ],
+    "recommendations": [
+        "Found 21 files using prepared statements - good practice!",
+        "Consider setting session.cookie_secure = 1 for HTTPS",
+        "Input validation found in codebase - good practice!"
+    ]
+}

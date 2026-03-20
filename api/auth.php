@@ -18,6 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // Include configuration
 require_once __DIR__ . '/../config/Config.php';
+require_once __DIR__ . '/validators/InputValidator.php';
+require_once __DIR__ . '/Logger.php';
+
+// Initialize logging system
+Logger::initialize();
 
 // Initialize response array
 $response = [
@@ -76,25 +81,47 @@ echo json_encode($response, JSON_PRETTY_PRINT);
  * Handle POST requests
  */
 function handlePostRequest($db, &$response) {
-    $action = $_POST['action'] ?? '';
-    
-    switch ($action) {
-        case 'login':
-            handleLogin($db, $response);
-            break;
-        case 'logout':
-            handleLogout($response);
-            break;
-        case 'register':
-            handleRegister($db, $response);
-            break;
-        case 'reset_password':
-            handlePasswordReset($db, $response);
-            break;
-        default:
-            $response['message'] = 'Aksi tidak valid';
+    try {
+        // Validate request method
+        if (!InputValidator::validateRequestMethod(['POST'])) {
+            $response['message'] = 'Method not allowed';
+            http_response_code(405);
+            return;
+        }
+        
+        // Validate action parameter
+        $action = InputValidator::validate($_POST['action'] ?? '', 'alphanum');
+        if (!$action) {
+            $response['message'] = 'Invalid action parameter';
+            $response['errors'][] = 'Action must be alphanumeric';
             http_response_code(400);
-            break;
+            return;
+        }
+        
+        switch ($action) {
+            case 'login':
+                handleLogin($db, $response);
+                break;
+            case 'register':
+                handleRegister($db, $response);
+                break;
+            case 'logout':
+                handleLogout($db, $response);
+                break;
+            case 'refresh':
+                handleRefreshToken($db, $response);
+                break;
+            default:
+                $response['message'] = 'Action tidak valid';
+                $response['errors'][] = 'Unknown action: ' . $action;
+                http_response_code(400);
+                break;
+        }
+    } catch (Exception $e) {
+        $response['message'] = 'Request processing error: ' . $e->getMessage();
+        $response['errors'][] = 'Internal server error';
+        http_response_code(500);
+        error_log("Auth POST Error: " . $e->getMessage());
     }
 }
 

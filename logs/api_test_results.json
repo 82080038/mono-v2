@@ -1,0 +1,134 @@
+{
+    "timestamp": "2026-03-20 11:42:34",
+    "total_tests": 19,
+    "passed": 8,
+    "failed": 11,
+    "success_rate": 42.11,
+    "results": [
+        {
+            "test": "Valid Login Test",
+            "status": "PASSED",
+            "http_code": 200,
+            "response_size": 574
+        },
+        {
+            "test": "Invalid Login Test",
+            "status": "FAILED",
+            "reason": "Expected HTTP 401, got 400",
+            "http_code": 400,
+            "response": "{\n    \"success\": false,\n    \"message\": \"Password minimal 8 karakter\",\n    \"data\": null,\n    \"errors\": [\n        \"Password minimal 8 karakter\"\n    ]\n}"
+        },
+        {
+            "test": "Missing Password Test",
+            "status": "PASSED",
+            "http_code": 400,
+            "response_size": 161
+        },
+        {
+            "test": "Invalid Action Test",
+            "status": "PASSED",
+            "http_code": 400,
+            "response_size": 146
+        },
+        {
+            "test": "Get Members Test",
+            "status": "PASSED",
+            "http_code": 200,
+            "response_size": 8895
+        },
+        {
+            "test": "Get Member Types Test",
+            "status": "PASSED",
+            "http_code": 200,
+            "response_size": 2215
+        },
+        {
+            "test": "Search Members Test",
+            "status": "PASSED",
+            "http_code": 200,
+            "response_size": 269
+        },
+        {
+            "test": "Get Loans Test",
+            "status": "FAILED",
+            "reason": "Expected HTTP 200, got 400",
+            "http_code": 400,
+            "response": "{\n    \"success\": false,\n    \"message\": \"Invalid action parameter\",\n    \"data\": null,\n    \"timestamp\": \"2026-03-20 12:42:34\",\n    \"errors\": []\n}"
+        },
+        {
+            "test": "Get Loan Types Test",
+            "status": "FAILED",
+            "reason": "Expected HTTP 200, got 400",
+            "http_code": 400,
+            "response": "{\n    \"success\": false,\n    \"message\": \"Invalid action parameter\",\n    \"data\": null,\n    \"timestamp\": \"2026-03-20 12:42:34\",\n    \"errors\": []\n}"
+        },
+        {
+            "test": "Invalid Loan Action Test",
+            "status": "PASSED",
+            "http_code": 400,
+            "response_size": 143
+        },
+        {
+            "test": "SQL Injection Test: '; DROP TABLE member...",
+            "status": "FAILED",
+            "reason": "Expected HTTP 400, got 401",
+            "http_code": 401,
+            "response": "{\n    \"success\": false,\n    \"message\": \"User tidak ditemukan\",\n    \"data\": null,\n    \"errors\": [\n        \"User tidak ditemukan\"\n    ]\n}"
+        },
+        {
+            "test": "SQL Injection Test: 1' OR '1'='1...",
+            "status": "FAILED",
+            "reason": "Expected HTTP 400, got 401",
+            "http_code": 401,
+            "response": "{\n    \"success\": false,\n    \"message\": \"User tidak ditemukan\",\n    \"data\": null,\n    \"errors\": [\n        \"User tidak ditemukan\"\n    ]\n}"
+        },
+        {
+            "test": "SQL Injection Test: admin'; UPDATE membe...",
+            "status": "FAILED",
+            "reason": "Expected HTTP 400, got 401",
+            "http_code": 401,
+            "response": "{\n    \"success\": false,\n    \"message\": \"User tidak ditemukan\",\n    \"data\": null,\n    \"errors\": [\n        \"User tidak ditemukan\"\n    ]\n}"
+        },
+        {
+            "test": "XSS Test: <script>alert('xss')...",
+            "status": "FAILED",
+            "reason": "Expected HTTP 400, got 401",
+            "http_code": 401,
+            "response": "{\n    \"success\": false,\n    \"message\": \"User tidak ditemukan\",\n    \"data\": null,\n    \"errors\": [\n        \"User tidak ditemukan\"\n    ]\n}"
+        },
+        {
+            "test": "XSS Test: javascript:alert('xs...",
+            "status": "FAILED",
+            "reason": "Expected HTTP 400, got 401",
+            "http_code": 401,
+            "response": "{\n    \"success\": false,\n    \"message\": \"User tidak ditemukan\",\n    \"data\": null,\n    \"errors\": [\n        \"User tidak ditemukan\"\n    ]\n}"
+        },
+        {
+            "test": "XSS Test: <img src=x onerror=a...",
+            "status": "FAILED",
+            "reason": "Expected HTTP 400, got 401",
+            "http_code": 401,
+            "response": "{\n    \"success\": false,\n    \"message\": \"User tidak ditemukan\",\n    \"data\": null,\n    \"errors\": [\n        \"User tidak ditemukan\"\n    ]\n}"
+        },
+        {
+            "test": "Invalid Page Number Test",
+            "status": "FAILED",
+            "reason": "Expected HTTP 400, got 200",
+            "http_code": 200,
+            "response": "{\n    \"success\": true,\n    \"message\": \"Members retrieved\",\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 1,\n                \"member_number\": \"MEM-001\",\n                \"member_ty"
+        },
+        {
+            "test": "Excessive Limit Test",
+            "status": "FAILED",
+            "reason": "Expected HTTP 400, got 200",
+            "http_code": 200,
+            "response": "{\n    \"success\": true,\n    \"message\": \"Members retrieved\",\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 1,\n                \"member_number\": \"MEM-001\",\n                \"member_ty"
+        },
+        {
+            "test": "Invalid Characters Test",
+            "status": "PASSED",
+            "http_code": 400,
+            "response_size": 133
+        }
+    ]
+}
