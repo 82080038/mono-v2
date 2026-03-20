@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Pinjaman - KSP Lam Gabe Jaya</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/css/main.css" rel="stylesheet">
+    
+    <style>
+        .loan-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            border-left: 4px solid transparent;
+        }
+        
+        .loan-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .loan-card.status-applied {
+            border-left-color: #ffc107;
+        }
+        
+        .loan-card.status-approved {
+            border-left-color: #17a2b8;
+        }
+        
+        .loan-card.status-disbursed {
+            border-left-color: #28a745;
+        }
+        
+        .loan-card.status-active {
+            border-left-color: #007bff;
+        }
+        
+        .loan-card.status-late {
+            border-left-color: #fd7e14;
+        }
+        
+        .loan-card.status-default {
+            border-left-color: #dc3545;
+        }
+        
+        .loan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+        
+        .loan-number {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0066cc;
+            margin-bottom: 5px;
+        }
+        
+        .loan-type {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+        
+        .loan-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745;
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .loan-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0066cc;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+        
+        .progress-ring {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+        }
+        
+        .progress-ring circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .payment-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .payment-status.current {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .payment-status.late {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .payment-status.overdue {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .quick-action-btn {
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            background: white;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .quick-action-btn:hover {
+            border-color: #0066cc;
+            background: #f0f8ff;
+            color: #0066cc;
+            transform: translateY(-2px);
+        }
+        
+        .quick-action-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #0066cc;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .form-floating label {
+            color: #6c757d;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box input {
+            padding-left: 40px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .filter-tabs {
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            color: #6c757d;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .filter-tab:hover {
+            color: #0066cc;
+        }
+        
+        .filter-tab.active {
+            color: #0066cc;
+            border-bottom-color: #0066cc;
+            font-weight: 600;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .credit-score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .credit-score-low {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .credit-score-medium {
+            background: #ffc107;
+            color: black;
+        }
+        
+        .credit-score-high {
+            background: #28a745;
+            color: white;
+        }
+        
+        .loan-calculation {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .calculation-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .calculation-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #0066cc;
+        }
+        
+        .installment-schedule {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .installment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .installment-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .approval-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<body class="bg-light">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="text-center text-white">
+            <div class="spinner-border mb-3" role="status"></div>
+            <div>Memproses data...</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-primary text-white py-3">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <a href="dashboard.html" class="text-white me-3">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                    <h4 class="mb-0">Manajemen Pinjaman</h4>
+                </div>
+                <div>
+                    <button class="btn btn-light" onclick="refreshData()">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-4">
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-6">
+                <a href="#" class="quick-action-btn" data-bs-toggle="modal" data-bs-target="#loanApplicationModal">
+                    <div class="quick-action-icon">
+                        <i class="bi bi-file-earmark-plus"></i>
+                    </div>
+                    <div class="fw-semibold">Ajukan Pinjaman</div>
+                    <small class="text-muted">Pengajuan baru</small>
+                </a>
+            </div>
+            <div class="col-md-3 col-6">
+                <a href="#" class="quick-action-btn" onclick="showApprovalQueue()">
+                    <div class="quick-action-icon">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <div class="fw-semibold">Approval Queue</div>
+                    <small class="text-muted">Menunggu persetujuan</small>
+                </a>
+            </div>
+            <div class="col-md-3 col-6">
+                <a href="#" class="quick-action-btn" onclick="showPortfolio()">
+                    <div class="quick-action-icon">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <div class="fw-semibold">Portfolio</div>
+                    <small class="text-muted">Analisis pinjaman</small>
+                </a>
+            </div>
+            <div class="col-md-3 col-6">
+                <a href="#" class="quick-action-btn" onclick="showPayments()">
+                    <div class="quick-action-icon">
+                        <i class="bi bi-cash"></i>
+                    </div>
+                    <div class="fw-semibold">Pembayaran</div>
+                    <small class="text-muted">Bayar angsuran</small>
+                </a>
+            </div>
+        </div>
+
+        <!-- Status Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterLoans('all')">Semua</button>
+            <button class="filter-tab" onclick="filterLoans('Applied')">Diajukan</button>
+            <button class="filter-tab" onclick="filterLoans('Approved')">Disetujui</button>
+            <button class="filter-tab" onclick="filterLoans('Disbursed')">Dicairkan</button>
+            <button class="filter-tab" onclick="filterLoans('Active')">Aktif</button>
+            <button class="filter-tab" onclick="filterLoans('Late')">Terlambat</button>
+            <button class="filter-tab" onclick="filterLoans('Default')">Gagal Bayar</button>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Cari nomor pinjaman atau nama anggota...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="loanTypeFilter">
+                    <option value="">Semua Jenis Pinjaman</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="memberFilter">
+                    <option value="">Semua Anggota</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Loans Grid -->
+        <div class="row" id="loansContainer">
+            <!-- Loans will be loaded here -->
+        </div>
+    </main>
+
+    <!-- Loan Application Modal -->
+    <div class="modal fade" id="loanApplicationModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pengajuan Pinjaman Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loanApplicationForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Anggota</label>
+                                    <select class="form-select" id="loanMember" required>
+                                        <option value="">Pilih anggota</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Jenis Pinjaman</label>
+                                    <select class="form-select" id="loanType" required>
+                                        <option value="">Pilih jenis pinjaman</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Jumlah Pinjaman</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="loanAmount" min="1000000" step="100000" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Jangka Waktu (bulan)</label>
+                                    <input type="number" class="form-control" id="loanTerm" min="1" max="60" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Metode Perhitungan</label>
+                                    <select class="form-select" id="loanMethod" required>
+                                        <option value="Flat">Flat</option>
+                                        <option value="Effective">Efektif</option>
+                                        <option value="Anuitas">Anuitas</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Tujuan Pinjaman</label>
+                            <textarea class="form-control" id="loanPurpose" rows="3" required></textarea>
+                        </div>
+                        
+                        <!-- Credit Score Display -->
+                        <div class="credit-score-display" id="creditScoreDisplay">
+                            <div>Calculating...</div>
+                        </div>
+                        
+                        <!-- Loan Calculation -->
+                        <div class="loan-calculation" id="loanCalculation" style="display: none;">
+                            <h6>Rincian Pinjaman</h6>
+                            <div class="calculation-item">
+                                <span>Pinjaman Pokok</span>
+                                <span id="calcPrincipal">-</span>
+                            </div>
+                            <div class="calculation-item">
+                                <span>Bunga</span>
+                                <span id="calcInterest">-</span>
+                            </div>
+                            <div class="calculation-item">
+                                <span>Biaya Admin</span>
+                                <span id="calcAdminFee">-</span>
+                            </div>
+                            <div class="calculation-item">
+                                <span>Total Pembayaran</span>
+                                <span id="calcTotal">-</span>
+                            </div>
+                            <div class="calculation-item">
+                                <span>Angsuran Bulanan</span>
+                                <span id="calcMonthly">-</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Collateral Section -->
+                        <div class="mb-3" id="collateralSection" style="display: none;">
+                            <h6>Jaminan</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Jenis Jaminan</label>
+                                        <select class="form-select" id="collateralType">
+                                            <option value="">Pilih jenis jaminan</option>
+                                            <option value="Property">Properti (Rumah/Tanah)</option>
+                                            <option value="Vehicle">Kendaraan</option>
+                                            <option value="Savings">Simpanan</option>
+                                            <option value="Guarantor">Penjamin</option>
+                                            <option value="Other">Lainnya</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nilai Taksiran</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="collateralValue" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Deskripsi Jaminan</label>
+                                <textarea class="form-control" id="collateralDescription" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="submitLoanApplication()">Ajukan Pinjaman</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loan Details Modal -->
+    <div class="modal fade" id="loanDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Pinjaman</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="loanDetailsContent">
+                    <!-- Loan details will be loaded here -->
+                </div>
+                <div class="modal-footer" id="loanDetailsFooter">
+                    <!-- Actions will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approval Modal -->
+    <div class="modal fade" id="approvalModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Persetujuan Pinjaman</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Keputusan</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="decision" id="approveLoan" value="approve" checked>
+                            <label class="form-check-label" for="approveLoan">
+                                <i class="bi bi-check-circle text-success me-2"></i>Setujui
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="decision" id="rejectLoan" value="reject">
+                            <label class="form-check-label" for="rejectLoan">
+                                <i class="bi bi-x-circle text-danger me-2"></i>Tolak
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3" id="rejectionReason" style="display: none;">
+                        <label class="form-label">Alasan Penolakan</label>
+                        <textarea class="form-control" id="rejectionText" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3" id="approvalNote">
+                        <label class="form-label">Catatan (Opsional)</label>
+                        <textarea class="form-control" id="approvalText" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success" id="confirmApprovalBtn">Konfirmasi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        let loans = [];
+        let loanTypes = [];
+        let members = [];
+        let currentFilter = 'all';
+        let currentLoanId = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', filterLoans);
+            document.getElementById('loanTypeFilter').addEventListener('change', filterLoans);
+            document.getElementById('memberFilter').addEventListener('change', filterLoans);
+            
+            // Loan application form
+            document.getElementById('loanMember').addEventListener('change', calculateCreditScore);
+            document.getElementById('loanAmount').addEventListener('input', calculateLoan);
+            document.getElementById('loanTerm').addEventListener('input', calculateLoan);
+            document.getElementById('loanType').addEventListener('change', updateLoanTypeInfo);
+            document.getElementById('loanMethod').addEventListener('change', calculateLoan);
+            
+            // Approval modal
+            document.querySelectorAll('input[name="decision"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const rejectionSection = document.getElementById('rejectionReason');
+                    const approvalSection = document.getElementById('approvalNote');
+                    const confirmBtn = document.getElementById('confirmApprovalBtn');
+                    
+                    if (this.value === 'reject') {
+                        rejectionSection.style.display = 'block';
+                        approvalSection.style.display = 'none';
+                        confirmBtn.className = 'btn btn-danger';
+                        confirmBtn.textContent = 'Tolak Pinjaman';
+                    } else {
+                        rejectionSection.style.display = 'none';
+                        approvalSection.style.display = 'block';
+                        confirmBtn.className = 'btn btn-success';
+                        confirmBtn.textContent = 'Setujui Pinjaman';
+                    }
+                });
+            });
+        }
+
+        // Load data
+        async function loadData() {
+            showLoading(true);
+            try {
+                await Promise.all([
+                    loadLoans(),
+                    loadLoanTypes(),
+                    loadMembers()
+                ]);
+                renderLoans();
+                populateSelects();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showAlert('error', 'Gagal memuat data');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Load loans
+        async function loadLoans() {
+            const response = await fetch('../api/loans.php?action=get_loans&limit=100');
+            const result = await response.json();
+            
+            if (result.success) {
+                loans = result.data.data;
+            } else {
+                throw new Error(result.message);
+            }
+        }
+
+        // Load loan types
+        async function loadLoanTypes() {
+            const response = await fetch('../api/loans.php?action=get_loan_types');
+            const result = await response.json();
+            
+            if (result.success) {
+                loanTypes = result.data;
+            } else {
+                throw new Error(result.message);
+            }
+        }
+
+        // Load members
+        async function loadMembers() {
+            const response = await fetch('../api/members.php?action=get_members&limit=100');
+            const result = await response.json();
+            
+            if (result.success) {
+                members = result.data.data;
+            } else {
+                throw new Error(result.message);
+            }
+        }
+
+        // Render loans
+        function renderLoans() {
+            const container = document.getElementById('loansContainer');
+            const filteredLoans = getFilteredLoans();
+            
+            if (filteredLoans.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12">
+                        <div class="empty-state">
+                            <i class="bi bi-inbox"></i>
+                            <h5>Belum ada pinjaman</h5>
+                            <p>Ajukan pinjaman baru untuk memulai</p>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loanApplicationModal">
+                                <i class="bi bi-file-earmark-plus me-2"></i>Ajukan Pinjaman Baru
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filteredLoans.map(loan => `
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="loan-card status-${loan.status.toLowerCase()}">
+                        <div class="loan-header">
+                            <div>
+                                <div class="loan-number">${loan.loan_number}</div>
+                                <div class="loan-type">${loan.loan_type_name}</div>
+                                <div class="text-muted small">${loan.full_name}</div>
+                            </div>
+                            <span class="badge bg-${getStatusColor(loan.status)}">${getStatusLabel(loan.status)}</span>
+                        </div>
+                        
+                        <div class="loan-amount">
+                            Rp${formatCurrency(loan.amount)}
+                        </div>
+                        
+                        <div class="loan-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${loan.term_months}</div>
+                                <div class="stat-label">Bulan</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${(loan.interest_rate * 100).toFixed(2)}%</div>
+                                <div class="stat-label">Bunga</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${getProgressPercentage(loan)}%</div>
+                                <div class="stat-label">Progress</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${getDaysOverdue(loan)}</div>
+                                <div class="stat-label">Hari Telat</div>
+                            </div>
+                        </div>
+                        
+                        ${getPaymentStatus(loan)}
+                        
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-sm btn-outline-primary flex-fill" onclick="viewLoanDetails(${loan.id})">
+                                <i class="bi bi-eye me-1"></i>Detail
+                            </button>
+                            ${getActionButtons(loan)}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get filtered loans
+        function getFilteredLoans() {
+            return loans.filter(loan => {
+                // Status filter
+                if (currentFilter !== 'all' && loan.status !== currentFilter) {
+                    return false;
+                }
+                
+                // Search filter
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                if (searchTerm && !loan.loan_number.toLowerCase().includes(searchTerm) && 
+                    !loan.full_name.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+                
+                // Loan type filter
+                const loanTypeFilter = document.getElementById('loanTypeFilter').value;
+                if (loanTypeFilter && loan.loan_type_id != loanTypeFilter) {
+                    return false;
+                }
+                
+                // Member filter
+                const memberFilter = document.getElementById('memberFilter').value;
+                if (memberFilter && loan.member_id != memberFilter) {
+                    return false;
+                }
+                
+                return true;
+            });
+        }
+
+        // Filter loans
+        function filterLoans(status = null) {
+            if (status) {
+                currentFilter = status;
+                
+                // Update tab states
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            }
+            
+            renderLoans();
+        }
+
+        // Populate select elements
+        function populateSelects() {
+            // Loan types
+            const loanTypeSelects = ['loanType'];
+            loanTypeSelects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '<option value="">Pilih jenis pinjaman</option>' +
+                        loanTypes.map(type => `
+                            <option value="${type.id}" 
+                                    data-min="${type.minimum_amount}" 
+                                    data-max="${type.maximum_amount}"
+                                    data-min-term="${type.minimum_term_months}"
+                                    data-max-term="${type.maximum_term_months}"
+                                    data-collateral="${type.collateral_required ? 'true' : 'false'}">
+                                ${type.name} (Min: Rp${formatCurrency(type.minimum_amount)}, Max: Rp${formatCurrency(type.maximum_amount)})
+                            </option>
+                        `).join('');
+                }
+            });
+            
+            // Members
+            const memberSelects = ['loanMember'];
+            memberSelects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '<option value="">Pilih anggota</option>' +
+                        members.map(member => `
+                            <option value="${member.id}">${member.full_name} (${member.member_number})</option>
+                        `).join('');
+                }
+            });
+            
+            // Filter selects
+            const loanTypeFilter = document.getElementById('loanTypeFilter');
+            if (loanTypeFilter) {
+                loanTypeFilter.innerHTML = '<option value="">Semua Jenis Pinjaman</option>' +
+                    loanTypes.map(type => `
+                        <option value="${type.id}">${type.name}</option>
+                    `).join('');
+            }
+            
+            const memberFilter = document.getElementById('memberFilter');
+            if (memberFilter) {
+                memberFilter.innerHTML = '<option value="">Semua Anggota</option>' +
+                    members.map(member => `
+                        <option value="${member.id}">${member.full_name}</option>
+                    `).join('');
+            }
+        }
+
+        // Update loan type info
+        function updateLoanTypeInfo() {
+            const loanTypeSelect = document.getElementById('loanType');
+            const selectedOption = loanTypeSelect.options[loanTypeSelect.selectedIndex];
+            const collateralRequired = selectedOption.dataset.collateral === 'true';
+            
+            const collateralSection = document.getElementById('collateralSection');
+            collateralSection.style.display = collateralRequired ? 'block' : 'none';
+            
+            // Update min/max values
+            const loanAmount = document.getElementById('loanAmount');
+            const loanTerm = document.getElementById('loanTerm');
+            
+            loanAmount.min = selectedOption.dataset.min;
+            loanAmount.max = selectedOption.dataset.max;
+            loanTerm.min = selectedOption.dataset.minTerm;
+            loanTerm.max = selectedOption.dataset.maxTerm;
+        }
+
+        // Calculate credit score
+        async function calculateCreditScore() {
+            const memberId = document.getElementById('loanMember').value;
+            const scoreDisplay = document.getElementById('creditScoreDisplay');
+            
+            if (!memberId) {
+                scoreDisplay.innerHTML = '<div>Pilih anggota terlebih dahulu</div>';
+                scoreDisplay.className = 'credit-score-display';
+                return;
+            }
+            
+            scoreDisplay.innerHTML = '<div>Calculating...</div>';
+            scoreDisplay.className = 'credit-score-display';
+            
+            try {
+                // Simulate credit score calculation
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Calculate mock score based on member data
+                const member = members.find(m => m.id == memberId);
+                let score = 50; // Base score
+                
+                // Income factor
+                if (member && member.monthly_income) {
+                    const income = parseFloat(member.monthly_income);
+                    if (income >= 5000000) score += 20;
+                    else if (income >= 3000000) score += 15;
+                    else if (income >= 2000000) score += 10;
+                    else if (income >= 1000000) score += 5;
+                }
+                
+                // Account factor
+                if (member && member.total_accounts > 0) {
+                    score += 10;
+                    if (member.total_savings > 1000000) score += 10;
+                }
+                
+                // Previous loans factor
+                if (member && member.total_loans > 0) {
+                    const paidRatio = member.paid_loans / member.total_loans;
+                    score += paidRatio * 10;
+                }
+                
+                score = Math.min(100, Math.max(0, score));
+                
+                // Display score
+                let scoreClass = 'credit-score-low';
+                let riskLevel = 'Tinggi';
+                let recommendation = 'Tidak Disarankan';
+                
+                if (score >= 80) {
+                    scoreClass = 'credit-score-high';
+                    riskLevel = 'Rendah';
+                    recommendation = 'Disarankan';
+                } else if (score >= 60) {
+                    scoreClass = 'credit-score-medium';
+                    riskLevel = 'Sedang';
+                    recommendation = 'Pertimbangkan';
+                }
+                
+                scoreDisplay.className = `credit-score-display ${scoreClass}`;
+                scoreDisplay.innerHTML = `
+                    <div class="fs-2">${score}</div>
+                    <div>Skor Kredit</div>
+                    <div class="small">Tingkat Risiko: ${riskLevel}</div>
+                    <div class="small">Rekomendasi: ${recommendation}</div>
+                `;
+                
+            } catch (error) {
+                console.error('Error calculating credit score:', error);
+                scoreDisplay.innerHTML = '<div class="text-danger">Gagal menghitung skor kredit</div>';
+            }
+        }
+
+        // Calculate loan
+        function calculateLoan() {
+            const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const term = parseInt(document.getElementById('loanTerm').value) || 0;
+            const method = document.getElementById('loanMethod').value;
+            const loanTypeSelect = document.getElementById('loanType');
+            const selectedOption = loanTypeSelect.options[loanTypeSelect.selectedIndex];
+            
+            if (amount <= 0 || term <= 0) {
+                document.getElementById('loanCalculation').style.display = 'none';
+                return;
+            }
+            
+            const interestRate = 0.015; // Default 1.5% per month
+            const adminFeeRate = 0.01; // 1% admin fee
+            
+            let totalInterest, totalPayment, monthlyInstallment;
+            
+            switch (method) {
+                case 'Flat':
+                    totalInterest = amount * interestRate * term;
+                    totalPayment = amount + totalInterest + (amount * adminFeeRate);
+                    monthlyInstallment = totalPayment / term;
+                    break;
+                    
+                case 'Effective':
+                    totalInterest = 0;
+                    let remainingBalance = amount;
+                    for (let i = 1; i <= term; i++) {
+                        totalInterest += remainingBalance * interestRate;
+                        remainingBalance -= amount / term;
+                    }
+                    totalPayment = amount + totalInterest + (amount * adminFeeRate);
+                    monthlyInstallment = totalPayment / term;
+                    break;
+                    
+                case 'Anuitas':
+                    const r = interestRate;
+                    const n = term;
+                    monthlyInstallment = amount * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+                    totalPayment = monthlyInstallment * term + (amount * adminFeeRate);
+                    totalInterest = (monthlyInstallment * term) - amount;
+                    break;
+            }
+            
+            // Update calculation display
+            document.getElementById('loanCalculation').style.display = 'block';
+            document.getElementById('calcPrincipal').textContent = 'Rp' + formatCurrency(amount);
+            document.getElementById('calcInterest').textContent = 'Rp' + formatCurrency(totalInterest);
+            document.getElementById('calcAdminFee').textContent = 'Rp' + formatCurrency(amount * adminFeeRate);
+            document.getElementById('calcTotal').textContent = 'Rp' + formatCurrency(totalPayment);
+            document.getElementById('calcMonthly').textContent = 'Rp' + formatCurrency(monthlyInstallment);
+        }
+
+        // Submit loan application
+        async function submitLoanApplication() {
+            const memberId = document.getElementById('loanMember').value;
+            const loanTypeId = document.getElementById('loanType').value;
+            const amount = parseFloat(document.getElementById('loanAmount').value);
+            const term = parseInt(document.getElementById('loanTerm').value);
+            const method = document.getElementById('loanMethod').value;
+            const purpose = document.getElementById('loanPurpose').value;
+            
+            if (!memberId || !loanTypeId || !amount || !term || !purpose) {
+                showAlert('error', 'Mohon lengkapi semua field yang wajib diisi');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch('../api/loans.php?action=apply_loan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        member_id: memberId,
+                        loan_type_id: loanTypeId,
+                        amount: amount,
+                        term_months: term,
+                        calculation_method: method,
+                        purpose: purpose
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('success', 'Pengajuan pinjaman berhasil! Nomor: ' + result.data.loan_number + ', Skor Kredit: ' + result.data.credit_score);
+                    bootstrap.Modal.getInstance(document.getElementById('loanApplicationModal')).hide();
+                    document.getElementById('loanApplicationForm').reset();
+                    document.getElementById('loanCalculation').style.display = 'none';
+                    await loadData();
+                } else {
+                    showAlert('error', result.message || 'Pengajuan pinjaman gagal');
+                }
+                
+            } catch (error) {
+                console.error('Loan application error:', error);
+                showAlert('error', 'Terjadi kesalahan saat mengajukan pinjaman');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // View loan details
+        async function viewLoanDetails(loanId) {
+            currentLoanId = loanId;
+            showLoading(true);
+            
+            try {
+                const response = await fetch(`../api/loans.php?action=get_loan&id=${loanId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const loan = result.data;
+                    
+                    // Update modal content
+                    const content = document.getElementById('loanDetailsContent');
+                    content.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Informasi Pinjaman</h6>
+                                <table class="table table-sm">
+                                    <tr><td>Nomor Pinjaman</td><td>${loan.loan_number}</td></tr>
+                                    <tr><td>Jenis Pinjaman</td><td>${loan.loan_type_name}</td></tr>
+                                    <tr><td>Anggota</td><td>${loan.full_name}</td></tr>
+                                    <tr><td>Tanggal Pengajuan</td><td>${formatDate(loan.application_date)}</td></tr>
+                                    <tr><td>Tanggal Persetujuan</td><td>${loan.approval_date ? formatDate(loan.approval_date) : '-'}</td></tr>
+                                    <tr><td>Tanggal Pencairan</td><td>${loan.disbursement_date ? formatDate(loan.disbursement_date) : '-'}</td></tr>
+                                    <tr><td>Status</td><td><span class="badge bg-${getStatusColor(loan.status)}">${getStatusLabel(loan.status)}</span></td></tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Rincian Keuangan</h6>
+                                <table class="table table-sm">
+                                    <tr><td>Jumlah Pinjaman</td><td>Rp${formatCurrency(loan.amount)}</td></tr>
+                                    <tr><td>Suku Bunga</td><td>${(loan.interest_rate * 100).toFixed(2)}%</td></tr>
+                                    <tr><td>Jangka Waktu</td><td>${loan.term_months} bulan</td></tr>
+                                    <tr><td>Angsuran Bulanan</td><td>Rp${formatCurrency(loan.monthly_installment)}</td></tr>
+                                    <tr><td>Total Bunga</td><td>Rp${formatCurrency(loan.total_interest)}</td></tr>
+                                    <tr><td>Total Pembayaran</td><td>Rp${formatCurrency(loan.total_payment)}</td></tr>
+                                    <tr><td>Sisa Pinjaman</td><td>Rp${formatCurrency(loan.outstanding_balance)}</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        ${loan.installments && loan.installments.length > 0 ? `
+                            <h6 class="mt-4">Jadwal Angsuran</h6>
+                            <div class="installment-schedule">
+                                ${loan.installments.map(installment => `
+                                    <div class="installment-item">
+                                        <div>
+                                            <div class="fw-semibold">Angsuran ${installment.installment_number}</div>
+                                            <div class="text-muted small">${formatDate(installment.due_date)}</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-semibold">Rp${formatCurrency(installment.total_amount)}</div>
+                                            <span class="badge bg-${getInstallmentStatusColor(installment.status)}">${installment.status}</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${loan.payments && loan.payments.length > 0 ? `
+                            <h6 class="mt-4">Riwayat Pembayaran</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Tanggal</th>
+                                            <th>Jumlah</th>
+                                            <th>Pokok</th>
+                                            <th>Bunga</th>
+                                            <th>Metode</th>
+                                            <th>Referensi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${loan.payments.map(payment => `
+                                            <tr>
+                                                <td>${formatDateTime(payment.payment_date)}</td>
+                                                <td>Rp${formatCurrency(payment.payment_amount)}</td>
+                                                <td>Rp${formatCurrency(payment.principal_portion)}</td>
+                                                <td>Rp${formatCurrency(payment.interest_portion)}</td>
+                                                <td>${payment.payment_method}</td>
+                                                <td>${payment.reference_number}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ` : ''}
+                    `;
+                    
+                    // Update modal footer with actions
+                    const footer = document.getElementById('loanDetailsFooter');
+                    footer.innerHTML = getLoanActions(loan);
+                    
+                    // Show modal
+                    const modal = new bootstrap.Modal(document.getElementById('loanDetailsModal'));
+                    modal.show();
+                    
+                } else {
+                    showAlert('error', result.message || 'Gagal memuat detail pinjaman');
+                }
+                
+            } catch (error) {
+                console.error('Error loading loan details:', error);
+                showAlert('error', 'Terjadi kesalahan saat memuat detail pinjaman');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Get loan actions
+        function getLoanActions(loan) {
+            let actions = '';
+            
+            switch (loan.status) {
+                case 'Applied':
+                    actions = `
+                        <button type="button" class="btn btn-success" onclick="showApprovalModal(${loan.id})">
+                            <i class="bi bi-check-circle me-2"></i>Proses Persetujuan
+                        </button>
+                    `;
+                    break;
+                    
+                case 'Approved':
+                    actions = `
+                        <button type="button" class="btn btn-primary" onclick="disburseLoan(${loan.id})">
+                            <i class="bi bi-cash-stack me-2"></i>Cairkan Pinjaman
+                        </button>
+                    `;
+                    break;
+                    
+                case 'Active':
+                case 'Late':
+                    actions = `
+                        <button type="button" class="btn btn-success" onclick="makePayment(${loan.id})">
+                            <i class="bi bi-cash me-2"></i>Bayar Angsuran
+                        </button>
+                    `;
+                    break;
+            }
+            
+            return actions;
+        }
+
+        // Show approval modal
+        function showApprovalModal(loanId) {
+            currentLoanId = loanId;
+            const modal = new bootstrap.Modal(document.getElementById('approvalModal'));
+            modal.show();
+        }
+
+        // Confirm approval/rejection
+        document.getElementById('confirmApprovalBtn').addEventListener('click', async function() {
+            const decision = document.querySelector('input[name="decision"]:checked').value;
+            const reason = decision === 'reject' ? document.getElementById('rejectionText').value : document.getElementById('approvalText').value;
+            
+            if (decision === 'reject' && !reason) {
+                showAlert('error', 'Alasan penolakan harus diisi');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch('../api/loans.php?action=approve_loan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        loan_id: currentLoanId,
+                        approved: decision === 'approve',
+                        reason: reason
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('success', decision === 'approve' ? 'Pinjaman disetujui' : 'Pinjaman ditolak');
+                    bootstrap.Modal.getInstance(document.getElementById('approvalModal')).hide();
+                    bootstrap.Modal.getInstance(document.getElementById('loanDetailsModal')).hide();
+                    await loadData();
+                } else {
+                    showAlert('error', result.message || 'Gagal memproses persetujuan');
+                }
+                
+            } catch (error) {
+                console.error('Approval error:', error);
+                showAlert('error', 'Terjadi kesalahan saat memproses persetujuan');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Utility functions
+        function formatCurrency(amount) {
+            return parseInt(amount || 0).toLocaleString('id-ID');
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID');
+        }
+
+        function formatDateTime(dateTime) {
+            const date = new Date(dateTime);
+            return date.toLocaleString('id-ID');
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'Applied': 'warning',
+                'Approved': 'info',
+                'Rejected': 'danger',
+                'Disbursed': 'success',
+                'Active': 'primary',
+                'Late': 'warning',
+                'Default': 'danger',
+                'Paid Off': 'success'
+            };
+            return colors[status] || 'secondary';
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                'Applied': 'Diajukan',
+                'Approved': 'Disetujui',
+                'Rejected': 'Ditolak',
+                'Disbursed': 'Dicairkan',
+                'Active': 'Aktif',
+                'Late': 'Terlambat',
+                'Default': 'Gagal Bayar',
+                'Paid Off': 'Lunas'
+            };
+            return labels[status] || status;
+        }
+
+        function getInstallmentStatusColor(status) {
+            const colors = {
+                'Pending': 'warning',
+                'Paid': 'success',
+                'Late': 'danger',
+                'Overdue': 'danger'
+            };
+            return colors[status] || 'secondary';
+        }
+
+        function getProgressPercentage(loan) {
+            if (loan.status === 'Paid Off') return 100;
+            if (loan.status === 'Applied' || loan.status === 'Approved') return 0;
+            
+            const totalPaid = parseFloat(loan.total_payment) - parseFloat(loan.outstanding_balance);
+            return Math.round((totalPaid / parseFloat(loan.total_payment)) * 100);
+        }
+
+        function getDaysOverdue(loan) {
+            if (loan.status !== 'Active' && loan.status !== 'Late') return 0;
+            
+            const nextPaymentDate = new Date(loan.next_payment_date);
+            const today = new Date();
+            const diffTime = today - nextPaymentDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            return Math.max(0, diffDays);
+        }
+
+        function getPaymentStatus(loan) {
+            if (loan.status !== 'Active' && loan.status !== 'Late') return '';
+            
+            const daysOverdue = getDaysOverdue(loan);
+            let statusClass = 'current';
+            let statusText = 'Tepat Waktu';
+            
+            if (daysOverdue > 0) {
+                if (daysOverdue <= 7) {
+                    statusClass = 'late';
+                    statusText = `Terlambat ${daysOverdue} hari`;
+                } else {
+                    statusClass = 'overdue';
+                    statusText = `Menunggak ${daysOverdue} hari`;
+                }
+            }
+            
+            return `
+                <div class="payment-status ${statusClass}">
+                    <i class="bi bi-clock me-2"></i>
+                    ${statusText}
+                </div>
+            `;
+        }
+
+        function getActionButtons(loan) {
+            let buttons = '';
+            
+            switch (loan.status) {
+                case 'Applied':
+                    buttons = `
+                        <button class="btn btn-sm btn-success" onclick="showApprovalModal(${loan.id})">
+                            <i class="bi bi-check-circle"></i>
+                        </button>
+                    `;
+                    break;
+                    
+                case 'Approved':
+                    buttons = `
+                        <button class="btn btn-sm btn-primary" onclick="disburseLoan(${loan.id})">
+                            <i class="bi bi-cash-stack"></i>
+                        </button>
+                    `;
+                    break;
+                    
+                case 'Active':
+                case 'Late':
+                    buttons = `
+                        <button class="btn btn-sm btn-success" onclick="makePayment(${loan.id})">
+                            <i class="bi bi-cash"></i>
+                        </button>
+                    `;
+                    break;
+            }
+            
+            return buttons;
+        }
+
+        // Quick action functions
+        function showApprovalQueue() {
+            filterLoans('Applied');
+        }
+
+        function showPortfolio() {
+            // Navigate to portfolio page
+            window.location.href = 'loan-portfolio.html';
+        }
+
+        function showPayments() {
+            // Navigate to payments page
+            window.location.href = 'loan-payments.html';
+        }
+
+        function refreshData() {
+            loadData();
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+        }
+
+        function showAlert(type, message) {
+            // Remove existing alerts
+            const existingAlert = document.querySelector('.alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            // Create new alert
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show`;
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            // Insert at the top of the main content
+            const main = document.querySelector('main');
+            main.insertBefore(alert, main.firstChild);
+            
+            // Auto dismiss after 5 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - KSP Lam Gabe Jaya</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .login-header h2 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .login-header p {
+            color: #666;
+            margin: 0;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .text-center {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .text-muted {
+            color: #666;
+            font-size: 0.875rem;
+        }
+        .alert {
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .alert-danger {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Admin Login</h2>
+            <p>KSP Lam Gabe Jaya</p>
+        </div>
+        
+        <div id="errorAlert" class="alert alert-danger">
+            Username atau password salah!
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Masukkan username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Masukkan password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                Login
+            </button>
+        </form>
+        
+        <div class="text-center">
+            <small class="text-muted">Demo: username=admin, password=admin123</small>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const errorAlert = document.getElementById("errorAlert");
+            
+            // Simple validation
+            if (!username || !password) {
+                errorAlert.textContent = "Username dan password harus diisi!";
+                errorAlert.style.display = "block";
+                return;
+            }
+            
+            // Check credentials
+            if (username === "admin" && password === "admin123") {
+                // Store authentication data
+                localStorage.setItem("authToken", "admin-token-12345");
+                localStorage.setItem("userRole", "admin");
+                localStorage.setItem("userName", username);
+                
+                // Redirect to dashboard
+                window.location.href = "dashboard.html";
+            } else {
+                errorAlert.style.display = "block";
+            }
+        });
+        
+        // Hide error alert when user starts typing
+        document.getElementById("username").addEventListener("input", function() {
+            document.getElementById("errorAlert").style.display = "none";
+        });
+        
+        document.getElementById("password").addEventListener("input", function() {
+            document.getElementById("errorAlert").style.display = "none";
+        });
+    </script>
+</body>
+</html>

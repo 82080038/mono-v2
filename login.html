@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <!-- Navigation Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-building me-2"></i>
+                KSP Lam Gabe Jaya
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Kembali
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Container -->
+    <div class="container">
+        <div class="row justify-content-center min-vh-100 align-items-center">
+            <div class="col-md-6 col-lg-4">
+                <!-- Login Card -->
+                <div class="card shadow-lg">
+                    <div class="card-body p-5">
+                        <!-- Logo and Title -->
+                        <div class="text-center mb-4">
+                            <div class="logo-container mb-3">
+                                <i class="fas fa-university text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h2 class="fw-bold">Masuk ke Sistem</h2>
+                            <p class="text-muted">
+                                Masukkan email dan kata sandi Anda untuk mengakses sistem
+                            </p>
+                        </div>
+
+                        <!-- Login Form -->
+                        <form id="loginForm" novalidate>
+                            <!-- Email Field -->
+                            <div class="form-group mb-3">
+                                <label for="emailInput" class="form-label">
+                                    <i class="fas fa-envelope me-1"></i>
+                                    Email atau Username
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="emailInput" name="username"
+                                    placeholder="Masukkan email atau username" required>
+                                <div class="invalid-feedback">
+                                    Email atau username harus diisi
+                                </div>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="form-group mb-3">
+                                <label for="passwordInput" class="form-label">
+                                    <i class="fas fa-lock me-1"></i>
+                                    Kata Sandi
+                                </label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control form-control-lg" id="passwordInput"
+                                        name="password" placeholder="Masukkan kata sandi" required>
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword"
+                                        title="Tampilkan/Sembunyikan Kata Sandi">
+                                        <i class="fas fa-eye" id="passwordIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Kata sandi harus diisi
+                                </div>
+                            </div>
+
+                            <!-- Remember Me & Forgot Password -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">
+                                        Ingat saya
+                                    </label>
+                                </div>
+                                <a href="#" class="text-decoration-none" onclick="showForgotPassword()">
+                                    Lupa kata sandi?
+                                </a>
+                            </div>
+
+                            <!-- Login Button -->
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg" id="loginBtn">
+                                    <i class="fas fa-sign-in-alt me-2"></i>
+                                    <span id="loginBtnText">Masuk</span>
+                                </button>
+                            </div>
+
+                            <!-- Register Link -->
+                            <div class="text-center">
+                                <p class="mb-0">
+                                    Belum punya akun?
+                                    <a href="#" class="text-decoration-none fw-bold" onclick="showRegister()">
+                                        Daftar di sini
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Quick Login Section -->
+                <div class="card shadow-lg mt-3">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <h5 class="fw-bold text-primary">
+                                <i class="fas fa-rocket me-2"></i>
+                                Quick Login (Development)
+                            </h5>
+                            <p class="text-muted small">
+                                Login cepat untuk testing semua role sistem
+                            </p>
+                        </div>
+
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button class="btn btn-outline-primary btn-sm w-100 quick-login-btn"
+                                    data-email="Admin User" data-password="password" data-role="Admin">
+                                    <i class="fas fa-crown me-1"></i>
+                                    Admin
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-success btn-sm w-100 quick-login-btn"
+                                    data-email="Mantri User" data-password="password" data-role="Mantri">
+                                    <i class="fas fa-user-shield me-1"></i>
+                                    Mantri
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-info btn-sm w-100 quick-login-btn"
+                                    data-email="Member User" data-password="password" data-role="Member">
+                                    <i class="fas fa-user-tie me-1"></i>
+                                    Member
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-warning btn-sm w-100 quick-login-btn"
+                                    data-email="Kasir User" data-password="password" data-role="Kasir">
+                                    <i class="fas fa-users me-1"></i>
+                                    Kasir
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-secondary btn-sm w-100 quick-login-btn"
+                                    data-email="Teller User" data-password="password" data-role="Teller">
+                                    <i class="fas fa-cash-register me-1"></i>
+                                    Teller
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-dark btn-sm w-100 quick-login-btn"
+                                    data-email="Surveyor User" data-password="password" data-role="Surveyor">
+                                    <i class="fas fa-hand-holding-usd me-1"></i>
+                                    Surveyor
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-primary btn-sm w-100 quick-login-btn"
+                                    data-email="Collector User" data-password="password" data-role="Collector">
+                                    <i class="fas fa-clipboard-list me-1"></i>
+                                    Collector
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info mt-3 mb-0 py-2">
+                            <small class="mb-0">
+                                <i class="fas fa-info-circle me-1"></i>
+                                <strong>Password universal:</strong> password
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Info -->
+                <div class="text-center mt-4">
+                    <small class="text-muted">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Sistem Koperasi KSP Lam Gabe Jaya v2.0
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div class="alert-container position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <!-- Alerts will be inserted here -->
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-key me-2"></i>
+                        Lupa Kata Sandi
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Masukkan email Anda untuk menerima link reset kata sandi.
+                    </p>
+                    <form id="forgotPasswordForm">
+                        <div class="form-group mb-3">
+                            <label for="resetEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="resetEmail" placeholder="Masukkan email Anda"
+                                required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="sendResetLink()">
+                        <i class="fas fa-paper-plane me-2"></i>
+                        Kirim Link Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Configuration -->
+    <script src="assets/js/config.js"></script>
+    <!-- Fixed Authentication Script -->
+    <script src="assets/js/auth-fixed.js"></script>
+
+    <!-- Login Fix Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Override auth.js functions to fix URL issues
+            if (typeof window.simulateLoginAPI === 'function') {
+                // Store original function
+                const originalSimulateLoginAPI = window.simulateLoginAPI;
+
+                // Override with fixed version
+                window.simulateLoginAPI = async function (email, password) {
+                    try {
+                        console.log('Using fixed login API call...');
+
+                        const formData = new FormData();
+                        formData.append('action', 'login');
+                        formData.append('username', email);
+                        formData.append('password', password);
+
+                        // Use absolute URL to fix path resolution
+                        const apiUrl = window.location.origin + '/mono-v2/api/auth.php';
+                        console.log('Calling API:', apiUrl);
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'Origin': window.location.origin,
+                                'Referer': window.location.href
+                            }
+                        });
+
+                        console.log('Response status:', response.status);
+                        console.log('Response headers:', Object.fromEntries(response.headers));
+
+                        const result = await response.json();
+                        console.log('Response data:', result);
+
+                        return result;
+                    } catch (error) {
+                        console.error('Fixed API Error:', error);
+                        return {
+                            success: false,
+                            message: 'Terjadi kesalahan koneksi ke server: ' + error.message
+                        };
+                    }
+                };
+
+                console.log('Login API function overridden with fixed version');
+            }
+
+            // Override validateStoredToken if exists
+            if (typeof window.validateStoredToken === 'function') {
+                const originalValidateStoredToken = window.validateStoredToken;
+
+                window.validateStoredToken = async function (token) {
+                    try {
+                        const apiUrl = window.location.origin + '/mono-v2/api/auth.php?action=validate&token=' + encodeURIComponent(token);
+                        console.log('Validating token at:', apiUrl);
+
+                        const response = await fetch(apiUrl);
+                        const result = await response.json();
+                        return result.success;
+                    } catch (error) {
+                        console.error('Token validation error:', error);
+                        return false;
+                    }
+                };
+
+                console.log('Token validation function overridden');
+            }
+
+            // Clear any problematic sessions
+            clearProblematicSessions();
+
+            // Add form submission handler
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    console.log('Form submitted via event listener');
+                    // Use the auth-fixed.js login handler with event
+                    if (typeof window.handleLogin === 'function') {
+                        window.handleLogin(e);
+                    } else {
+                        console.error('handleLogin function not found');
+                    }
+                });
+                console.log('Form submission handler added');
+            }
+        });
+
+        function clearProblematicSessions() {
+            console.log('Clearing problematic sessions...');
+
+            // Get stored data
+            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+            const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+
+            if (token || userData) {
+                console.log('Found stored session data, clearing...');
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                sessionStorage.removeItem('authToken');
+                sessionStorage.removeItem('userData');
+                console.log('Session cleared');
+            }
+        }
+    </script>
+
+    <!-- Quick Login Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Clear any invalid stored sessions on login page load
+            clearInvalidSessions();
+
+            // Quick Login Button Handler (auto-submit and clear previous session)
+            const quickLoginButtons = document.querySelectorAll('.quick-login-btn');
+            const loginForm = document.getElementById('loginForm');
+            const loginBtn = document.getElementById('loginBtn');
+
+            function clearSession() {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                sessionStorage.removeItem('authToken');
+                sessionStorage.removeItem('userData');
+            }
+
+            async function clearInvalidSessions() {
+                const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+                const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+
+                if (token && userData) {
+                    try {
+                        // Use absolute URL to avoid path resolution issues
+                        const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]+$/, '/');
+                        const response = await fetch(`${baseUrl}api/auth.php?action=validate&token=${encodeURIComponent(token)}`);
+                        const result = await response.json();
+
+                        if (!result.success) {
+                            console.log('Clearing invalid session on login page');
+                            clearSession();
+                        }
+                    } catch (error) {
+                        console.log('Error validating session, clearing anyway');
+                        clearSession();
+                    }
+                }
+            }
+
+            quickLoginButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const email = this.getAttribute('data-email');
+                    const password = this.getAttribute('data-password');
+                    const role = this.getAttribute('data-role');
+
+                    clearSession();
+
+                    // Fill form fields
+                    document.getElementById('emailInput').value = email;
+                    document.getElementById('passwordInput').value = password;
+
+                    // Show loading state on clicked button and login button
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Login...';
+                    this.disabled = true;
+                    if (loginBtn) {
+                        loginBtn.disabled = true;
+                        loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Memproses';
+                    }
+
+                    // Auto submit login form
+                    setTimeout(() => {
+                        loginForm.dispatchEvent(new Event('submit'));
+                        // restore button state after short delay
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                            if (loginBtn) {
+                                loginBtn.disabled = false;
+                                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Masuk';
+                            }
+                        }, 1500);
+                    }, 200);
+
+                    // Info alert
+                    showAlert(`Login cepat sebagai ${role}...`, 'info');
+                });
+            });
+        });
+
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.querySelector('.alert-container');
+            const alertId = 'alert-' + Date.now();
+
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show" id="${alertId}" role="alert">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+
+            alertContainer.insertAdjacentHTML('beforeend', alertHtml);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                const alert = document.getElementById(alertId);
+                if (alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+
+</html>

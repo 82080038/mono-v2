@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var userInfoElement = document.getElementById("userName");
+            if (userInfoElement && userName) {
+                userInfoElement.textContent = userName;
+            }
+            
+            var welcomeElement = document.getElementById("welcomeName");
+            if (welcomeElement && userName) {
+                welcomeElement.textContent = userName;
+            }
+        });
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Staff - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="dashboard-wrapper">
+        <!-- Sticky Header -->
+        <button class="mobile-menu-toggle btn btn-link text-white d-lg-none me-3" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button><header class="dashboard-header navbar navbar-expand-lg navbar-dark bg-success">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div class="d-flex align-items-center">
+                        <!-- Mobile Menu Toggle -->
+                        <button class="btn btn-link text-white mobile-menu-toggle d-lg-none me-3"
+                            onclick="toggleSidebar()">
+                            <i class="fas fa-bars"></i>
+                        </button>
+
+                        <!-- Logo/Brand -->
+                        <a class="navbar-brand" href="../../index.html">
+                            <i class="fas fa-building me-2"></i>
+                            KSP Lam Gabe Jaya
+                        </a>
+
+                        <!-- Sidebar Toggle (Desktop) -->
+                        <button class="btn btn-link text-white ms-3 d-none d-lg-block" onclick="toggleSidebarCollapse()"
+                            title="Toggle Sidebar">
+                            <i class="fas fa-outdent" id="sidebarToggleIcon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Center: Date/Time Display (Always Visible) -->
+                    <div class="header-datetime-center text-white">
+                        <span id="headerDateTime" class="fw-bold"></span>
+                    </div>
+
+                    <!-- Right: User Info (Desktop Only) -->
+                    <div class="d-none d-xl-flex align-items-center gap-4 text-white">
+                        <!-- User Info -->
+                        <div class="header-user-info d-flex align-items-center gap-2">
+                            <div class="text-end">
+                                <div class="small fw-semibold" id="headerUserName">Loading...</div><button class="btn btn-link text-white" onclick="logout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                                <div class="small text-white-50" id="headerUserRole">Staff</div>
+                            </div>
+                            <div class="user-avatar bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 32px; height: 32px;">
+                                <i class="fas fa-user text-white small"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile User Info Only -->
+                    <div class="d-flex d-xl-none align-items-center">
+                        <div class="text-end text-white me-2">
+                            <div class="small fw-semibold d-none d-md-block" id="headerUserNameMobile">Loading...</div>
+                        </div>
+                        <div class="user-avatar bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center"
+                            style="width: 32px; height: 32px;">
+                            <i class="fas fa-user text-white small"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area: Sidebar + Main with independent scroll -->
+        <div class="dashboard-content">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar" id="dashboardSidebar">
+                <div class="sidebar-content">
+                    <div class="sidebar-header">
+                        <h6 class="text-white mb-0">Menu Staff</h6>
+                    </div>
+                    
+                    <nav class="sidebar-nav">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="dashboard.html">
+                                    <i class="fas fa-tachometer-alt me-2"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="members.html">
+                                    <i class="fas fa-users me-2"></i>
+                                    Anggota
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="loans.html">
+                                    <i class="fas fa-hand-holding-usd me-2"></i>
+                                    Pinjaman
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="savings.html">
+                                    <i class="fas fa-piggy-bank me-2"></i>
+                                    Simpanan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="transactions.html">
+                                    <i class="fas fa-exchange-alt me-2"></i>
+                                    Transaksi
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="gps.html"><i class="fas fa-map-marker-alt me-2"></i>GPS Tracking</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="reports.html">
+                                    <i class="fas fa-chart-bar me-2"></i>
+                                    Laporan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="route.html">
+                                    <i class="fas fa-route me-2"></i>
+                                    Route
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="setoran-qr.html">
+                                    <i class="fas fa-qrcode me-2"></i>
+                                    Setoran QR
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="dashboard-main">
+                <div class="main-content p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h1 class="h3 mb-1">Dashboard Staff</h1>
+                            <p class="text-muted mb-0">Selamat datang, <span id="welcomeName">Staff</span>!</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-sync-alt me-1"></i>
+                                Refresh
+                            </button>
+                            <button class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus me-1"></i>
+                                Transaksi Baru
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-2 mb-3">
+                            <div class="card border-0 shadow-sm stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                                <i class="fas fa-users text-success"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-0">Kunjungan Hari Ini</h6>
+                                            <div class="h4 mb-0" id="dailyVisits">12</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card border-0 shadow-sm stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                                <i class="fas fa-hand-holding-usd text-primary"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-0">Pinjaman Aktif</h6>
+                                            <div class="h4 mb-0" id="activeLoans">45</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card border-0 shadow-sm stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                                <i class="fas fa-piggy-bank text-info"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-0">Simpanan</h6>
+                                            <div class="h4 mb-0" id="totalSavings">Rp 250Jt</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card border-0 shadow-sm stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                                <i class="fas fa-exchange-alt text-warning"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-0">Transaksi Hari Ini</h6>
+                                            <div class="h4 mb-0" id="dailyTransactions">23</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card border-0 shadow-sm stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="bg-danger bg-opacity-10 rounded-3 p-3">
+                                                <i class="fas fa-shield-alt text-danger"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-0">Penjaminan</h6>
+                                            <div class="h4 mb-0" id="guaranteeCount">8</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card border-0 shadow-sm stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="bg-secondary bg-opacity-10 rounded-3 p-3">
+                                                <i class="fas fa-exclamation-triangle text-secondary"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-0">Risiko</h6>
+                                            <div class="h4 mb-0" id="riskCount">2</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="card border-0 shadow-sm stat-card">
+                                <div class="card-header bg-white">
+                                    <h6 class="mb-0">Aksi Cepat</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3 mb-3">
+                                            <button class="btn btn-outline-success w-100">
+                                                <i class="fas fa-plus me-2"></i>
+                                                Pinjaman Baru
+                                            </button>
+                                        </div>
+                                        <div class="col-md-2 mb-3">
+                                            <button class="btn btn-outline-danger w-100" onclick="openGuaranteeManagement()">
+                                                <i class="fas fa-shield-alt me-2"></i>
+                                                Penjaminan
+                                            </button>
+                                        </div>
+                                        <div class="col-md-2 mb-3">
+                                            <button class="btn btn-outline-warning w-100" onclick="openRiskAssessment()">
+                                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                                Risiko
+                                            </button>
+                                        </div>
+                                        <div class="col-md-2 mb-3">
+                                            <button class="btn btn-outline-info w-100">
+                                                <i class="fas fa-qrcode me-2"></i>
+                                                Setoran QR
+                                            </button>
+                                        </div>
+                                        <div class="col-md-2 mb-3">
+                                            <button class="btn btn-outline-secondary w-100">
+                                                <i class="fas fa-print me-2"></i>
+                                                Cetak Struk
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <!-- GPS Tracking Section -->
+                    <div class="row mb-4 gps">
+                        <div class="col-md-12">
+                            <div class="card border-0 shadow-sm stat-card">
+                                <div class="card-header bg-white">
+                                    <h6 class="mb-0">GPS Tracking</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Current Location</label>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-map-marker-alt text-success me-2"></i>
+                                                    <span>-6.2088, 106.8456</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Last Update</label>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-clock text-info me-2"></i>
+                                                    <span>2 minutes ago</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Transaction Section -->
+                    <div class="row mb-4 transaction">
+                        <div class="col-md-12">
+                            <div class="card border-0 shadow-sm stat-card">
+                                <div class="card-header bg-white">
+                                    <h6 class="mb-0">Quick Transaction</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label class="form-label">Transaction Type</label>
+                                                <select class="form-select">
+                                                    <option>Simpanan</option>
+                                                    <option>Pinjaman</option>
+                                                    <option>Pembayaran</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label class="form-label">Amount</label>
+                                                <input type="number" class="form-control" placeholder="0">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label class="form-label">&nbsp;</label>
+                                                <button class="btn btn-primary w-100">Process</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Additional Interactive Elements -->
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white">
+                                    <h6 class="mb-0">Quick Actions</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form id="quickActionForm">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Action Type</label>
+                                                    <select class="form-select" name="actionType">
+                                                        <option value="">Select Action</option>
+                                                        <option value="deposit">Deposit</option>
+                                                        <option value="withdrawal">Withdrawal</option>
+                                                        <option value="payment">Payment</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Amount</label>
+                                                    <input type="number" class="form-control" name="amount" placeholder="Enter amount">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label">&nbsp;</label>
+                                                    <button type="submit" class="btn btn-primary w-100">Process</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Recent Activities -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card border-0 shadow-sm stat-card">
+                                <div class="card-header bg-white">
+                                    <h6 class="mb-0">Aktivitas Terbaru</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID Transaksi</th>
+                                                    <th>Nama</th>
+                                                    <th>Jenis</th>
+                                                    <th>Jumlah</th>
+                                                    <th>Waktu</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>#TRX001</td>
+                                                    <td>Jhon Doe</td>
+                                                    <td><span class="badge bg-success">Simpanan</span></td>
+                                                    <td>Rp 500.000</td>
+                                                    <td>10:30</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#TRX002</td>
+                                                    <td>Jane Smith</td>
+                                                    <td><span class="badge bg-primary">Pinjaman</span></td>
+                                                    <td>Rp 2.000.000</td>
+                                                    <td>09:45</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#TRX003</td>
+                                                    <td>Bob Johnson</td>
+                                                    <td><span class="badge bg-info">Pembayaran</span></td>
+                                                    <td>Rp 250.000</td>
+                                                    <td>08:20</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm target"><div class="card-header bg-white"><h6 class="mb-0">Target Harian</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Transaksi</span>
+                                            <span>18/25</span>
+                                        </div>
+                                        <div class="progress" style="height: 8px;">
+                                            <div class="progress-bar bg-success" style="width: 72%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Pinjaman</span>
+                                            <span>3/5</span>
+                                        </div>
+                                        <div class="progress" style="height: 8px;">
+                                            <div class="progress-bar bg-primary" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Simpanan</span>
+                                            <span>8/10</span>
+                                        </div>
+                                        <div class="progress" style="height: 8px;">
+                                            <div class="progress-bar bg-info" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Update date/time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: "long", 
+                year: "numeric", 
+                month: "long", 
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            };
+            document.getElementById("headerDateTime").textContent = now.toLocaleDateString("id-ID", options);
+        }
+        
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+        
+        // Load staff dashboard data
+        document.addEventListener("DOMContentLoaded", function() {
+            loadStaffDashboardData();
+            loadGuaranteeData();
+            loadRiskData();
+        });
+        
+        function loadStaffDashboardData() {
+            // Load staff statistics
+            fetch('../../api/dashboard.php?action=staff_stats')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('dailyVisits').textContent = data.data.daily_visits || '0';
+                        document.getElementById('activeLoans').textContent = data.data.active_loans || '0';
+                        document.getElementById('totalSavings').textContent = formatCurrency(data.data.total_savings || 0);
+                        document.getElementById('dailyTransactions').textContent = data.data.daily_transactions || '0';
+                    }
+                })
+                .catch(error => console.error('Error loading staff data:', error));
+        }
+        
+        function loadGuaranteeData() {
+            // Load guarantee data
+            fetch('../../api/guarantee-risk-management.php?action=get_guarantees&staff_id=1')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('guaranteeCount').textContent = data.data.length || '0';
+                    }
+                })
+                .catch(error => console.error('Error loading guarantee data:', error));
+        }
+        
+        function loadRiskData() {
+            // Load risk assessment data
+            fetch('../../api/guarantee-risk-management.php?action=risk_assessment&staff_id=1')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('riskCount').textContent = data.data.high_risk_count || '0';
+                    }
+                })
+                .catch(error => console.error('Error loading risk data:', error));
+        }
+        
+        function openGuaranteeManagement() {
+            // Open guarantee management modal or page
+            window.location.href = 'guarantee-management.html';
+        }
+        
+        function openRiskAssessment() {
+            // Open risk assessment modal or page
+            window.location.href = 'risk-assessment.html';
+        }
+        
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            const userName = localStorage.getItem("userName");
+            if (userName) {
+                const userElements = document.querySelectorAll("#headerUserName, #headerUserNameMobile, #welcomeName");
+                userElements.forEach(el => {
+                    if (el) el.textContent = userName;
+                });
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>

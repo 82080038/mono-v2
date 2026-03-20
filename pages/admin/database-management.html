@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var userInfoElement = document.getElementById("userName");
+            if (userInfoElement && userName) {
+                userInfoElement.textContent = userName;
+            }
+            
+            var welcomeElement = document.getElementById("welcomeName");
+            if (welcomeElement && userName) {
+                welcomeElement.textContent = userName;
+            }
+        });
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Management - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="../../assets/css/data-migration.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block sidebar">
+                <div class="sidebar-sticky">
+                    <div class="sidebar-header">
+                        <h4 class="text-white">KSP Lam Gabe Jaya</h4>
+                        <small class="text-white-50">Admin Panel</small>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.html">
+                                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="guarantee-management.html">
+                                <i class="fas fa-shield-alt me-2"></i> Guarantee Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="members.html">
+                                <i class="fas fa-users me-2"></i> Members
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="loans.html">
+                                <i class="fas fa-hand-holding-usd me-2"></i> Loans
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="savings.html">
+                                <i class="fas fa-piggy-bank me-2"></i> Savings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="reports.html">
+                                <i class="fas fa-chart-bar me-2"></i> Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="database-management.html">
+                                <i class="fas fa-database me-2"></i> Database
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="fas fa-cog me-2"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-10 ms-sm-auto px-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Database Management</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="syncDatabases()">
+                                <i class="fas fa-sync me-1"></i> Sync All
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="backupDatabases()">
+                                <i class="fas fa-download me-1"></i> Backup
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="openDataMigrationModal()">
+                            <i class="fas fa-upload me-1"></i> Data Migration
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Database Status Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="stat-card">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-database text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0">Koperasi DB</h6>
+                                    <div class="h4 mb-0">
+                                        <span class="badge bg-success" id="koperasiDbStatus">Online</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="stat-card">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-users text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0">Orang DB</h6>
+                                    <div class="h4 mb-0">
+                                        <span class="badge bg-success" id="orangDbStatus">Online</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="stat-card">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-map-marked-alt text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0">Alamat DB</h6>
+                                    <div class="h4 mb-0">
+                                        <span class="badge bg-success" id="alamatDbStatus">Online</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integration Status -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Integration Status</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="text-center">
+                                            <div class="mb-2">
+                                                <i class="fas fa-link fa-2x text-success"></i>
+                                            </div>
+                                            <h6>Database Links</h6>
+                                            <span class="badge bg-success" id="dbLinkStatus">Connected</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="text-center">
+                                            <div class="mb-2">
+                                                <i class="fas fa-sync fa-2x text-info"></i>
+                                            </div>
+                                            <h6>Data Sync</h6>
+                                            <span class="badge bg-info" id="syncStatus">In Sync</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="text-center">
+                                            <div class="mb-2">
+                                                <i class="fas fa-shield-alt fa-2x text-warning"></i>
+                                            </div>
+                                            <h6>Data Integrity</h6>
+                                            <span class="badge bg-warning" id="integrityStatus">Valid</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="text-center">
+                                            <div class="mb-2">
+                                                <i class="fas fa-tachometer-alt fa-2x text-primary"></i>
+                                            </div>
+                                            <h6>Performance</h6>
+                                            <span class="badge bg-primary" id="performanceStatus">Good</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Database Tables -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Koperasi Database</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Total Tables</span>
+                                        <span class="badge bg-primary" id="koperasiTableCount">0</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Total Records</span>
+                                        <span class="badge bg-info" id="koperasiRecordCount">0</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Size</span>
+                                        <span class="badge bg-success" id="koperasiDbSize">0 MB</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary w-100" onclick="viewKoperasiTables()">
+                                    <i class="fas fa-eye me-1"></i> View Tables
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Orang Database</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Total Tables</span>
+                                        <span class="badge bg-primary" id="orangTableCount">0</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Total Records</span>
+                                        <span class="badge bg-info" id="orangRecordCount">0</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Size</span>
+                                        <span class="badge bg-success" id="orangDbSize">0 MB</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary w-100" onclick="viewOrangTables()">
+                                    <i class="fas fa-eye me-1"></i> View Tables
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Alamat Database</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Total Tables</span>
+                                        <span class="badge bg-primary" id="alamatTableCount">0</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Total Records</span>
+                                        <span class="badge bg-info" id="alamatRecordCount">0</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Size</span>
+                                        <span class="badge bg-success" id="alamatDbSize">0 MB</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary w-100" onclick="viewAlamatTables()">
+                                    <i class="fas fa-eye me-1"></i> View Tables
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Recent Database Activities</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Timestamp</th>
+                                                <th>Database</th>
+                                                <th>Action</th>
+                                                <th>Table</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="activitiesTableBody">
+                                            <!-- Activities will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Data Migration Modal -->
+    <div class="modal fade" id="dataMigrationModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Data Migration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Import Data</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Data Type</label>
+                                        <select class="form-select" id="importDataType">
+                                            <option value="">Select Type</option>
+                                            <option value="members">Members</option>
+                                            <option value="loans">Loans</option>
+                                            <option value="savings">Savings</option>
+                                            <option value="staff">Staff</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">File</label>
+                                        <input type="file" class="form-control" id="importFile" accept=".csv,.xlsx,.xls">
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="importData()">
+                                        <i class="fas fa-upload me-1"></i> Import Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Export Data</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Database</label>
+                                        <select class="form-select" id="exportDatabase">
+                                            <option value="">Select Database</option>
+                                            <option value="ksp_lamgabejaya_v2">Koperasi</option>
+                                            <option value="orang">Orang</option>
+                                            <option value="alamat_db">Alamat</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Format</label>
+                                        <select class="form-select" id="exportFormat">
+                                            <option value="csv">CSV</option>
+                                            <option value="xlsx">Excel</option>
+                                            <option value="sql">SQL</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-success w-100" onclick="exportData()">
+                                        <i class="fas fa-download me-1"></i> Export Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/data-migration.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDatabaseStatus();
+            loadDatabaseStats();
+            loadRecentActivities();
+        });
+
+        function loadDatabaseStatus() {
+            // Check database connections
+            fetch('../../api/orang-integration.php?action=dashboard')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('koperasiDbStatus').className = 'badge bg-success';
+                        document.getElementById('orangDbStatus').className = 'badge bg-success';
+                        document.getElementById('alamatDbStatus').className = 'badge bg-success';
+                        document.getElementById('dbLinkStatus').textContent = 'Connected';
+                        document.getElementById('syncStatus').textContent = 'In Sync';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading database status:', error);
+                    document.getElementById('koperasiDbStatus').className = 'badge bg-danger';
+                    document.getElementById('orangDbStatus').className = 'badge bg-danger';
+                    document.getElementById('alamatDbStatus').className = 'badge bg-danger';
+                });
+        }
+
+        function loadDatabaseStats() {
+            // Load database statistics
+            fetch('../../api/database-stats.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Koperasi DB
+                        document.getElementById('koperasiTableCount').textContent = data.data.koperasi.tables;
+                        document.getElementById('koperasiRecordCount').textContent = data.data.koperasi.records;
+                        document.getElementById('koperasiDbSize').textContent = data.data.koperasi.size + ' MB';
+                        
+                        // Orang DB
+                        document.getElementById('orangTableCount').textContent = data.data.orang.tables;
+                        document.getElementById('orangRecordCount').textContent = data.data.orang.records;
+                        document.getElementById('orangDbSize').textContent = data.data.orang.size + ' MB';
+                        
+                        // Alamat DB
+                        document.getElementById('alamatTableCount').textContent = data.data.alamat.tables;
+                        document.getElementById('alamatRecordCount').textContent = data.data.alamat.records;
+                        document.getElementById('alamatDbSize').textContent = data.data.alamat.size + ' MB';
+                    }
+                })
+                .catch(error => console.error('Error loading database stats:', error));
+        }
+
+        function loadRecentActivities() {
+            // Load recent database activities
+            fetch('../../api/database-activities.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const tbody = document.getElementById('activitiesTableBody');
+                        tbody.innerHTML = '';
+                        
+                        data.data.forEach(activity => {
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td>${activity.timestamp}</td>
+                                    <td>${activity.database}</td>
+                                    <td>${activity.action}</td>
+                                    <td>${activity.table}</td>
+                                    <td><span class="badge bg-success">${activity.status}</span></td>
+                                </tr>
+                            `;
+                        });
+                    }
+                })
+                .catch(error => console.error('Error loading activities:', error));
+        }
+
+        function syncDatabases() {
+            // Sync all databases
+            fetch('../../api/sync-databases.php', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Databases synchronized successfully!');
+                    loadDatabaseStatus();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => console.error('Error syncing databases:', error));
+        }
+
+        function backupDatabases() {
+            // Backup all databases
+            fetch('../../api/backup-databases.php', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Databases backed up successfully!');
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => console.error('Error backing up databases:', error));
+        }
+
+        function openDataMigrationModal() {
+            const modal = new bootstrap.Modal(document.getElementById('dataMigrationModal'));
+            modal.show();
+        }
+
+        function viewKoperasiTables() {
+            window.open('http://localhost/phpmyadmin/index.php?route=/database/structure&db=ksp_lamgabejaya_v2', '_blank');
+        }
+
+        function viewOrangTables() {
+            window.open('http://localhost/phpmyadmin/index.php?route=/database/structure&db=orang', '_blank');
+        }
+
+        function viewAlamatTables() {
+            window.open('http://localhost/phpmyadmin/index.php?route=/database/structure&db=alamat_db', '_blank');
+        }
+
+        function importData() {
+            const dataType = document.getElementById('importDataType').value;
+            const file = document.getElementById('importFile').files[0];
+            
+            if (!dataType || !file) {
+                alert('Please select data type and file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'import');
+            formData.append('data_type', dataType);
+            formData.append('file', file);
+
+            fetch('../../api/data-migration.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Data imported successfully!');
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => console.error('Error importing data:', error));
+        }
+
+        function exportData() {
+            const database = document.getElementById('exportDatabase').value;
+            const format = document.getElementById('exportFormat').value;
+            
+            if (!database || !format) {
+                alert('Please select database and format');
+                return;
+            }
+
+            window.open(`../../api/data-migration.php?action=export&database=${database}&format=${format}`);
+        }
+    </script>
+</body>
+
+</html>

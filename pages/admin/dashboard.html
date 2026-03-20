@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var userInfoElement = document.getElementById("userName");
+            if (userInfoElement && userName) {
+                userInfoElement.textContent = userName;
+            }
+            
+            var welcomeElement = document.getElementById("welcomeName");
+            if (welcomeElement && userName) {
+                welcomeElement.textContent = userName;
+            }
+        });
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin: 5px 10px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="dashboard-wrapper">
+        <!-- Sticky Header -->
+        <button class="mobile-menu-toggle btn btn-link text-white d-lg-none me-3" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button><header class="dashboard-header navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div class="d-flex align-items-center">
+                        <!-- Mobile Menu Toggle -->
+                        <button class="btn btn-link text-white mobile-menu-toggle d-lg-none me-3"
+                            onclick="toggleSidebar()">
+                            <i class="fas fa-bars"></i>
+                        </button>
+
+                        <!-- Logo/Brand -->
+                        <a class="navbar-brand" href="../../index.html">
+                            <i class="fas fa-building me-2"></i>
+                            KSP Lam Gabe Jaya
+                        </a>
+
+                        <!-- Sidebar Toggle (Desktop) -->
+                        <button class="btn btn-link text-white ms-3 d-none d-lg-block" onclick="toggleSidebarCollapse()"
+                            title="Toggle Sidebar">
+                            <i class="fas fa-outdent" id="sidebarToggleIcon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Center: Date/Time Display (Always Visible) -->
+                    <div class="header-datetime-center text-white">
+                        <span id="headerDateTime" class="fw-bold"></span>
+                    </div>
+
+                    <!-- Right: User Info (Desktop Only) -->
+                    <div class="d-none d-xl-flex align-items-center gap-4 text-white">
+                        <!-- User Info -->
+                        <div class="header-user-info d-flex align-items-center gap-2">
+                            <div class="text-end">
+                                <div class="small fw-semibold" id="headerUserName">Loading...</div>
+                                <div class="small text-white-50" id="headerUserRole">Admin</div>
+                            </div>
+                            <div class="user-avatar bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 32px; height: 32px;">
+                                <i class="fas fa-user text-white small"></i>
+                            </div>
+                        </div>
+                        <!-- Logout Button -->
+                        <button class="btn btn-link text-white" onclick="logout()" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+
+                    <!-- Mobile User Info Only -->
+                    <div class="d-flex d-xl-none align-items-center">
+                        <div class="text-end text-white me-2">
+                            <div class="small fw-semibold d-none d-md-block" id="headerUserNameMobile">Loading...</div>
+                        </div>
+                        <div class="user-avatar bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center"
+                            style="width: 32px; height: 32px;">
+                            <i class="fas fa-user text-white small"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area: Sidebar + Main with independent scroll -->
+        <div class="dashboard-content">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar" id="dashboardSidebar">
+                <div class="sidebar-content">
+                    <div class="sidebar-header">
+                        <h6 class="text-white mb-0">Menu Admin</h6>
+                    </div>
+                    
+                    <nav class="sidebar-nav">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="dashboard.html">
+                                    <i class="fas fa-tachometer-alt me-2"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="members.html">
+                                    <i class="fas fa-users me-2"></i>
+                                    Anggota
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="loans.html">
+                                    <i class="fas fa-hand-holding-usd me-2"></i>
+                                    Pinjaman
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="savings.html">
+                                    <i class="fas fa-piggy-bank me-2"></i>
+                                    Simpanan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="reports.html">
+                                    <i class="fas fa-chart-bar me-2"></i>
+                                    Laporan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="settings.html">
+                                    <i class="fas fa-cog me-2"></i>
+                                    Settings
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="dashboard-main">
+                <div class="main-content p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h1 class="h3 mb-1">Dashboard Admin</h1>
+                            <p class="text-muted mb-0">Selamat datang, <span id="welcomeName">Admin</span>!</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-sync-alt me-1"></i>
+                                Refresh
+                            </button>
+                            <button class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus me-1"></i>
+                                New Member
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-2 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                            <i class="fas fa-users text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0">Total Anggota</h6>
+                                        <div class="h4 mb-0" id="totalMembers">150</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                            <i class="fas fa-hand-holding-usd text-success"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0">Pinjaman Aktif</h6>
+                                        <div class="h4 mb-0" id="activeLoans">45</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                            <i class="fas fa-piggy-bank text-info"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0">Simpanan</h6>
+                                        <div class="h4 mb-0" id="totalSavings">Rp 250Jt</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                            <i class="fas fa-shield-alt text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0">Penjaminan</h6>
+                                        <div class="h4 mb-0" id="totalGuarantees">12</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        <div class="bg-danger bg-opacity-10 rounded-3 p-3">
+                                            <i class="fas fa-exclamation-triangle text-danger"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0">Risiko</h6>
+                                        <div class="h4 mb-0" id="riskCount">3</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        <div class="bg-secondary bg-opacity-10 rounded-3 p-3">
+                                            <i class="fas fa-database text-secondary"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0">Database</h6>
+                                        <div class="h4 mb-0" id="dbStatus">3 DB</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                            <i class="fas fa-exchange-alt text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0">Transaksi Hari Ini</h6>
+                                        <div class="h4 mb-0">23</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Role-Specific Features -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm members-table">
+                                <div class="card-header bg-white">
+                                    <h6 class="mb-0">Recent Members</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Status</th>
+                                                    <th>Join Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>John Doe</td>
+                                                    <td><span class="badge bg-success">Active</span></td>
+                                                    <td>2024-01-15</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Jane Smith</td>
+                                                    <td><span class="badge bg-warning">Pending</span></td>
+                                                    <td>2024-01-18</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm guarantee-management">
+                                <div class="card-header bg-white">
+                                    <h6 class="mb-0">Guarantee Management</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Active Guarantees</span>
+                                            <span class="badge bg-warning" id="activeGuarantees">12</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>High Risk</span>
+                                            <span class="badge bg-danger" id="highRiskCount">3</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Pending Approval</span>
+                                            <span class="badge bg-info" id="pendingGuarantees">5</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary w-100" onclick="openGuaranteeManagement()">
+                                        <i class="fas fa-shield-alt me-1"></i> Manage Guarantees
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm database-monitoring">
+                                <div class="card-header bg-white">
+                                    <h6 class="mb-0">Database Status</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Koperasi DB</span>
+                                            <span class="badge bg-success">Online</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Orang DB</span>
+                                            <span class="badge bg-success">Online</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Alamat DB</span>
+                                            <span class="badge bg-success">Online</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Integration</span>
+                                            <span class="badge bg-success" id="integrationStatus">Active</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-secondary w-100" onclick="openDatabaseManagement()">
+                                        <i class="fas fa-database me-1"></i> Database Admin
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <label class="form-label">Interest Rate</label>
+                                        <input type="number" class="form-control" value="12">
+                                    </div>
+                                    <button class="btn btn-primary">Save Settings</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reports Section -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card border-0 shadow-sm reports">
+                                <div class="card-header bg-white">
+                                    <h6 class="mb-0">Recent Reports</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Report Type</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Monthly Report</td>
+                                                    <td>2024-01-31</td>
+                                                    <td><span class="badge bg-success">Completed</span></td>
+                                                    <td><button class="btn btn-sm btn-outline-primary">View</button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Annual Report</td>
+                                                    <td>2023-12-31</td>
+                                                    <td><span class="badge bg-success">Completed</span></td>
+                                                    <td><button class="btn btn-sm btn-outline-primary">View</button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Risk Assessment Report</td>
+                                                    <td>2024-01-20</td>
+                                                    <td><span class="badge bg-warning">Processing</span></td>
+                                                    <td><button class="btn btn-sm btn-outline-primary">View</button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Guarantee Analysis Report</td>
+                                                    <td>2024-01-19</td>
+                                                    <td><span class="badge bg-success">Completed</span></td>
+                                                    <td><button class="btn btn-sm btn-outline-primary">View</button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Dashboard data loading
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            loadGuaranteeData();
+            loadDatabaseStatus();
+        });
+
+        function loadDashboardData() {
+            // Load dashboard statistics
+            fetch('../../api/dashboard.php?action=admin_stats')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('totalMembers').textContent = data.data.total_members || '0';
+                        document.getElementById('activeLoans').textContent = data.data.active_loans || '0';
+                        document.getElementById('totalSavings').textContent = formatCurrency(data.data.total_savings || 0);
+                        document.getElementById('totalGuarantees').textContent = data.data.total_guarantees || '0';
+                        document.getElementById('riskCount').textContent = data.data.risk_count || '0';
+                    }
+                })
+                .catch(error => console.error('Error loading dashboard data:', error));
+        }
+
+        function loadGuaranteeData() {
+            // Load guarantee management data
+            fetch('../../api/guarantee-risk-management.php?action=dashboard')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('activeGuarantees').textContent = data.data.active_guarantees || '0';
+                        document.getElementById('highRiskCount').textContent = data.data.high_risk_count || '0';
+                        document.getElementById('pendingGuarantees').textContent = data.data.pending_guarantees || '0';
+                    }
+                })
+                .catch(error => console.error('Error loading guarantee data:', error));
+        }
+
+        function loadDatabaseStatus() {
+            // Load database status
+            fetch('../../api/orang-integration.php?action=dashboard')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('dbStatus').textContent = '3 DB';
+                        document.getElementById('integrationStatus').textContent = 'Active';
+                        document.getElementById('integrationStatus').className = 'badge bg-success';
+                    }
+                })
+                .catch(error => console.error('Error loading database status:', error));
+        }
+
+        function openGuaranteeManagement() {
+            // Open guarantee management page
+            window.location.href = 'guarantee-management.html';
+        }
+
+        function openDatabaseManagement() {
+            // Open database management page
+            window.location.href = 'database-management.html';
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+    </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Update date/time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: "long", 
+                year: "numeric", 
+                month: "long", 
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            };
+            document.getElementById("headerDateTime").textContent = now.toLocaleDateString("id-ID", options);
+        }
+        
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            const userName = localStorage.getItem("userName");
+            if (userName) {
+                const userElements = document.querySelectorAll("#headerUserName, #headerUserNameMobile, #welcomeName");
+                userElements.forEach(el => {
+                    if (el) el.textContent = userName;
+                });
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+        
+        // Toggle sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById("dashboardSidebar");
+            sidebar.classList.toggle("collapsed");
+        }
+        
+        function toggleSidebarCollapse() {
+            const sidebar = document.getElementById("dashboardSidebar");
+            sidebar.classList.toggle("collapsed");
+        }
+    </script>
+</body>
+</html>

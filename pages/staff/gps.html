@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Tracking - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .btn-back {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Check -->
+    <script>
+        function checkAuth() {
+            const token = localStorage.getItem(\'authToken\');
+            const role = localStorage.getItem(\'userRole\');
+            const userName = localStorage.getItem(\'userName\');
+            
+            if (!token || role !== \'staff\' || !userName) {
+                window.location.href = \'login.html\';
+                return false;
+            }
+            return true;
+        }
+        
+        if (!checkAuth()) {
+            // Will redirect to login
+        }
+    </script>
+
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="dashboard-enhanced.html" class="btn btn-back">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <h1 class="h2 mt-3">GPS Tracking</h1>
+                    <p class="text-muted">This page is under construction</p>
+                </div>
+                <div class="text-muted">
+                    <i class="fas fa-clock me-2"></i>
+                    <span id="currentTime"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Card -->
+        <div class="content-card">
+            <div class="text-center py-5">
+                <i class="fas fa-tools fa-4x text-muted mb-3"></i>
+                <h3>Page Under Construction</h3>
+                <p class="text-muted">This page is being developed and will be available soon.</p>
+                <div class="mt-4">
+                    <button class="btn btn-primary" onclick="window.location.href=\'dashboard-enhanced.html\'">
+                        <i class="fas fa-home me-2"></i>Return to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById(\'currentTime\').textContent = now.toLocaleString();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>
