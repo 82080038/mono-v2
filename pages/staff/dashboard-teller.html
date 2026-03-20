@@ -94,10 +94,19 @@
 
             window.logout = function () {
                 if (confirm('Apakah Anda yakin ingin keluar?')) {
-                    localStorage.removeItem('userData');
-                    sessionStorage.removeItem('userData');
-                    const loginUrl = window.buildUrl ? window.buildUrl('login.html') : '../../login.html';
-                    window.location.href = loginUrl;
+                    // Use auth-fixed.js logout function if available
+                    if (typeof window.logout === 'function') {
+                        window.logout();
+                    } else {
+                        // Fallback logout
+                        localStorage.removeItem('authToken');
+                        localStorage.removeItem('userData');
+                        sessionStorage.removeItem('authToken');
+                        sessionStorage.removeItem('userData');
+
+                        const loginUrl = window.buildUrl ? window.buildUrl('login.html') : '../../login.html';
+                        window.location.href = loginUrl;
+                    }
                 }
             };
 

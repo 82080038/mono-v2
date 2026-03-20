@@ -637,7 +637,7 @@ class ComplianceController {
         return $count > 0 ? round($totalScore / $count, 2) : 0;
     }
     
-    private function getComplianceStatus($score) {
+    private function getComplianceStatusLevel($score) {
         if ($score >= 90) {
             return 'compliant';
         } elseif ($score >= 70) {
@@ -773,72 +773,5 @@ class ComplianceController {
         return $this->db->lastInsertId();
     }
     
-    private function calculateComplianceScore($data) {
-        // Mock implementation - calculate compliance score from report data
-        return 85.5; // Mock score
-    }
-    
-    private function generateComplianceReportData($type, $startDate, $endDate) {
-        // Mock implementation - generate report data
-        return [
-            'type' => $type,
-            'period' => $startDate . ' to ' . $endDate,
-            'compliance_score' => 85.5,
-            'areas' => $this->getComplianceAreas(),
-            'recommendations' => $this->generateRecommendations($type)
-        ];
-    }
-    
-    private function generateRecommendations($type) {
-        // Mock implementation - generate recommendations
-        return [
-            'improve_tax_compliance',
-            'enhance_risk_management',
-            'update_policies'
-        ];
-    }
-    
-    private function calculateOverallScore($results) {
-        $totalScore = 0;
-        $count = 0;
-        
-        foreach ($results as $result) {
-            if (isset($result['score'])) {
-                $totalScore += $result['score'];
-                $count++;
-            }
-        }
-        
-        return $count > 0 ? round($totalScore / $count, 2) : 0;
-    }
-    
-    private function getAlert($alertId) {
-        $query = "SELECT * FROM compliance_alerts WHERE id = ?";
-        
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([$alertId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-    
-    private function acknowledgeAlert($alertId) {
-        $query = "UPDATE compliance_alerts SET status = 'acknowledged', acknowledged_at = NOW() WHERE id = ?";
-        
-        $stmt = $this->db->prepare($query);
-        return $stmt->execute([$alertId]);
-    }
-    
-    private function resolveAlert($alertId) {
-        $query = "UPDATE compliance_alerts SET status = 'resolved', resolved_at = NOW() WHERE id = ?";
-        
-        $stmt = $this->db->prepare($query);
-        return $stmt->execute([$alertId]);
-    }
-    
-    private function escalateAlert($alertId) {
-        $query = "UPDATE compliance_alerts SET status = 'escalated', escalated_at = NOW() WHERE id = ?";
-        
-        $stmt = $this->db->prepare($query);
-        return $stmt->execute([$alertId]);
-    }
+    // End of class
 }
-?>

@@ -29,6 +29,7 @@ class Database {
                        ";charset=" . Config::DB_CHARSET;
             } else {
                 $dsn = "mysql:host=" . Config::DB_HOST . 
+                       ";port=3306" .
                        ";dbname=" . Config::DB_NAME . 
                        ";charset=" . Config::DB_CHARSET;
             }

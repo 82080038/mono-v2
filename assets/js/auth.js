@@ -33,12 +33,32 @@ const domElements = {
 // Update UI display name if element exists
 function updateUserNameDisplay(user) {
     try {
-        const el = document.getElementById('userName');
-        if (el && user && user.name) {
-            el.textContent = user.name;
-        }
+        // Handle null/undefined user data safely
+        if (!user) return;
+
+        // Get display name with fallbacks
+        const displayName = user.full_name || user.name || user.username || 'User';
+
+        // Update all possible user name elements
+        const userElements = ['userName', 'headerUserName', 'sidebarUserName'];
+        userElements.forEach(elementId => {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.textContent = displayName;
+            }
+        });
+
+        // Update role elements
+        const displayRole = user.role || 'Staff';
+        const roleElements = ['headerUserRole', 'sidebarUserRole'];
+        roleElements.forEach(elementId => {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.textContent = displayRole;
+            }
+        });
     } catch (e) {
-        // ignore
+        console.warn('Error updating user display:', e);
     }
 }
 
@@ -104,22 +124,70 @@ function checkExistingSession() {
     const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
 
     if (token && userData) {
-        authState.isAuthenticated = true;
-        authState.token = token;
-        authState.currentUser = JSON.parse(userData);
+        try {
+            // Validate token before setting auth state
+            validateStoredToken(token).then(isValid => {
+                if (isValid) {
+                    authState.isAuthenticated = true;
+                    authState.token = token;
+                    authState.currentUser = JSON.parse(userData);
 
-        // Update display name
-        updateUserNameDisplay(authState.currentUser);
+                    // Update display name
+                    updateUserNameDisplay(authState.currentUser);
 
-        // Avoid redirect loop if already on a dashboard page
-        const currentPath = window.location.pathname;
-        if (currentPath.includes('/pages/') && currentPath.includes('dashboard')) {
-            return;
+                    // Avoid redirect loop if already on a dashboard page
+                    const currentPath = window.location.pathname;
+                    if (currentPath.includes('/pages/') && currentPath.includes('dashboard')) {
+                        return;
+                    }
+
+                    // Redirect to dashboard
+                    redirectToDashboard();
+                } else {
+                    // Token invalid, clear stored session
+                    clearStoredSession();
+                    console.log('Stored token invalid, session cleared');
+                }
+            }).catch(error => {
+                console.error('Token validation error:', error);
+                clearStoredSession();
+            });
+        } catch (error) {
+            console.error('Session check error:', error);
+            clearStoredSession();
         }
-
-        // Redirect to dashboard
-        redirectToDashboard();
     }
+}
+
+/**
+ * Validate stored token
+ */
+async function validateStoredToken(token) {
+    try {
+        // Use absolute URL to avoid path resolution issues
+        const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]+$/, '/');
+        const response = await fetch(`${baseUrl}api/auth.php?action=validate&token=${encodeURIComponent(token)}`);
+        const result = await response.json();
+        return result.success;
+    } catch (error) {
+        console.error('Token validation API error:', error);
+        return false;
+    }
+}
+
+/**
+ * Clear stored session
+ */
+function clearStoredSession() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('userData');
+
+    // Reset auth state
+    authState.isAuthenticated = false;
+    authState.token = null;
+    authState.currentUser = null;
 }
 
 /**
@@ -201,25 +269,38 @@ function validateLoginForm(email, password) {
  * Handle successful login
  */
 function handleLoginSuccess(data, rememberMe) {
-    const user = data.user;
+    const user = data.user || {};
+
+    // Ensure user object has required fields with fallbacks
+    const processedUser = {
+        id: user.id || 0,
+        name: user.full_name || user.name || user.username || 'User',
+        email: user.email || '',
+        role: user.role || 'Staff',
+        token: user.token || data.token || '',
+        is_active: user.is_active ?? 1,
+        permissions: user.permissions || null,
+        last_login: user.last_login || null
+    };
+
     // Reset login attempts
     authState.loginAttempts = 0;
     authState.lockoutUntil = null;
 
     // Set authentication state
     authState.isAuthenticated = true;
-    authState.currentUser = user;
+    authState.currentUser = processedUser;
 
     // Update display name
-    updateUserNameDisplay(user);
+    updateUserNameDisplay(processedUser);
 
     // Set authentication token
-    authState.token = data.token;
+    authState.token = processedUser.token;
 
     // Store session data
     const storage = rememberMe ? localStorage : sessionStorage;
-    storage.setItem('authToken', data.token);
-    storage.setItem('userData', JSON.stringify(user));
+    storage.setItem('authToken', processedUser.token);
+    storage.setItem('userData', JSON.stringify(processedUser));
 
     // Show success message
     showAlert('success', 'Login berhasil! Mengalihkan ke dashboard...');
@@ -387,18 +468,22 @@ function redirectToDashboard() {
     let dashboardPath;
 
     switch (userRole) {
-        case 'super_admin':
-        case 'admin':
+        case 'Super Admin':
+        case 'Admin':
+        case 'Manager':
             dashboardPath = 'pages/admin/dashboard.html';
+            break;
+        case 'Teller':
+            dashboardPath = 'pages/staff/dashboard-teller-complete.html';
+            break;
+        case 'Staff':
+            dashboardPath = 'pages/staff/dashboard-complete.html';
             break;
         case 'mantri':
             dashboardPath = 'pages/staff/dashboard-mantri.html';
             break;
         case 'kasir':
             dashboardPath = 'pages/staff/dashboard-kasir.html';
-            break;
-        case 'teller':
-            dashboardPath = 'pages/staff/dashboard-teller.html';
             break;
         case 'surveyor':
             dashboardPath = 'pages/staff/dashboard-surveyor.html';
@@ -410,7 +495,7 @@ function redirectToDashboard() {
             dashboardPath = 'pages/member/dashboard.html';
             break;
         default:
-            dashboardPath = 'pages/member/dashboard.html';
+            dashboardPath = 'pages/staff/dashboard.html';
     }
 
     // Build URL with dynamic base path
@@ -428,8 +513,9 @@ async function simulateLoginAPI(email, password) {
         formData.append('username', email); // Changed from email to username
         formData.append('password', password);
 
-        // Build dynamic API URL
-        const apiUrl = window.buildApiUrl ? window.buildApiUrl('AUTH') : 'api/auth.php';
+        // Build absolute API URL to avoid path resolution issues
+        const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]+$/, '/');
+        const apiUrl = window.buildApiUrl ? window.buildApiUrl('AUTH') : `${baseUrl}api/auth.php`;
 
         const response = await fetch(apiUrl, {
             method: 'POST',

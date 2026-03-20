@@ -6,10 +6,10 @@
 
 class Config {
     // Database Configuration
-    const DB_HOST = 'localhost';
+    const DB_HOST = '127.0.0.1';
     const DB_NAME = 'ksp_lamgabejaya_v2';
     const DB_USER = 'root';
-    const DB_PASS = '';
+    const DB_PASS = 'root';
     const DB_CHARSET = 'utf8mb4';
     const DB_SOCKET = '';
     

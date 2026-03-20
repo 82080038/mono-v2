@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Staff - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard-layout.css" rel="stylesheet">
+    <style>
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e9ecef;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -22px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #007bff;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <!-- Dashboard Wrapper -->
+    <div class="dashboard-wrapper">
+        <!-- Sticky Header -->
+        <header class="dashboard-header navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div class="d-flex align-items-center">
+                        <!-- Mobile Menu Toggle -->
+                        <button class="btn btn-link text-white mobile-menu-toggle d-lg-none me-3"
+                            onclick="toggleSidebar()">
+                            <i class="fas fa-bars"></i>
+                        </button>
+
+                        <!-- Logo/Brand -->
+                        <a class="navbar-brand" href="../../index.html">
+                            <i class="fas fa-building me-2"></i>
+                            KSP Lam Gabe Jaya
+                        </a>
+
+                        <!-- Sidebar Toggle (Desktop) -->
+                        <button class="btn btn-link text-white ms-3 d-none d-lg-block" onclick="toggleSidebarCollapse()"
+                            title="Toggle Sidebar">
+                            <i class="fas fa-outdent" id="sidebarToggleIcon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Center: Date/Time Display -->
+                    <div class="header-datetime-center text-white">
+                        <span id="headerDateTime" class="fw-bold"></span>
+                    </div>
+
+                    <!-- Right: User Info -->
+                    <div class="d-none d-xl-flex align-items-center gap-4 text-white">
+                        <div class="header-user-info d-flex align-items-center gap-2">
+                            <div class="text-end">
+                                <div class="small fw-semibold" id="headerUserName">Loading...</div>
+                                <div class="small opacity-75" id="headerUserRole">Staff</div>
+                            </div>
+                            <div class="avatar-circle bg-white text-primary">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="dashboard-content">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar" id="dashboardSidebar">
+                <div class="sidebar-header">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="avatar-circle bg-white text-primary">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <div class="fw-semibold text-white" id="sidebarUserName">Staff</div>
+                            <div class="small text-white-50">Staff</div>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="loadPage('dashboard')">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('members')">
+                                <i class="fas fa-users me-2"></i>
+                                Anggota
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('loans')">
+                                <i class="fas fa-hand-holding-usd me-2"></i>
+                                Pinjaman
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('savings')">
+                                <i class="fas fa-piggy-bank me-2"></i>
+                                Simpanan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('transactions')">
+                                <i class="fas fa-exchange-alt me-2"></i>
+                                Transaksi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('reports')">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Laporan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('settings')">
+                                <i class="fas fa-cog me-2"></i>
+                                Pengaturan
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Sidebar Footer -->
+                <div class="sidebar-footer">
+                    <button class="btn btn-outline-light btn-sm w-100" onclick="logout()">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Keluar
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="dashboard-main">
+                <div class="container-fluid p-4">
+                    <!-- Page Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2 class="h4 mb-1">Dashboard Staff</h2>
+                            <p class="text-muted mb-0">Pusat aktivitas dan monitoring operasional</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary" onclick="startNewTask()">
+                                <i class="fas fa-plus me-2"></i>
+                                Tugas Baru
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Overview -->
+                    <div class="row mb-4">
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title mb-0">Total Anggota</h6>
+                                            <h3 class="mb-0" id="totalMembers">5</h3>
+                                        </div>
+                                        <div class="fs-1 opacity-50">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title mb-0">Pinjaman Aktif</h6>
+                                            <h3 class="mb-0" id="activeLoans">0</h3>
+                                        </div>
+                                        <div class="fs-1 opacity-50">
+                                            <i class="fas fa-hand-holding-usd"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title mb-0">Simpanan Total</h6>
+                                            <h3 class="mb-0" id="totalSavings">Rp 5M</h3>
+                                        </div>
+                                        <div class="fs-1 opacity-50">
+                                            <i class="fas fa-piggy-bank"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title mb-0">Tugas Hari Ini</h6>
+                                            <h3 class="mb-0" id="todayTasks">8</h3>
+                                        </div>
+                                        <div class="fs-1 opacity-50">
+                                            <i class="fas fa-tasks"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions & Recent Activity -->
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Aktivitas Terkini</h5>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="refreshActivity()">
+                                        <i class="fas fa-sync-alt me-1"></i>
+                                        Refresh
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="timeline" id="activityTimeline">
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker bg-primary"></div>
+                                            <div class="timeline-content">
+                                                <h6 class="mb-1">Anggota Baru Terdaftar</h6>
+                                                <p class="text-muted mb-1">Ahmad Wijaya berhasil mendaftar sebagai
+                                                    anggota baru</p>
+                                                <small class="text-muted">2 jam yang lalu</small>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker bg-success"></div>
+                                            <div class="timeline-content">
+                                                <h6 class="mb-1">Pinjaman Disetujui</h6>
+                                                <p class="text-muted mb-1">Pinjaman sebesar Rp 5.000.000 telah disetujui
+                                                </p>
+                                                <small class="text-muted">3 jam yang lalu</small>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker bg-warning"></div>
+                                            <div class="timeline-content">
+                                                <h6 class="mb-1">Pembayaran Terlambat</h6>
+                                                <p class="text-muted mb-1">2 anggota memiliki pembayaran yang terlambat
+                                                </p>
+                                                <small class="text-muted">5 jam yang lalu</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Quick Actions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary" onclick="registerMember()">
+                                            <i class="fas fa-user-plus me-2"></i>
+                                            Daftar Anggota Baru
+                                        </button>
+                                        <button class="btn btn-success" onclick="newLoan()">
+                                            <i class="fas fa-hand-holding-usd me-2"></i>
+                                            Ajukan Pinjaman
+                                        </button>
+                                        <button class="btn btn-info" onclick="processSavings()">
+                                            <i class="fas fa-piggy-bank me-2"></i>
+                                            Proses Simpanan
+                                        </button>
+                                        <button class="btn btn-warning" onclick="generateReport()">
+                                            <i class="fas fa-file-alt me-2"></i>
+                                            Buat Laporan
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h5 class="mb-0">System Status</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Database</span>
+                                        <span class="badge bg-success">Online</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>API Server</span>
+                                        <span class="badge bg-success">Online</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Backup</span>
+                                        <span class="badge bg-success">Updated</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Last Sync</span>
+                                        <small class="text-muted">2 menit lalu</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Configuration -->
+    <script src="../../assets/js/config.js"></script>
+    <!-- Fixed Authentication -->
+    <script src="../../assets/js/auth-fixed.js"></script>
+
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeDashboard();
+            loadDashboardData();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        });
+
+        function initializeDashboard() {
+            // Update user info with null handling
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            const displayName = userData.full_name || userData.name || userData.username || 'Staff';
+            const displayRole = userData.role || 'Staff';
+
+            // Update all user display elements safely
+            const userElements = ['headerUserName', 'sidebarUserName'];
+            userElements.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.textContent = displayName;
+                }
+            });
+
+            const roleElements = ['headerUserRole'];
+            roleElements.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.textContent = displayRole;
+                }
+            });
+        }
+
+        function loadDashboardData() {
+            // Simulate loading dashboard data from API
+            setTimeout(() => {
+                // Update stats with real or simulated data
+                document.getElementById('totalMembers').textContent = '5';
+                document.getElementById('activeLoans').textContent = '0';
+                document.getElementById('totalSavings').textContent = 'Rp 5M';
+                document.getElementById('todayTasks').textContent = '8';
+            }, 1000);
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('headerDateTime').textContent = now.toLocaleDateString('id-ID', options);
+        }
+
+        function toggleSidebar() {
+            document.getElementById('dashboardSidebar').classList.toggle('show');
+        }
+
+        function toggleSidebarCollapse() {
+            document.getElementById('dashboardSidebar').classList.toggle('collapsed');
+            const icon = document.getElementById('sidebarToggleIcon');
+            icon.classList.toggle('fa-outdent');
+            icon.classList.toggle('fa-indent');
+        }
+
+        function loadPage(page) {
+            // Placeholder for page navigation
+            console.log('Loading page:', page);
+            alert(`Navigasi ke halaman ${page} akan diimplementasikan`);
+        }
+
+        function startNewTask() {
+            alert('Form tugas baru akan dibuka');
+        }
+
+        function refreshActivity() {
+            location.reload();
+        }
+
+        function registerMember() {
+            alert('Form pendaftaran anggota baru akan dibuka');
+        }
+
+        function newLoan() {
+            alert('Form pengajuan pinjaman baru akan dibuka');
+        }
+
+        function processSavings() {
+            alert('Form proses simpanan akan dibuka');
+        }
+
+        function generateReport() {
+            alert('Form pembuatan laporan akan dibuka');
+        }
+
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                // Use auth-fixed.js logout function if available
+                if (typeof window.logout === 'function') {
+                    window.logout();
+                } else {
+                    // Fallback logout
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    sessionStorage.removeItem('authToken');
+                    sessionStorage.removeItem('userData');
+
+                    const loginUrl = window.buildUrl ? window.buildUrl('login.html') : '../../login.html';
+                    window.location.href = loginUrl;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -8,7 +8,7 @@
 // Enable CORS
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 // Handle preflight requests
@@ -30,7 +30,7 @@ $response = [
 // Database connection
 try {
     $pdo = new PDO(
-        "mysql:host=localhost;dbname=ksp_lamgabejaya_v2;charset=utf8mb4",
+        "mysql:host=127.0.0.1;port=3306;dbname=ksp_lamgabejaya_v2;charset=utf8mb4",
         Config::DB_USER, 
         Config::DB_PASS,
         [
@@ -162,12 +162,14 @@ function handleLogin($pdo, &$response) {
     $response['message'] = 'Login berhasil';
     $response['data'] = [
         'user' => [
-            'id' => $user['id'],
-            'name' => $user['name'],
-            'email' => $user['email'],
-            'role' => $user['role'],
+            'id' => $user['id'] ?? 0,
+            'name' => $user['full_name'] ?? $user['username'] ?? 'Unknown',
+            'email' => $user['email'] ?? '',
+            'role' => $user['role'] ?? 'Staff',
             'token' => $token,
-            'last_login' => date('Y-m-d H:i:s')
+            'last_login' => date('Y-m-d H:i:s'),
+            'permissions' => $user['permissions'] ?? null,
+            'is_active' => $user['is_active'] ?? 1
         ]
     ];
     
@@ -308,22 +310,101 @@ function handleGetRequest($pdo, &$response) {
     $action = $_GET['action'] ?? '';
     
     switch ($action) {
-        case 'check_auth':
-            handleAuthCheck($pdo, $response);
+        case 'validate':
+            handleTokenValidation($pdo, $response);
             break;
-        case 'get_user':
-            handleGetUser($pdo, $response);
+        case 'me':
+            handleGetCurrentUser($pdo, $response);
             break;
         default:
-            // Default response for GET requests
-            $response['success'] = true;
-            $response['message'] = 'Auth API is running';
-            $response['data'] = [
-                'version' => '2.0.0',
-                'status' => 'operational',
-                'timestamp' => date('Y-m-d H:i:s')
-            ];
+            $response['message'] = 'Action tidak valid';
+            http_response_code(400);
             break;
+    }
+}
+
+/**
+ * Handle token validation
+ */
+function handleTokenValidation($pdo, &$response) {
+    $token = getTokenFromRequest();
+    
+    if (!$token) {
+        $response['success'] = false;
+        $response['message'] = 'Token tidak ditemukan';
+        http_response_code(401);
+        return;
+    }
+    
+    $payload = validateJWT($token);
+    if (!$payload) {
+        $response['success'] = false;
+        $response['message'] = 'Token tidak valid atau kadaluarsa';
+        http_response_code(401);
+        return;
+    }
+    
+    $response['success'] = true;
+    $response['message'] = 'Token valid';
+    $response['data'] = [
+        'user_id' => $payload['user_id'] ?? null,
+        'role' => $payload['role'] ?? 'Unknown',
+        'expires_at' => date('Y-m-d H:i:s', $payload['exp'] ?? 0)
+    ];
+}
+
+/**
+ * Handle get current user
+ */
+function handleGetCurrentUser($pdo, &$response) {
+    $token = getTokenFromRequest();
+    
+    if (!$token) {
+        $response['success'] = false;
+        $response['message'] = 'Token tidak ditemukan';
+        http_response_code(401);
+        return;
+    }
+    
+    $payload = validateJWT($token);
+    if (!$payload) {
+        $response['success'] = false;
+        $response['message'] = 'Token tidak valid atau kadaluarsa';
+        http_response_code(401);
+        return;
+    }
+    
+    try {
+        $stmt = $pdo->prepare("SELECT id, username, full_name, email, role, is_active, last_login FROM users WHERE id = ?");
+        $stmt->execute([$payload['user_id']]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$user) {
+            $response['success'] = false;
+            $response['message'] = 'User tidak ditemukan';
+            http_response_code(404);
+            return;
+        }
+        
+        $response['success'] = true;
+        $response['message'] = 'User data retrieved';
+        $response['data'] = [
+            'user' => [
+                'id' => $user['id'] ?? 0,
+                'username' => $user['username'] ?? '',
+                'name' => $user['full_name'] ?? $user['username'] ?? 'Unknown',
+                'email' => $user['email'] ?? '',
+                'role' => $user['role'] ?? 'Staff',
+                'is_active' => $user['is_active'] ?? 1,
+                'last_login' => $user['last_login'] ?? null
+            ]
+        ];
+        
+    } catch (PDOException $e) {
+        error_log("Get user error: " . $e->getMessage());
+        $response['success'] = false;
+        $response['message'] = 'Database error';
+        http_response_code(500);
     }
 }
 
@@ -595,6 +676,22 @@ function clearLoginAttempts($email, $db) {
 }
 
 /**
+ * Get token from request
+ */
+function getTokenFromRequest() {
+    // Try to get from Authorization header first
+    $headers = getallheaders();
+    $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+    
+    if ($authHeader && strpos($authHeader, 'Bearer ') === 0) {
+        return substr($authHeader, 7);
+    }
+    
+    // Try to get from POST data
+    return $_POST['token'] ?? $_GET['token'] ?? null;
+}
+
+/**
  * Generate reset token
  */
 function generateResetToken() {
@@ -627,27 +724,13 @@ function sendResetEmail($email, $token) {
 }
 
 /**
- * Get token from request
- */
-function getTokenFromRequest() {
-    $headers = getallheaders();
-    $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
-    
-    if (preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
-        return $matches[1];
-    }
-    
-    return $_POST['token'] ?? '';
-}
-
-/**
  * Generate JWT token (simplified for testing)
  */
 function generateJWT($user) {
     // For testing purposes, create a simple token
     $payload = [
         'user_id' => $user['id'],
-        'name' => $user['name'],
+        'name' => $user['full_name'] ?? $user['username'] ?? 'Unknown',
         'email' => $user['email'],
         'role' => $user['role'],
         'iat' => time(),
@@ -663,6 +746,11 @@ function generateJWT($user) {
  */
 function validateJWT($token) {
     try {
+        // First check if token is blacklisted
+        if (isTokenBlacklisted($token)) {
+            return false;
+        }
+        
         $payload = json_decode(base64_decode($token), true);
         if (!$payload || !isset($payload['exp']) || $payload['exp'] < time()) {
             return false;
@@ -674,13 +762,70 @@ function validateJWT($token) {
 }
 
 /**
- * Blacklist token (placeholder implementation)
+ * Blacklist token (simple implementation using session)
  */
 function blacklistToken($token) {
-    // This would store the token in a blacklist table
-    // For now, just log it
-    error_log("Token blacklisted: $token");
-    return true;
+    try {
+        // Create blacklist table if not exists
+        $pdo = new PDO(
+            "mysql:host=127.0.0.1;port=3306;dbname=ksp_lamgabejaya_v2;charset=utf8mb4",
+            'root',
+            'root',
+            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        );
+        
+        // Create blacklist table if not exists
+        $pdo->exec("CREATE TABLE IF NOT EXISTS token_blacklist (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            token VARCHAR(500) NOT NULL,
+            blacklisted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            expires_at TIMESTAMP NULL,
+            INDEX idx_token (token),
+            INDEX idx_expires (expires_at)
+        )");
+        
+        // Get token payload to check expiry
+        $payload = json_decode(base64_decode($token), true);
+        $expiresAt = isset($payload['exp']) ? date('Y-m-d H:i:s', $payload['exp']) : null;
+        
+        // Insert token into blacklist
+        $stmt = $pdo->prepare("INSERT IGNORE INTO token_blacklist (token, expires_at) VALUES (?, ?)");
+        $stmt->execute([$token, $expiresAt]);
+        
+        // Clean up expired tokens
+        $pdo->exec("DELETE FROM token_blacklist WHERE expires_at < NOW()");
+        
+        error_log("Token blacklisted: $token");
+        return true;
+        
+    } catch (Exception $e) {
+        error_log("Failed to blacklist token: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Check if token is blacklisted
+ */
+function isTokenBlacklisted($token) {
+    try {
+        $pdo = new PDO(
+            "mysql:host=127.0.0.1;port=3306;dbname=ksp_lamgabejaya_v2;charset=utf8mb4",
+            'root',
+            'root',
+            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        );
+        
+        $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM token_blacklist WHERE token = ? AND (expires_at IS NULL OR expires_at > NOW())");
+        $stmt->execute([$token]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['count'] > 0;
+        
+    } catch (Exception $e) {
+        // If blacklist table doesn't exist, assume token is not blacklisted
+        return false;
+    }
 }
 
 ?>

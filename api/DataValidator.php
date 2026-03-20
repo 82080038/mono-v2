@@ -144,7 +144,7 @@ class DataValidator {
     private static function validateSafeString($field, $value, $params) {
         if (!empty($value)) {
             // Check for dangerous characters
-            $dangerous_chars = ['<', '>', '"', "'", '\', '/', ';', ':', '(', ')', '{', '}'];
+            $dangerous_chars = ['<', '>', '"', "'", '\\', '/', ';', ':', '(', ')', '{', '}'];
             
             foreach ($dangerous_chars as $char) {
                 if (strpos($value, $char) !== false) {

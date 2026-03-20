@@ -245,12 +245,124 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Configuration -->
     <script src="assets/js/config.js"></script>
-    <!-- Custom JS -->
-    <script src="assets/js/auth.js"></script>
+    <!-- Fixed Authentication Script -->
+    <script src="assets/js/auth-fixed.js"></script>
+
+    <!-- Login Fix Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Override auth.js functions to fix URL issues
+            if (typeof window.simulateLoginAPI === 'function') {
+                // Store original function
+                const originalSimulateLoginAPI = window.simulateLoginAPI;
+
+                // Override with fixed version
+                window.simulateLoginAPI = async function (email, password) {
+                    try {
+                        console.log('Using fixed login API call...');
+
+                        const formData = new FormData();
+                        formData.append('action', 'login');
+                        formData.append('username', email);
+                        formData.append('password', password);
+
+                        // Use absolute URL to fix path resolution
+                        const apiUrl = window.location.origin + '/mono-v2/api/auth.php';
+                        console.log('Calling API:', apiUrl);
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'Origin': window.location.origin,
+                                'Referer': window.location.href
+                            }
+                        });
+
+                        console.log('Response status:', response.status);
+                        console.log('Response headers:', Object.fromEntries(response.headers));
+
+                        const result = await response.json();
+                        console.log('Response data:', result);
+
+                        return result;
+                    } catch (error) {
+                        console.error('Fixed API Error:', error);
+                        return {
+                            success: false,
+                            message: 'Terjadi kesalahan koneksi ke server: ' + error.message
+                        };
+                    }
+                };
+
+                console.log('Login API function overridden with fixed version');
+            }
+
+            // Override validateStoredToken if exists
+            if (typeof window.validateStoredToken === 'function') {
+                const originalValidateStoredToken = window.validateStoredToken;
+
+                window.validateStoredToken = async function (token) {
+                    try {
+                        const apiUrl = window.location.origin + '/mono-v2/api/auth.php?action=validate&token=' + encodeURIComponent(token);
+                        console.log('Validating token at:', apiUrl);
+
+                        const response = await fetch(apiUrl);
+                        const result = await response.json();
+                        return result.success;
+                    } catch (error) {
+                        console.error('Token validation error:', error);
+                        return false;
+                    }
+                };
+
+                console.log('Token validation function overridden');
+            }
+
+            // Clear any problematic sessions
+            clearProblematicSessions();
+
+            // Add form submission handler
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    console.log('Form submitted via event listener');
+                    // Use the auth-fixed.js login handler with event
+                    if (typeof window.handleLogin === 'function') {
+                        window.handleLogin(e);
+                    } else {
+                        console.error('handleLogin function not found');
+                    }
+                });
+                console.log('Form submission handler added');
+            }
+        });
+
+        function clearProblematicSessions() {
+            console.log('Clearing problematic sessions...');
+
+            // Get stored data
+            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+            const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+
+            if (token || userData) {
+                console.log('Found stored session data, clearing...');
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                sessionStorage.removeItem('authToken');
+                sessionStorage.removeItem('userData');
+                console.log('Session cleared');
+            }
+        }
+    </script>
 
     <!-- Quick Login Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Clear any invalid stored sessions on login page load
+            clearInvalidSessions();
+
             // Quick Login Button Handler (auto-submit and clear previous session)
             const quickLoginButtons = document.querySelectorAll('.quick-login-btn');
             const loginForm = document.getElementById('loginForm');
@@ -261,6 +373,28 @@
                 localStorage.removeItem('userData');
                 sessionStorage.removeItem('authToken');
                 sessionStorage.removeItem('userData');
+            }
+
+            async function clearInvalidSessions() {
+                const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+                const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+
+                if (token && userData) {
+                    try {
+                        // Use absolute URL to avoid path resolution issues
+                        const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]+$/, '/');
+                        const response = await fetch(`${baseUrl}api/auth.php?action=validate&token=${encodeURIComponent(token)}`);
+                        const result = await response.json();
+
+                        if (!result.success) {
+                            console.log('Clearing invalid session on login page');
+                            clearSession();
+                        }
+                    } catch (error) {
+                        console.log('Error validating session, clearing anyway');
+                        clearSession();
+                    }
+                }
             }
 
             quickLoginButtons.forEach(button => {

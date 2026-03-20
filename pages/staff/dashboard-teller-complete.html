@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Teller - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard-layout.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <!-- Dashboard Wrapper -->
+    <div class="dashboard-wrapper">
+        <!-- Sticky Header -->
+        <header class="dashboard-header navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div class="d-flex align-items-center">
+                        <!-- Mobile Menu Toggle -->
+                        <button class="btn btn-link text-white mobile-menu-toggle d-lg-none me-3"
+                            onclick="toggleSidebar()">
+                            <i class="fas fa-bars"></i>
+                        </button>
+
+                        <!-- Logo/Brand -->
+                        <a class="navbar-brand" href="../../index.html">
+                            <i class="fas fa-building me-2"></i>
+                            KSP Lam Gabe Jaya
+                        </a>
+
+                        <!-- Sidebar Toggle (Desktop) -->
+                        <button class="btn btn-link text-white ms-3 d-none d-lg-block" onclick="toggleSidebarCollapse()"
+                            title="Toggle Sidebar">
+                            <i class="fas fa-outdent" id="sidebarToggleIcon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Center: Date/Time Display -->
+                    <div class="header-datetime-center text-white">
+                        <span id="headerDateTime" class="fw-bold"></span>
+                    </div>
+
+                    <!-- Right: User Info -->
+                    <div class="d-none d-xl-flex align-items-center gap-4 text-white">
+                        <div class="header-user-info d-flex align-items-center gap-2">
+                            <div class="text-end">
+                                <div class="small fw-semibold" id="headerUserName">Loading...</div>
+                                <div class="small opacity-75" id="headerUserRole">Teller</div>
+                            </div>
+                            <div class="avatar-circle bg-white text-primary">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="dashboard-content">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar" id="dashboardSidebar">
+                <div class="sidebar-header">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="avatar-circle bg-white text-primary">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <div class="fw-semibold text-white" id="sidebarUserName">Teller</div>
+                            <div class="small text-white-50">Teller</div>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="loadPage('dashboard')">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('savings')">
+                                <i class="fas fa-piggy-bank me-2"></i>
+                                Simpanan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('withdrawals')">
+                                <i class="fas fa-hand-holding-usd me-2"></i>
+                                Penarikan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('deposits')">
+                                <i class="fas fa-coins me-2"></i>
+                                Setoran
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('transactions')">
+                                <i class="fas fa-exchange-alt me-2"></i>
+                                Transaksi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('members')">
+                                <i class="fas fa-users me-2"></i>
+                                Anggota
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('reports')">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Laporan
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Sidebar Footer -->
+                <div class="sidebar-footer">
+                    <button class="btn btn-outline-light btn-sm w-100" onclick="logout()">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Keluar
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="dashboard-main">
+                <div class="container-fluid p-4">
+                    <!-- Page Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2 class="h4 mb-1">Dashboard Teller</h2>
+                            <p class="text-muted mb-0">Kelola transaksi harian dan layanan anggota</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary" onclick="quickTransaction()">
+                                <i class="fas fa-plus me-2"></i>
+                                Transaksi Baru
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="row mb-4">
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title mb-0">Transaksi Hari Ini</h6>
+                                            <h3 class="mb-0" id="todayTransactions">0</h3>
+                                        </div>
+                                        <div class="fs-1 opacity-50">
+                                            <i class="fas fa-exchange-alt"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title mb-0">Total Setoran</h6>
+                                            <h3 class="mb-0" id="totalDeposits">Rp 0</h3>
+                                        </div>
+                                        <div class="fs-1 opacity-50">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title mb-0">Total Penarikan</h6>
+                                            <h3 class="mb-0" id="totalWithdrawals">Rp 0</h3>
+                                        </div>
+                                        <div class="fs-1 opacity-50">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title mb-0">Anggota Dilayani</h6>
+                                            <h3 class="mb-0" id="membersServed">0</h3>
+                                        </div>
+                                        <div class="fs-1 opacity-50">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Transaksi Terakhir</h5>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="loadPage('transactions')">
+                                        Lihat Semua
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Waktu</th>
+                                                    <th>No. Transaksi</th>
+                                                    <th>Anggota</th>
+                                                    <th>Jenis</th>
+                                                    <th>Jumlah</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="recentTransactions">
+                                                <tr>
+                                                    <td colspan="6" class="text-center text-muted">
+                                                        <i class="fas fa-spinner fa-spin me-2"></i>
+                                                        Memuat data...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Quick Actions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary" onclick="quickDeposit()">
+                                            <i class="fas fa-plus me-2"></i>
+                                            Setoran Tunai
+                                        </button>
+                                        <button class="btn btn-success" onclick="quickWithdrawal()">
+                                            <i class="fas fa-minus me-2"></i>
+                                            Penarikan Tunai
+                                        </button>
+                                        <button class="btn btn-info" onclick="quickTransfer()">
+                                            <i class="fas fa-exchange-alt me-2"></i>
+                                            Transfer Antar Rekening
+                                        </button>
+                                        <button class="btn btn-warning" onclick="memberLookup()">
+                                            <i class="fas fa-search me-2"></i>
+                                            Cari Anggota
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Info Kas</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <small class="text-muted">Saldo Kas Awal</small>
+                                        <h6 class="mb-0" id="openingBalance">Rp 0</h6>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Pemasukan</small>
+                                        <h6 class="mb-0 text-success" id="cashIn">Rp 0</h6>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Pengeluaran</small>
+                                        <h6 class="mb-0 text-danger" id="cashOut">Rp 0</h6>
+                                    </div>
+                                    <hr>
+                                    <div>
+                                        <small class="text-muted">Saldo Kas Saat Ini</small>
+                                        <h5 class="mb-0 text-primary" id="currentBalance">Rp 0</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Configuration -->
+    <script src="../../assets/js/config.js"></script>
+    <!-- Fixed Authentication -->
+    <script src="../../assets/js/auth-fixed.js"></script>
+
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeDashboard();
+            loadDashboardData();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        });
+
+        function initializeDashboard() {
+            // Update user info with null handling
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            const displayName = userData.full_name || userData.name || userData.username || 'Teller';
+            const displayRole = userData.role || 'Teller';
+
+            // Update all user display elements safely
+            const userElements = ['headerUserName', 'sidebarUserName'];
+            userElements.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.textContent = displayName;
+                }
+            });
+
+            const roleElements = ['headerUserRole'];
+            roleElements.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.textContent = displayRole;
+                }
+            });
+        }
+
+        function loadDashboardData() {
+            // Simulate loading dashboard data
+            setTimeout(() => {
+                // Update stats
+                document.getElementById('todayTransactions').textContent = Math.floor(Math.random() * 50) + 10;
+                document.getElementById('totalDeposits').textContent = 'Rp ' + (Math.floor(Math.random() * 10000000) + 5000000).toLocaleString('id-ID');
+                document.getElementById('totalWithdrawals').textContent = 'Rp ' + (Math.floor(Math.random() * 5000000) + 1000000).toLocaleString('id-ID');
+                document.getElementById('membersServed').textContent = Math.floor(Math.random() * 30) + 5;
+
+                // Update cash balance
+                const openingBalance = Math.floor(Math.random() * 50000000) + 10000000;
+                const cashIn = Math.floor(Math.random() * 10000000) + 5000000;
+                const cashOut = Math.floor(Math.random() * 5000000) + 1000000;
+                const currentBalance = openingBalance + cashIn - cashOut;
+
+                document.getElementById('openingBalance').textContent = 'Rp ' + openingBalance.toLocaleString('id-ID');
+                document.getElementById('cashIn').textContent = 'Rp ' + cashIn.toLocaleString('id-ID');
+                document.getElementById('cashOut').textContent = 'Rp ' + cashOut.toLocaleString('id-ID');
+                document.getElementById('currentBalance').textContent = 'Rp ' + currentBalance.toLocaleString('id-ID');
+
+                // Load recent transactions
+                loadRecentTransactions();
+            }, 1000);
+        }
+
+        function loadRecentTransactions() {
+            const transactions = [
+                { time: '09:15', no: 'TRX001', member: 'Ahmad Wijaya', type: 'Setoran', amount: 1000000, status: 'Success' },
+                { time: '09:30', no: 'TRX002', member: 'Siti Nurhaliza', type: 'Penarikan', amount: 500000, status: 'Success' },
+                { time: '10:00', no: 'TRX003', member: 'Budi Santoso', type: 'Setoran', amount: 2000000, status: 'Success' },
+                { time: '10:15', no: 'TRX004', member: 'Dewi Lestari', type: 'Transfer', amount: 750000, status: 'Success' }
+            ];
+
+            let html = '';
+            transactions.forEach(trans => {
+                const statusClass = trans.status === 'Success' ? 'success' : 'warning';
+                const typeIcon = trans.type === 'Setoran' ? 'arrow-down' : trans.type === 'Penarikan' ? 'arrow-up' : 'exchange-alt';
+
+                html += `
+                    <tr>
+                        <td>${trans.time}</td>
+                        <td>${trans.no}</td>
+                        <td>${trans.member}</td>
+                        <td><i class="fas fa-${typeIcon} me-1"></i> ${trans.type}</td>
+                        <td>Rp ${trans.amount.toLocaleString('id-ID')}</td>
+                        <td><span class="badge bg-${statusClass}">${trans.status}</span></td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('recentTransactions').innerHTML = html;
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('headerDateTime').textContent = now.toLocaleDateString('id-ID', options);
+        }
+
+        function toggleSidebar() {
+            document.getElementById('dashboardSidebar').classList.toggle('show');
+        }
+
+        function toggleSidebarCollapse() {
+            document.getElementById('dashboardSidebar').classList.toggle('collapsed');
+            const icon = document.getElementById('sidebarToggleIcon');
+            icon.classList.toggle('fa-outdent');
+            icon.classList.toggle('fa-indent');
+        }
+
+        function loadPage(page) {
+            // Placeholder for page navigation
+            console.log('Loading page:', page);
+        }
+
+        function quickTransaction() {
+            alert('Form transaksi baru akan dibuka');
+        }
+
+        function quickDeposit() {
+            alert('Form setoran tunai akan dibuka');
+        }
+
+        function quickWithdrawal() {
+            alert('Form penarikan tunai akan dibuka');
+        }
+
+        function quickTransfer() {
+            alert('Form transfer antar rekening akan dibuka');
+        }
+
+        function memberLookup() {
+            alert('Pencarian anggota akan dibuka');
+        }
+
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                // Use auth-fixed.js logout function if available
+                if (typeof window.logout === 'function') {
+                    window.logout();
+                } else {
+                    // Fallback logout
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    sessionStorage.removeItem('authToken');
+                    sessionStorage.removeItem('userData');
+
+                    const loginUrl = window.buildUrl ? window.buildUrl('login.html') : '../../login.html';
+                    window.location.href = loginUrl;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
