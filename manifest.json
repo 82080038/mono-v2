@@ -1,0 +1,27 @@
+{
+  "name": "KSP Lam Gabe Jaya",
+  "short_name": "KSP Lam Gabe",
+  "description": "Aplikasi Koperasi Simpan Pinjam Digital",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#667eea",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/assets/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": [
+    "finance",
+    "business"
+  ],
+  "lang": "id-ID"
+}

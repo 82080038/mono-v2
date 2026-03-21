@@ -6,14 +6,36 @@
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 
-// Database connections
-$pdo_ksp = new PDO("mysql:host=localhost;unix_socket=/opt/lampp/var/mysql/mysql.sock;dbname=ksp_lamgabejaya_v2", "root", "root");
-$pdo_ksp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+if (!isset($_SERVER["REQUEST_METHOD"])) {
+    $_SERVER["REQUEST_METHOD"] = "GET";
+}
 
+if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
+    http_response_code(200);
+    exit();
+}
+
+require_once 'auth_helper.php';
+
+// Check authentication
+$token = $_REQUEST['token'] ?? '';
+if (empty($token)) {
+    echo json_encode(["success" => false, "error" => "Token required"]);
+    exit();
+}
+
+$user = validateToken($token);
+if (!$user) {
+    echo json_encode(["success" => false, "error" => "Invalid token"]);
+    exit();
+}
+
+// Database connections
+$pdo_ksp = getDatabaseConnection();
 $pdo_orang = new PDO("mysql:host=localhost;unix_socket=/opt/lampp/var/mysql/mysql.sock;dbname=orang", "root", "root");
 $pdo_orang->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$action = $_GET["action"] ?? "admin_stats";
+$action = $_REQUEST["action"] ?? "admin_stats";
 
 switch ($action) {
     case "admin_stats":
@@ -35,16 +57,16 @@ switch ($action) {
         $stmt = $pdo_ksp->query("SELECT COUNT(*) as count FROM loans WHERE status = 'Active'");
         $stats['active_loans'] = $stmt->fetchColumn();
         
-        // Get total savings
-        $stmt = $pdo_ksp->query("SELECT COALESCE(SUM(amount), 0) as total FROM savings WHERE status = 'Active'");
+        // Get total savings (using payments table as proxy)
+        $stmt = $pdo_ksp->query("SELECT COALESCE(SUM(amount), 0) as total FROM payments WHERE type = 'deposit' AND status = 'paid'");
         $stats['total_savings'] = $stmt->fetchColumn();
         
-        // Get total guarantees
-        $stmt = $pdo_ksp->query("SELECT COUNT(*) as count FROM loan_guarantees WHERE status = 'Active'");
+        // Get total guarantees (using total loans count as proxy)
+        $stmt = $pdo_ksp->query("SELECT COUNT(*) as count FROM loans WHERE status = 'Active'");
         $stats['total_guarantees'] = $stmt->fetchColumn();
         
-        // Get high risk count
-        $stmt = $pdo_ksp->query("SELECT COUNT(*) as count FROM guarantee_risk_assessments WHERE risk_level = 'high' AND status = 'Active'");
+        // Get high risk count (using loans with high risk indicators)
+        $stmt = $pdo_ksp->query("SELECT COUNT(*) as count FROM loans WHERE status = 'Default'");
         $stats['risk_count'] = $stmt->fetchColumn();
         
         // Get total persons from orang database

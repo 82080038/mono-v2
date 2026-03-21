@@ -1,0 +1,83 @@
+{
+  "summary": {
+    "bootstrapEnhancements": {
+      "progressBars": 2,
+      "badges": 5,
+      "toasts": 4,
+      "spinners": 4,
+      "breadcrumbs": 0,
+      "tables": 0,
+      "pagination": 0,
+      "listGroups": 0
+    },
+    "jqueryEnhancements": {
+      "animations": 3,
+      "ajax": 5,
+      "utilities": 5,
+      "selectors": 0,
+      "events": 3
+    },
+    "totalBootstrap": 15,
+    "totalJQuery": 16,
+    "totalEnhancements": 31,
+    "timestamp": "2026-03-21T14:12:34.519Z"
+  },
+  "details": {
+    "bootstrap": {
+      "progressBars": [
+        "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html"
+      ],
+      "tables": [],
+      "pagination": [],
+      "breadcrumbs": [],
+      "badges": [
+        "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/admin/members.html",
+        "/opt/lampp/htdocs/mono-v2/pages/admin/loans.html",
+        "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html"
+      ],
+      "toasts": [
+        "/opt/lampp/htdocs/mono-v2/login.html",
+        "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html"
+      ],
+      "spinners": [
+        "/opt/lampp/htdocs/mono-v2/pages/admin/members.html",
+        "/opt/lampp/htdocs/mono-v2/pages/admin/loans.html",
+        "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html"
+      ],
+      "listGroups": []
+    },
+    "jquery": {
+      "animations": [
+        "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html"
+      ],
+      "ajax": [
+        "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/admin/members.html",
+        "/opt/lampp/htdocs/mono-v2/pages/admin/loans.html",
+        "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html"
+      ],
+      "utilities": [
+        "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/admin/members.html",
+        "/opt/lampp/htdocs/mono-v2/pages/admin/loans.html",
+        "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html"
+      ],
+      "selectors": [],
+      "events": [
+        "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+        "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html"
+      ]
+    }
+  }
+}

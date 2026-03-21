@@ -1,0 +1,283 @@
+{
+  "summary": {
+    "totalTests": 11,
+    "successfulTests": 11,
+    "failedTests": 0,
+    "totalErrors": 6,
+    "totalFixes": 0,
+    "totalScreenshots": 7,
+    "timestamp": "2026-03-21T14:19:40.054Z"
+  },
+  "results": [
+    {
+      "test": "Login Page",
+      "url": "http://localhost/mono-v2/login.html",
+      "success": true,
+      "loadTime": 3081,
+      "errors": [],
+      "elements": [
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "required": true
+        },
+        {
+          "selector": "body",
+          "description": "Page Body",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "timestamp": "2026-03-21T14:19:08.618Z"
+    },
+    {
+      "test": "Home Page",
+      "url": "http://localhost/mono-v2/index.html",
+      "success": true,
+      "loadTime": 2892,
+      "errors": [],
+      "elements": [
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "required": true
+        },
+        {
+          "selector": "body",
+          "description": "Page Body",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "timestamp": "2026-03-21T14:19:15.363Z"
+    },
+    {
+      "test": "Admin Dashboard",
+      "url": "http://localhost/mono-v2/pages/admin/dashboard.html",
+      "success": true,
+      "loadTime": 1201,
+      "errors": [],
+      "elements": [
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "required": true
+        },
+        {
+          "selector": "body",
+          "description": "Page Body",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "timestamp": "2026-03-21T14:19:25.270Z"
+    },
+    {
+      "test": "Staff Dashboard",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard.html",
+      "success": true,
+      "loadTime": 1121,
+      "errors": [],
+      "elements": [
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "required": true
+        },
+        {
+          "selector": "body",
+          "description": "Page Body",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "timestamp": "2026-03-21T14:19:27.180Z"
+    },
+    {
+      "test": "Member Dashboard",
+      "url": "http://localhost/mono-v2/pages/member/dashboard.html",
+      "success": true,
+      "loadTime": 1164,
+      "errors": [],
+      "elements": [
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "required": true
+        },
+        {
+          "selector": "body",
+          "description": "Page Body",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "timestamp": "2026-03-21T14:19:28.996Z"
+    },
+    {
+      "test": "Members Page",
+      "url": "http://localhost/mono-v2/pages/admin/members.html",
+      "success": true,
+      "loadTime": 1781,
+      "errors": [],
+      "elements": [
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "required": true
+        },
+        {
+          "selector": "body",
+          "description": "Page Body",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "timestamp": "2026-03-21T14:19:30.848Z"
+    },
+    {
+      "test": "Loans Page",
+      "url": "http://localhost/mono-v2/pages/admin/loans.html",
+      "success": true,
+      "loadTime": 2009,
+      "errors": [],
+      "elements": [
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "required": true
+        },
+        {
+          "selector": "body",
+          "description": "Page Body",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "timestamp": "2026-03-21T14:19:32.823Z"
+    },
+    {
+      "test": "Dashboard Stats",
+      "url": "http://localhost/mono-v2/api/dashboard.php?action=admin_stats&token=MTI6T3duZXIgVXNlcjoxNzc0MDk2MDk3",
+      "success": true,
+      "loadTime": 0,
+      "errors": [],
+      "timestamp": "2026-03-21T14:19:36.860Z"
+    },
+    {
+      "test": "Members List",
+      "url": "http://localhost/mono-v2/api/members.php?action=list&token=MTI6T3duZXIgVXNlcjoxNzc0MDk2MDk3",
+      "success": true,
+      "loadTime": 0,
+      "errors": [],
+      "timestamp": "2026-03-21T14:19:37.937Z"
+    },
+    {
+      "test": "Loans List",
+      "url": "http://localhost/mono-v2/api/loans.php?action=list&token=MTI6T3duZXIgVXNlcjoxNzc0MDk2MDk3",
+      "success": true,
+      "loadTime": 0,
+      "errors": [],
+      "timestamp": "2026-03-21T14:19:38.994Z"
+    },
+    {
+      "test": "Digital Payments",
+      "url": "http://localhost/mono-v2/api/digital-payments.php?action=methods&token=MTI6T3duZXIgVXNlcjoxNzc0MDk2MDk3",
+      "success": true,
+      "loadTime": 0,
+      "errors": [],
+      "timestamp": "2026-03-21T14:19:40.052Z"
+    }
+  ],
+  "errors": [
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2026-03-21T14:19:16.007Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2026-03-21T14:19:16.012Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2026-03-21T14:19:17.707Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2026-03-21T14:19:17.721Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2026-03-21T14:19:18.153Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.webmanifest failed, code 404",
+      "timestamp": "2026-03-21T14:19:18.154Z"
+    }
+  ],
+  "fixes": [],
+  "screenshots": [
+    {
+      "filename": "Login_Page_2026-03-21T14-19-11-875Z.png",
+      "description": "Login Page - SUCCESS",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Login_Page_2026-03-21T14-19-11-875Z.png",
+      "isError": false,
+      "timestamp": "2026-03-21T14:19:15.362Z"
+    },
+    {
+      "filename": "Home_Page_2026-03-21T14-19-18-288Z.png",
+      "description": "Home Page - SUCCESS",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Home_Page_2026-03-21T14-19-18-288Z.png",
+      "isError": false,
+      "timestamp": "2026-03-21T14:19:25.269Z"
+    },
+    {
+      "filename": "Admin_Dashboard_2026-03-21T14-19-26-510Z.png",
+      "description": "Admin Dashboard - SUCCESS",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Admin_Dashboard_2026-03-21T14-19-26-510Z.png",
+      "isError": false,
+      "timestamp": "2026-03-21T14:19:27.180Z"
+    },
+    {
+      "filename": "Staff_Dashboard_2026-03-21T14-19-28-334Z.png",
+      "description": "Staff Dashboard - SUCCESS",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Staff_Dashboard_2026-03-21T14-19-28-334Z.png",
+      "isError": false,
+      "timestamp": "2026-03-21T14:19:28.995Z"
+    },
+    {
+      "filename": "Member_Dashboard_2026-03-21T14-19-30-216Z.png",
+      "description": "Member Dashboard - SUCCESS",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Member_Dashboard_2026-03-21T14-19-30-216Z.png",
+      "isError": false,
+      "timestamp": "2026-03-21T14:19:30.848Z"
+    },
+    {
+      "filename": "Members_Page_2026-03-21T14-19-32-685Z.png",
+      "description": "Members Page - SUCCESS",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Members_Page_2026-03-21T14-19-32-685Z.png",
+      "isError": false,
+      "timestamp": "2026-03-21T14:19:32.823Z"
+    },
+    {
+      "filename": "Loans_Page_2026-03-21T14-19-34-858Z.png",
+      "description": "Loans Page - SUCCESS",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Loans_Page_2026-03-21T14-19-34-858Z.png",
+      "isError": false,
+      "timestamp": "2026-03-21T14:19:34.999Z"
+    }
+  ]
+}

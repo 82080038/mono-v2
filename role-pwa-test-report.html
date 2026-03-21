@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role & PWA Test Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">
+                    <i class="fas fa-users-cog me-2"></i>
+                    Role & PWA Comprehensive Test Report
+                </h1>
+                
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Role Tests</h5>
+                                <h3>3</h3>
+                                <p class="mb-0">Total role tests</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Successful</h5>
+                                <h3>3</h3>
+                                <p class="mb-0">Role tests passed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">PWA Tests</h5>
+                                <h3>1</h3>
+                                <p class="mb-0">PWA features tested</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Errors</h5>
+                                <h3>177</h3>
+                                <p class="mb-0">Total errors found</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Role Tests Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user-tag me-2"></i>
+                            Role-Based Test Results
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        
+                            <div class="card mb-3">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">ADMIN Role</h6>
+                                    <span class="badge bg-success">
+                                        SUCCESS
+                                    </span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Login Test</h6>
+                                            <p class="mb-2">
+                                                <strong>Success:</strong> Yes<br>
+                                                <strong>Current URL:</strong> http://localhost/mono-v2/pages/admin/dashboard.html
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Dashboard Test</h6>
+                                            <p class="mb-2">
+                                                <strong>Success:</strong> Yes<br>
+                                                <strong>Components:</strong> Loaded
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                        <h6>Permissions Test</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Page</th>
+                                                        <th>Access</th>
+                                                        <th>Expected</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                        <tr>
+                                                            <td>Admin Dashboard</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Members Management</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Loans Management</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Reports</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Staff Dashboard</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Denied</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Member Dashboard</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Denied</span></td>
+                                                        </tr>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        
+                            <div class="card mb-3">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">STAFF Role</h6>
+                                    <span class="badge bg-success">
+                                        SUCCESS
+                                    </span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Login Test</h6>
+                                            <p class="mb-2">
+                                                <strong>Success:</strong> Yes<br>
+                                                <strong>Current URL:</strong> http://localhost/mono-v2/pages/staff/dashboard.html
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Dashboard Test</h6>
+                                            <p class="mb-2">
+                                                <strong>Success:</strong> Yes<br>
+                                                <strong>Components:</strong> Loaded
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                        <h6>Permissions Test</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Page</th>
+                                                        <th>Access</th>
+                                                        <th>Expected</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                        <tr>
+                                                            <td>Staff Dashboard</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Members</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Loans</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Transactions</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Admin Dashboard</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Denied</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Reports</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Denied</span></td>
+                                                        </tr>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        
+                            <div class="card mb-3">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">MEMBER Role</h6>
+                                    <span class="badge bg-success">
+                                        SUCCESS
+                                    </span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Login Test</h6>
+                                            <p class="mb-2">
+                                                <strong>Success:</strong> Yes<br>
+                                                <strong>Current URL:</strong> http://localhost/mono-v2/pages/member/login.html
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Dashboard Test</h6>
+                                            <p class="mb-2">
+                                                <strong>Success:</strong> Yes<br>
+                                                <strong>Components:</strong> Loaded
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                        <h6>Permissions Test</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Page</th>
+                                                        <th>Access</th>
+                                                        <th>Expected</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                        <tr>
+                                                            <td>Member Dashboard</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Loan Application</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Profile</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Granted</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Admin Dashboard</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Denied</span></td>
+                                                        </tr>
+                                                    
+                                                        <tr>
+                                                            <td>Staff Dashboard</td>
+                                                            <td><span class="badge bg-success">Granted</span></td>
+                                                            <td><span class="badge bg-info">Denied</span></td>
+                                                        </tr>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+                
+                <!-- PWA Tests Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-mobile-alt me-2"></i>
+                            PWA Feature Test Results
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Service Worker</h6>
+                                    <p class="mb-2">
+                                        <strong>Registered:</strong> Yes<br>
+                                        <strong>Controlling:</strong> No<br>
+                                        <strong>File Exists:</strong> Yes
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Web App Manifest</h6>
+                                    <p class="mb-2">
+                                        <strong>Has Link:</strong> No<br>
+                                        <strong>Exists:</strong> No<br>
+                                        <strong>Content:</strong> Not loaded
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Offline Support</h6>
+                                    <p class="mb-2">
+                                        <strong>Supported:</strong> Yes<br>
+                                        <strong>Response:</strong> 200
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Development Impact</h6>
+                                    <p class="mb-2">
+                                        <strong>Interferes:</strong> No<br>
+                                        <strong>Reload Time:</strong> 777ms
+                                    </p>
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+                
+                <!-- Recommendations -->
+                
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

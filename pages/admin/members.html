@@ -43,7 +43,9 @@
             color: white;
         }
     </style>
-</head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="manifest" href="/manifest.json">
+    </head>
 <body>
     <!-- Authentication Check -->
     <script>
@@ -107,5 +109,164 @@
         setInterval(updateTime, 1000);
         updateTime();
     </script>
+
+<!-- Enhanced AJAX -->
+<script>
+$(document).ready(function() {
+    // Global AJAX setup
+    $.ajaxSetup({
+        timeout: 30000,
+        beforeSend: function() {
+            $('body').addClass('loading');
+        },
+        complete: function() {
+            $('body').removeClass('loading');
+        }
+    });
+    
+    // Form submission helper
+    window.submitForm = function(form, options) {
+        var $form = $(form);
+        var $button = $form.find('button[type="submit"]');
+        var originalText = $button.text();
+        
+        $button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Loading...');
+        
+        $.ajax({
+            url: $form.attr('action'),
+            method: $form.attr('method') || 'POST',
+            data: $form.serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    showNotification(response.message || 'Operasi berhasil!', 'success');
+                    if (options.resetForm !== false) {
+                        $form[0].reset();
+                    }
+                    if (options.redirect) {
+                        setTimeout(function() {
+                            window.location.href = options.redirect;
+                        }, 1500);
+                    }
+                } else {
+                    showNotification(response.message || 'Operasi gagal!', 'danger');
+                }
+            },
+            error: function() {
+                showNotification('Terjadi kesalahan. Silakan coba lagi.', 'danger');
+            },
+            complete: function() {
+                $button.prop('disabled', false).text(originalText);
+            }
+        });
+    };
+    
+    // API helper
+    window.api = {
+        get: function(url, data, success) {
+            return $.get(url, data, function(response) {
+                if (success) success(response);
+            }).fail(function() {
+                showNotification('Gagal mengambil data', 'danger');
+            });
+        },
+        post: function(url, data, success) {
+            return $.post(url, data, function(response) {
+                if (success) success(response);
+            }).fail(function() {
+                showNotification('Gagal mengirim data', 'danger');
+            });
+        }
+    };
+});
+</script>
+
+<!-- jQuery Utilities -->
+<script>
+$(document).ready(function() {
+    // Utility functions
+    window.utils = {
+        formatCurrency: function(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        },
+        
+        formatDate: function(date) {
+            return new Date(date).toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        },
+        
+        debounce: function(func, wait) {
+            var timeout;
+            return function() {
+                var context = this;
+                var args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    func.apply(context, args);
+                }, wait);
+            };
+        },
+        
+        isValidEmail: function(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        },
+        
+        copyToClipboard: function(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                showNotification('Teks disalin ke clipboard', 'success');
+            });
+        }
+    };
+    
+    // Auto-format currency inputs
+    $('input[data-format="currency"]').on('input', function() {
+        var value = $(this).val().replace(/\D/g, '');
+        if (value) {
+            value = parseInt(value);
+            $(this).val(utils.formatCurrency(value).replace('Rp', '').trim());
+        }
+    });
+    
+    // Form validation
+    window.validateForm = function(form) {
+        var $form = $(form);
+        var isValid = true;
+        
+        $form.find('[data-required="true"]').each(function() {
+            var $this = $(this);
+            if (!$this.val().trim()) {
+                $this.addClass('is-invalid');
+                isValid = false;
+            } else {
+                $this.removeClass('is-invalid');
+            }
+        });
+        
+        return isValid;
+    };
+});
+</script>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
 </body>
 </html>

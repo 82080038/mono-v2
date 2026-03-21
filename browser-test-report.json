@@ -1,0 +1,202 @@
+{
+  "summary": {
+    "totalTests": 4,
+    "successfulTests": 1,
+    "failedTests": 3,
+    "totalScreenshots": 7,
+    "timestamp": "2026-03-21T13:55:50.995Z"
+  },
+  "results": [
+    {
+      "test": "Login Page",
+      "url": "http://localhost/mono-v2/login.html",
+      "success": true,
+      "loadTime": 3572,
+      "status": 200,
+      "title": "Masuk - KSP Lam Gabe Jaya",
+      "errors": [],
+      "elements": [
+        {
+          "selector": "#loginForm",
+          "description": "Login Form",
+          "exists": true,
+          "text": "\n                            \n                            \n                                \n                                    \n                                    Email atau Username\n                                \n                                \n                                \n                                    Email atau username harus diisi\n                                \n                            \n\n                            \n                            \n                                \n                                    \n                                    Kata Sandi\n                                \n                                \n                                    \n                                    \n                                        \n                                    \n                                \n                                \n                                    Kata sandi harus diisi\n                                \n                            \n\n                            \n                            \n                                \n                                    \n                                    \n                                        Ingat saya\n                                    \n                                \n                                \n                                    Lupa kata sandi?\n                                \n                            \n\n                            \n                            \n                                \n                                    \n                                    Masuk\n                                \n                            \n\n                            \n                            \n                                \n                                    Belum punya akun?\n                                    \n                                        Daftar di sini\n                                    \n                                \n                            \n                        "
+        },
+        {
+          "selector": "#emailInput",
+          "description": "Email Input",
+          "exists": true,
+          "text": ""
+        },
+        {
+          "selector": "#passwordInput",
+          "description": "Password Input",
+          "exists": true,
+          "text": ""
+        },
+        {
+          "selector": "#loginBtn",
+          "description": "Login Button",
+          "exists": true,
+          "text": "\n                                    \n                                    Masuk\n                                "
+        },
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "text": "Masuk - KSP Lam Gabe Jaya"
+        }
+      ],
+      "timestamp": "2026-03-21T13:55:30.406Z"
+    },
+    {
+      "test": "Admin Dashboard",
+      "url": "http://localhost/mono-v2/pages/admin/dashboard.html",
+      "success": false,
+      "loadTime": 1149,
+      "status": 200,
+      "title": "Admin Login - KSP Lam Gabe Jaya",
+      "errors": [
+        "Missing required element: Dashboard Header",
+        "Missing required element: Sidebar"
+      ],
+      "elements": [
+        {
+          "selector": ".dashboard-header",
+          "description": "Dashboard Header",
+          "exists": false,
+          "text": ""
+        },
+        {
+          "selector": ".dashboard-sidebar",
+          "description": "Sidebar",
+          "exists": false,
+          "text": ""
+        },
+        {
+          "selector": ".stat-card",
+          "description": "Statistics Cards",
+          "exists": false,
+          "text": ""
+        },
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "text": "Admin Login - KSP Lam Gabe Jaya"
+        }
+      ],
+      "timestamp": "2026-03-21T13:55:32.107Z"
+    },
+    {
+      "test": "Staff Dashboard",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard.html",
+      "success": false,
+      "loadTime": 1121,
+      "status": 200,
+      "title": "Staff Login - KSP Lam Gabe Jaya",
+      "errors": [
+        "Missing required element: Dashboard Header",
+        "Missing required element: Sidebar"
+      ],
+      "elements": [
+        {
+          "selector": ".dashboard-header",
+          "description": "Dashboard Header",
+          "exists": false,
+          "text": ""
+        },
+        {
+          "selector": ".dashboard-sidebar",
+          "description": "Sidebar",
+          "exists": false,
+          "text": ""
+        },
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "text": "Staff Login - KSP Lam Gabe Jaya"
+        }
+      ],
+      "timestamp": "2026-03-21T13:55:33.739Z"
+    },
+    {
+      "test": "Member Dashboard",
+      "url": "http://localhost/mono-v2/pages/member/dashboard.html",
+      "success": false,
+      "loadTime": 1183,
+      "status": 200,
+      "title": "Member Login - KSP Lam Gabe Jaya",
+      "errors": [
+        "Missing required element: Dashboard Header",
+        "Missing required element: Sidebar"
+      ],
+      "elements": [
+        {
+          "selector": ".dashboard-header",
+          "description": "Dashboard Header",
+          "exists": false,
+          "text": ""
+        },
+        {
+          "selector": ".dashboard-sidebar",
+          "description": "Sidebar",
+          "exists": false,
+          "text": ""
+        },
+        {
+          "selector": "title",
+          "description": "Page Title",
+          "exists": true,
+          "text": "Member Login - KSP Lam Gabe Jaya"
+        }
+      ],
+      "timestamp": "2026-03-21T13:55:35.279Z"
+    }
+  ],
+  "screenshots": [
+    {
+      "filename": "Login_Page_2026-03-21T13-55-29-957Z.png",
+      "description": "Login Page - SUCCESS",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Login_Page_2026-03-21T13-55-29-957Z.png"
+    },
+    {
+      "filename": "Admin_Dashboard_2026-03-21T13-55-31-590Z.png",
+      "description": "Admin Dashboard - FAILED",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Admin_Dashboard_2026-03-21T13-55-31-590Z.png"
+    },
+    {
+      "filename": "Staff_Dashboard_2026-03-21T13-55-33-260Z.png",
+      "description": "Staff Dashboard - FAILED",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Staff_Dashboard_2026-03-21T13-55-33-260Z.png"
+    },
+    {
+      "filename": "Member_Dashboard_2026-03-21T13-55-34-954Z.png",
+      "description": "Member Dashboard - FAILED",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Member_Dashboard_2026-03-21T13-55-34-954Z.png"
+    },
+    {
+      "filename": "Responsive_Mobile_2026-03-21T13-55-47-826Z.png",
+      "description": "Responsive Mobile",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Responsive_Mobile_2026-03-21T13-55-47-826Z.png"
+    },
+    {
+      "filename": "Responsive_Tablet_2026-03-21T13-55-48-787Z.png",
+      "description": "Responsive Tablet",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Responsive_Tablet_2026-03-21T13-55-48-787Z.png"
+    },
+    {
+      "filename": "Responsive_Desktop_2026-03-21T13-55-50-003Z.png",
+      "description": "Responsive Desktop",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Responsive_Desktop_2026-03-21T13-55-50-003Z.png"
+    }
+  ],
+  "browserInfo": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    }
+  }
+}

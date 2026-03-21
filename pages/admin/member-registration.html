@@ -162,7 +162,8 @@
             color: white;
         }
     </style>
-</head>
+<link rel="manifest" href="/manifest.json">
+    </head>
 
 <body>
 <body class="bg-light">
@@ -1190,6 +1191,21 @@
             });
         }
     </script>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
 </body>
 </body>
 </html>

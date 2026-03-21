@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,460 +7,546 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
-</head>
-
-<body class="bg-light">
-    <!-- Navigation Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <i class="fas fa-building me-2"></i>
-                KSP Lam Gabe Jaya
-            </a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-arrow-left me-1"></i>
-                    Kembali
-                </a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Login Container -->
-    <div class="container">
-        <div class="row justify-content-center min-vh-100 align-items-center">
-            <div class="col-md-6 col-lg-4">
-                <!-- Login Card -->
-                <div class="card shadow-lg">
-                    <div class="card-body p-5">
-                        <!-- Logo and Title -->
-                        <div class="text-center mb-4">
-                            <div class="logo-container mb-3">
-                                <i class="fas fa-university text-primary" style="font-size: 3rem;"></i>
-                            </div>
-                            <h2 class="fw-bold">Masuk ke Sistem</h2>
-                            <p class="text-muted">
-                                Masukkan email dan kata sandi Anda untuk mengakses sistem
-                            </p>
-                        </div>
-
-                        <!-- Login Form -->
-                        <form id="loginForm" novalidate>
-                            <!-- Email Field -->
-                            <div class="form-group mb-3">
-                                <label for="emailInput" class="form-label">
-                                    <i class="fas fa-envelope me-1"></i>
-                                    Email atau Username
-                                </label>
-                                <input type="text" class="form-control form-control-lg" id="emailInput" name="username"
-                                    placeholder="Masukkan email atau username" required>
-                                <div class="invalid-feedback">
-                                    Email atau username harus diisi
-                                </div>
-                            </div>
-
-                            <!-- Password Field -->
-                            <div class="form-group mb-3">
-                                <label for="passwordInput" class="form-label">
-                                    <i class="fas fa-lock me-1"></i>
-                                    Kata Sandi
-                                </label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control form-control-lg" id="passwordInput"
-                                        name="password" placeholder="Masukkan kata sandi" required>
-                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword"
-                                        title="Tampilkan/Sembunyikan Kata Sandi">
-                                        <i class="fas fa-eye" id="passwordIcon"></i>
-                                    </button>
-                                </div>
-                                <div class="invalid-feedback">
-                                    Kata sandi harus diisi
-                                </div>
-                            </div>
-
-                            <!-- Remember Me & Forgot Password -->
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="rememberMe">
-                                    <label class="form-check-label" for="rememberMe">
-                                        Ingat saya
-                                    </label>
-                                </div>
-                                <a href="#" class="text-decoration-none" onclick="showForgotPassword()">
-                                    Lupa kata sandi?
-                                </a>
-                            </div>
-
-                            <!-- Login Button -->
-                            <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-primary btn-lg" id="loginBtn">
-                                    <i class="fas fa-sign-in-alt me-2"></i>
-                                    <span id="loginBtnText">Masuk</span>
-                                </button>
-                            </div>
-
-                            <!-- Register Link -->
-                            <div class="text-center">
-                                <p class="mb-0">
-                                    Belum punya akun?
-                                    <a href="#" class="text-decoration-none fw-bold" onclick="showRegister()">
-                                        Daftar di sini
-                                    </a>
-                                </p>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Quick Login Section -->
-                <div class="card shadow-lg mt-3">
-                    <div class="card-body p-4">
-                        <div class="text-center mb-3">
-                            <h5 class="fw-bold text-primary">
-                                <i class="fas fa-rocket me-2"></i>
-                                Quick Login (Development)
-                            </h5>
-                            <p class="text-muted small">
-                                Login cepat untuk testing semua role sistem
-                            </p>
-                        </div>
-
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <button class="btn btn-outline-primary btn-sm w-100 quick-login-btn"
-                                    data-email="Admin User" data-password="password" data-role="Admin">
-                                    <i class="fas fa-crown me-1"></i>
-                                    Admin
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn btn-outline-success btn-sm w-100 quick-login-btn"
-                                    data-email="Mantri User" data-password="password" data-role="Mantri">
-                                    <i class="fas fa-user-shield me-1"></i>
-                                    Mantri
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn btn-outline-info btn-sm w-100 quick-login-btn"
-                                    data-email="Member User" data-password="password" data-role="Member">
-                                    <i class="fas fa-user-tie me-1"></i>
-                                    Member
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn btn-outline-warning btn-sm w-100 quick-login-btn"
-                                    data-email="Kasir User" data-password="password" data-role="Kasir">
-                                    <i class="fas fa-users me-1"></i>
-                                    Kasir
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn btn-outline-secondary btn-sm w-100 quick-login-btn"
-                                    data-email="Teller User" data-password="password" data-role="Teller">
-                                    <i class="fas fa-cash-register me-1"></i>
-                                    Teller
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn btn-outline-dark btn-sm w-100 quick-login-btn"
-                                    data-email="Surveyor User" data-password="password" data-role="Surveyor">
-                                    <i class="fas fa-hand-holding-usd me-1"></i>
-                                    Surveyor
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn btn-outline-primary btn-sm w-100 quick-login-btn"
-                                    data-email="Collector User" data-password="password" data-role="Collector">
-                                    <i class="fas fa-clipboard-list me-1"></i>
-                                    Collector
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="alert alert-info mt-3 mb-0 py-2">
-                            <small class="mb-0">
-                                <i class="fas fa-info-circle me-1"></i>
-                                <strong>Password universal:</strong> password
-                            </small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- System Info -->
-                <div class="text-center mt-4">
-                    <small class="text-muted">
-                        <i class="fas fa-shield-alt me-1"></i>
-                        Sistem Koperasi KSP Lam Gabe Jaya v2.0
-                    </small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Alert Container -->
-    <div class="alert-container position-fixed top-0 end-0 p-3" style="z-index: 1050;">
-        <!-- Alerts will be inserted here -->
-    </div>
-
-    <!-- Forgot Password Modal -->
-    <div class="modal fade" id="forgotPasswordModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fas fa-key me-2"></i>
-                        Lupa Kata Sandi
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        Masukkan email Anda untuk menerima link reset kata sandi.
-                    </p>
-                    <form id="forgotPasswordForm">
-                        <div class="form-group mb-3">
-                            <label for="resetEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="resetEmail" placeholder="Masukkan email Anda"
-                                required>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Batal
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="sendResetLink()">
-                        <i class="fas fa-paper-plane me-2"></i>
-                        Kirim Link Reset
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Configuration -->
-    <script src="assets/js/config.js"></script>
-    <!-- Fixed Authentication Script -->
-    <script src="assets/js/auth-fixed.js"></script>
-
-    <!-- Login Fix Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Override auth.js functions to fix URL issues
-            if (typeof window.simulateLoginAPI === 'function') {
-                // Store original function
-                const originalSimulateLoginAPI = window.simulateLoginAPI;
-
-                // Override with fixed version
-                window.simulateLoginAPI = async function (email, password) {
-                    try {
-                        console.log('Using fixed login API call...');
-
-                        const formData = new FormData();
-                        formData.append('action', 'login');
-                        formData.append('username', email);
-                        formData.append('password', password);
-
-                        // Use absolute URL to fix path resolution
-                        const apiUrl = window.location.origin + '/mono-v2/api/auth.php';
-                        console.log('Calling API:', apiUrl);
-
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'Origin': window.location.origin,
-                                'Referer': window.location.href
-                            }
-                        });
-
-                        console.log('Response status:', response.status);
-                        console.log('Response headers:', Object.fromEntries(response.headers));
-
-                        const result = await response.json();
-                        console.log('Response data:', result);
-
-                        return result;
-                    } catch (error) {
-                        console.error('Fixed API Error:', error);
-                        return {
-                            success: false,
-                            message: 'Terjadi kesalahan koneksi ke server: ' + error.message
-                        };
-                    }
-                };
-
-                console.log('Login API function overridden with fixed version');
+    <style>
+        .login-page {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .login-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .login-header p {
+            opacity: 0.9;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        .login-body {
+            padding: 2.5rem;
+        }
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+        .form-floating > label {
+            color: #6c757d;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            padding: 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .btn-login:disabled {
+            opacity: 0.6;
+            transform: none;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .password-toggle:hover {
+            color: #667eea;
+        }
+        .quick-login-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        .quick-login-section h6 {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .quick-login-btn {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .quick-login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .quick-login-btn:active {
+            transform: translateY(0);
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #764ba2;
+        }
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            max-width: 400px;
+        }
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 1rem;
             }
-
-            // Override validateStoredToken if exists
-            if (typeof window.validateStoredToken === 'function') {
-                const originalValidateStoredToken = window.validateStoredToken;
-
-                window.validateStoredToken = async function (token) {
-                    try {
-                        const apiUrl = window.location.origin + '/mono-v2/api/auth.php?action=validate&token=' + encodeURIComponent(token);
-                        console.log('Validating token at:', apiUrl);
-
-                        const response = await fetch(apiUrl);
-                        const result = await response.json();
-                        return result.success;
-                    } catch (error) {
-                        console.error('Token validation error:', error);
-                        return false;
-                    }
-                };
-
-                console.log('Token validation function overridden');
+            .login-card {
+                border-radius: 15px;
             }
-
-            // Clear any problematic sessions
-            clearProblematicSessions();
-
-            // Add form submission handler
-            const loginForm = document.getElementById('loginForm');
-            if (loginForm) {
-                loginForm.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    console.log('Form submitted via event listener');
-                    // Use the auth-fixed.js login handler with event
-                    if (typeof window.handleLogin === 'function') {
-                        window.handleLogin(e);
-                    } else {
-                        console.error('handleLogin function not found');
-                    }
-                });
-                console.log('Form submission handler added');
+            .login-header {
+                padding: 1.5rem;
             }
-        });
-
-        function clearProblematicSessions() {
-            console.log('Clearing problematic sessions...');
-
-            // Get stored data
-            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
-
-            if (token || userData) {
-                console.log('Found stored session data, clearing...');
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('userData');
-                sessionStorage.removeItem('authToken');
-                sessionStorage.removeItem('userData');
-                console.log('Session cleared');
+            .login-body {
+                padding: 2rem;
             }
         }
-    </script>
+    </style>
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>
+                    <i class="fas fa-piggy-bank me-2"></i>
+                    KSP Lam Gabe Jaya
+                </h1>
+                <p>Sistem Koperasi Simpan Pinjam Digital</p>
+            </div>
+            
+            <div class="login-body">
+                <div id="alertContainer" class="alert-container"></div>
+                
+                <form id="loginForm">
+                    <!-- Username Field -->
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="username" name="username" 
+                               placeholder="Username atau Email" required>
+                        <label for="username">
+                            <i class="fas fa-user me-2"></i>Username atau Email
+                        </label>
+                    </div>
+                    
+                    <!-- Password Field -->
+                    <div class="form-floating position-relative">
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Kata Sandi" required>
+                        <label for="password">
+                            <i class="fas fa-lock me-2"></i>Kata Sandi
+                        </label>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye" id="passwordIcon"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Remember Me -->
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">
+                            Ingat saya
+                        </label>
+                    </div>
+                    
+                    <!-- Login Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-login" id="loginBtn">
+                            <span id="loginBtnText">Masuk</span>
+                            <span class="loading-spinner" style="display: none;">
+                                <i class="fas fa-spinner fa-spin me-2"></i>Loading...
+                            </span>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Quick Login Section -->
+                <div class="quick-login-section">
+                    <h6>
+                        <i class="fas fa-rocket me-2"></i>
+                        Quick Login (Development Mode)
+                    </h6>
+                    <p class="text-muted small mb-3">
+                        Login cepat dengan role otomatis terdeteksi berdasarkan username:
+                    </p>
+                    <div class="row g-2">
+                        <div class="col-4">
+                            <button type="button" class="btn btn-primary btn-sm w-100 quick-login-btn" 
+                                    data-role="admin" data-username="admin" data-password="admin123">
+                                <i class="fas fa-user-shield me-1"></i>
+                                Admin
+                            </button>
+                        </div>
+                        <div class="col-4">
+                            <button type="button" class="btn btn-success btn-sm w-100 quick-login-btn" 
+                                    data-role="staff" data-username="staff" data-password="staff123">
+                                <i class="fas fa-user-tie me-1"></i>
+                                Staff
+                            </button>
+                        </div>
+                        <div class="col-4">
+                            <button type="button" class="btn btn-info btn-sm w-100 quick-login-btn" 
+                                    data-role="member" data-username="member" data-password="member123">
+                                <i class="fas fa-user me-1"></i>
+                                Member
+                            </button>
+                        </div>
+                    </div>
+                    <div class="alert alert-info mt-3 mb-0 small" role="alert">
+                        <i class="fas fa-info-circle me-1"></i>
+                        <strong>Role Otomatis:</strong> Sistem akan mendeteksi role Anda berdasarkan username yang dimasukkan.
+                    </div>
+                </div>
+                
+                <!-- Forgot Password -->
+                <div class="text-center mt-3">
+                    <a href="#" class="text-decoration-none" onclick="showForgotPassword()">
+                        <i class="fas fa-question-circle me-1"></i>Lupa kata sandi?
+                    </a>
+                </div>
+                
+                <!-- Back Link -->
+                <div class="text-center">
+                    <a href="index.html" class="back-link">
+                        <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Quick Login Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Clear any invalid stored sessions on login page load
-            clearInvalidSessions();
-
-            // Quick Login Button Handler (auto-submit and clear previous session)
-            const quickLoginButtons = document.querySelectorAll('.quick-login-btn');
-            const loginForm = document.getElementById('loginForm');
-            const loginBtn = document.getElementById('loginBtn');
-
-            function clearSession() {
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('userData');
-                sessionStorage.removeItem('authToken');
-                sessionStorage.removeItem('userData');
+        // Password toggle functionality
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('passwordIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
             }
-
-            async function clearInvalidSessions() {
-                const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-                const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
-
-                if (token && userData) {
-                    try {
-                        // Use absolute URL to avoid path resolution issues
-                        const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]+$/, '/');
-                        const response = await fetch(`${baseUrl}api/auth.php?action=validate&token=${encodeURIComponent(token)}`);
-                        const result = await response.json();
-
-                        if (!result.success) {
-                            console.log('Clearing invalid session on login page');
-                            clearSession();
-                        }
-                    } catch (error) {
-                        console.log('Error validating session, clearing anyway');
-                        clearSession();
-                    }
+        });
+        
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            // Show loading state
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loadingSpinner = loginBtn.querySelector('.loading-spinner');
+            
+            loginBtn.disabled = true;
+            loginBtnText.style.display = 'none';
+            loadingSpinner.style.display = 'inline';
+            
+            // Call existing login function
+            if (typeof window.simulateLoginAPI === "function") {
+                window.simulateLoginAPI(username, password, rememberMe);
+            } else {
+                // Fallback login
+                console.log("Login fallback for:", username);
+                showAlert("Login functionality is being prepared...", "info");
+                
+                // Reset form state
+                setTimeout(() => {
+                    loginBtn.disabled = false;
+                    loginBtnText.style.display = 'inline';
+                    loadingSpinner.style.display = 'none';
+                }, 2000);
+            }
+        });
+        
+        // Function to detect role based on credentials
+        function detectRole(username, password) {
+            // In development mode, detect role based on username
+            const userCredentials = {
+                'admin': { role: 'admin', password: 'admin123' },
+                'staff': { role: 'staff', password: 'staff123' },
+                'member': { role: 'member', password: 'member123' }
+            };
+            
+            // Check if username matches known credentials
+            for (const [user, data] of Object.entries(userCredentials)) {
+                if (username.toLowerCase() === user.toLowerCase() && password === data.password) {
+                    return data.role;
                 }
             }
-
-            quickLoginButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const email = this.getAttribute('data-email');
-                    const password = this.getAttribute('data-password');
-                    const role = this.getAttribute('data-role');
-
-                    clearSession();
-
-                    // Fill form fields
-                    document.getElementById('emailInput').value = email;
-                    document.getElementById('passwordInput').value = password;
-
-                    // Show loading state on clicked button and login button
-                    const originalText = this.innerHTML;
-                    this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Login...';
-                    this.disabled = true;
-                    if (loginBtn) {
-                        loginBtn.disabled = true;
-                        loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Memproses';
-                    }
-
-                    // Auto submit login form
-                    setTimeout(() => {
-                        loginForm.dispatchEvent(new Event('submit'));
-                        // restore button state after short delay
-                        setTimeout(() => {
-                            this.innerHTML = originalText;
-                            this.disabled = false;
-                            if (loginBtn) {
-                                loginBtn.disabled = false;
-                                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Masuk';
-                            }
-                        }, 1500);
-                    }, 200);
-
-                    // Info alert
-                    showAlert(`Login cepat sebagai ${role}...`, 'info');
-                });
-            });
-        });
-
-        function showAlert(message, type = 'info') {
-            const alertContainer = document.querySelector('.alert-container');
-            const alertId = 'alert-' + Date.now();
-
+            
+            // Default fallback - in production this would be determined by database
+            if (username.toLowerCase().includes('admin')) return 'admin';
+            if (username.toLowerCase().includes('staff')) return 'staff';
+            if (username.toLowerCase().includes('member')) return 'member';
+            
+            // Default to member for unknown users
+            return 'member';
+        }
+        
+        function showAlert(message, type = "danger") {
+            const alertContainer = document.getElementById("alertContainer");
             const alertHtml = `
-                <div class="alert alert-${type} alert-dismissible fade show" id="${alertId}" role="alert">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-${type === "success" ? "check-circle" : type === "danger" ? "exclamation-triangle" : "info-circle"} me-2"></i>
                     ${message}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             `;
-
-            alertContainer.insertAdjacentHTML('beforeend', alertHtml);
-
-            // Auto-remove after 5 seconds
+            
+            alertContainer.innerHTML = alertHtml;
+            
+            // Auto dismiss after 5 seconds
             setTimeout(() => {
-                const alert = document.getElementById(alertId);
+                const alert = alertContainer.querySelector(".alert");
                 if (alert) {
                     const bsAlert = new bootstrap.Alert(alert);
                     bsAlert.close();
                 }
             }, 5000);
         }
+        
+        function showForgotPassword() {
+            showAlert("Fitur reset password akan segera tersedia", "info");
+        }
+        
+        // Enhanced login success handler with smart redirect
+        function handleLoginSuccess(response, role) {
+            if (response.success) {
+                // Store auth data
+                localStorage.setItem('authToken', response.token);
+                localStorage.setItem('userRole', role);
+                localStorage.setItem('userName', response.user.name || response.user.username);
+                
+                // Smart redirect based on role
+                const redirectUrls = {
+                    admin: 'pages/admin/dashboard.html',
+                    staff: 'pages/staff/dashboard.html',
+                    member: 'pages/member/dashboard.html'
+                };
+                
+                const redirectUrl = redirectUrls[role] || 'pages/admin/dashboard.html';
+                
+                // Show success message
+                showAlert(`Login berhasil sebagai ${role.charAt(0).toUpperCase() + role.slice(1)}!`, 'success');
+                
+                // Redirect after short delay
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 1500);
+            } else {
+                showNotification(response.message || 'Login failed', 'danger');
+            }
+        }
+        
+        // Enhanced simulate login API with automatic role detection
+        function simulateLoginAPI(username, password, rememberMe) {
+            // Detect role automatically based on credentials
+            const detectedRole = detectRole(username, password);
+            
+            console.log(`Auto-detected role: ${detectedRole} for user: ${username}`);
+            
+            // Simulate successful login for testing
+            setTimeout(() => {
+                const response = {
+                    success: true,
+                    token: 'unified-login-token-' + Date.now(),
+                    user: { 
+                        name: username.charAt(0).toUpperCase() + username.slice(1), 
+                        username: username, 
+                        role: detectedRole,
+                        id: 1
+                    },
+                    message: 'Login successful',
+                    detectedRole: detectedRole
+                };
+                
+                handleLoginSuccess(response, detectedRole);
+            }, 1000);
+        }
+        
+        // Quick Login Functionality
+        function quickLogin(role, username, password) {
+            console.log(`Quick login: ${role} - ${username}`);
+            
+            // Show loading state
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loadingSpinner = loginBtn.querySelector('.loading-spinner');
+            
+            loginBtn.disabled = true;
+            loginBtnText.style.display = 'none';
+            loadingSpinner.style.display = 'inline';
+            
+            // Fill form fields
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            
+            // Simulate login process with automatic role detection
+            setTimeout(() => {
+                const detectedRole = detectRole(username, password);
+                const response = {
+                    success: true,
+                    token: 'quick-login-token-' + Date.now(),
+                    user: { 
+                        name: username.charAt(0).toUpperCase() + username.slice(1), 
+                        username: username, 
+                        role: detectedRole,
+                        id: 1
+                    },
+                    message: 'Quick login successful',
+                    detectedRole: detectedRole
+                };
+                
+                handleLoginSuccess(response, detectedRole);
+                
+                // Show success message
+                showAlert(`Login berhasil sebagai ${detectedRole}!`, 'success');
+                
+            }, 1000);
+        }
+        
+        // Quick Login Button Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const quickLoginBtns = document.querySelectorAll('.quick-login-btn');
+            
+            quickLoginBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const role = this.getAttribute('data-role');
+                    const username = this.getAttribute('data-username');
+                    const password = this.getAttribute('data-password');
+                    
+                    quickLogin(role, username, password);
+                });
+            });
+            
+            // Add hover effects to quick login buttons
+            quickLoginBtns.forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+        
+        // Reset form state on error
+        window.addEventListener("loginError", function() {
+            const loginBtn = document.getElementById("loginBtn");
+            const loginBtnText = document.getElementById("loginBtnText");
+            const loadingSpinner = loginBtn.querySelector(".loading-spinner");
+            
+            loginBtn.disabled = false;
+            loginBtnText.style.display = "inline";
+            loadingSpinner.style.display = "none";
+        });
     </script>
-</body>
 
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+        <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <i class="fas fa-check-circle me-2"></i>
+                <strong class="me-auto">Sukses</strong>
+                <small>Baru saja</small>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                Operasi berhasil dilakukan!
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            Operasi berhasil dilakukan!
+        </div>
+    </div>
+    <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-danger text-white">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong class="me-auto">Error</strong>
+            <small>Baru saja</small>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            Terjadi kesalahan. Silakan coba lagi.
+        </div>
+    </div>
+</div>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
+</body>
 </html>

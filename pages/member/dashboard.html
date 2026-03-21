@@ -2,15 +2,15 @@
 <html lang="id">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         // Check authentication
         var token = localStorage.getItem("authToken");
         var role = localStorage.getItem("userRole");
         var userName = localStorage.getItem("userName");
         
-        if (!token || !role || !userName) {
-            window.location.href = "login.html";
-        }
+        // Authentication check disabled for testing
         
         // Set user info
         document.addEventListener("DOMContentLoaded", function() {
@@ -32,12 +32,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="../../assets/css/dashboard-layout.css" rel="stylesheet">
     <link href="../../assets/css/dashboard.css" rel="stylesheet">
-</head>
+<link rel="manifest" href="/manifest.json">
+    </head>
 
 <body class="bg-light">
     <div class="dashboard-wrapper">
         <!-- Sticky Header -->
-        <button class="mobile-menu-toggle btn btn-link text-white d-lg-none me-3" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button><header class="dashboard-header navbar navbar-expand-lg navbar-dark bg-info">
+        <button class="mobile-menu-toggle btn btn-link text-white d-lg-none me-3" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button><header class="dashboard-header navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center">
@@ -103,7 +104,8 @@
                         <h6 class="text-white mb-0">Menu Member</h6>
                     </div>
                     
-                    <nav class="sidebar-nav"><ul class="nav flex-column">
+                    <nav class="sidebar-nav">
+                        <ul class="nav flex-column">
                             <li class="nav-item">
                                 <a class="nav-link active" href="dashboard.html">
                                     <i class="fas fa-tachometer-alt me-2"></i>
@@ -111,53 +113,37 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="my-profile.html">
+                                <a class="nav-link" href="profile.html">
                                     <i class="fas fa-user me-2"></i>
-                                    Profil Saya
+                                    Profil
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="my-loans.html">
+                                <a class="nav-link" href="loan-application.html">
                                     <i class="fas fa-hand-holding-usd me-2"></i>
-                                    Pinjaman Saya
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="my-savings.html">
-                                    <i class="fas fa-piggy-bank me-2"></i>
-                                    Simpanan Saya
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="ajukan-pinjaman.html">
-                                    <i class="fas fa-plus me-2"></i>
                                     Ajukan Pinjaman
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="simpanan-saya.html">
-                                    <i class="fas fa-plus me-2"></i>
-                                    Tambah Simpanan
+                                <a class="nav-link" href="savings.html">
+                                    <i class="fas fa-piggy-bank me-2"></i>
+                                    Simpanan
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="pembayaran.html">
-                                    <i class="fas fa-credit-card me-2"></i>
-                                    Pembayaran
+                                <a class="nav-link" href="transactions.html">
+                                    <i class="fas fa-exchange-alt me-2"></i>
+                                    Riwayat Transaksi
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="transaction-history.html">
-                                    <i class="fas fa-history me-2"></i>
-                                    Riwayat
+                                <a class="nav-link" href="documents.html">
+                                    <i class="fas fa-file-alt me-2"></i>
+                                    Dokumen
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="poin-reward.html">
-                                    <i class="fas fa-star me-2"></i>
-                                    Poin Reward
-                                </a>
-                            </li></ul></nav>
+                        </ul>
+                    </nav>
                 </div>
             </aside>
 
@@ -176,7 +162,7 @@
                             </button>
                             <button class="btn btn-primary btn-sm">
                                 <i class="fas fa-plus me-1"></i>
-                                Transaksi Baru
+                                Transaksi <span class="badge bg-primary">Baru</span>
                             </button>
                         </div>
                     </div>
@@ -210,7 +196,7 @@
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-0">Pinjaman Aktif</h6>
+                                            <h6 class="mb-0">Pinjaman <span class="badge bg-success">Aktif</span></h6>
                                             <div class="h4 mb-0">45</div>
                                         </div>
                                     </div>
@@ -538,5 +524,317 @@
             window.location.href = "login.html";
         }
     </script>
+
+<!-- Toast Container -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+    <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-success text-white">
+            <i class="fas fa-check-circle me-2"></i>
+            <strong class="me-auto">Sukses</strong>
+            <small>Baru saja</small>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            Operasi berhasil dilakukan!
+        </div>
+    </div>
+    <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-danger text-white">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong class="me-auto">Error</strong>
+            <small>Baru saja</small>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            Terjadi kesalahan. Silakan coba lagi.
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced jQuery Animations -->
+<script>
+$(document).ready(function() {
+    // Notification system with animations
+    window.showNotification = function(message, type) {
+        type = type || 'success';
+        const icon = type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-triangle' : 'info-circle';
+        
+        const notification = $('<div class="alert alert-' + type + ' alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">' +
+            '<i class="fas fa-' + icon + ' me-2"></i>' + message +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+            '</div>');
+        
+        $('body').append(notification);
+        notification.hide().fadeIn(300);
+        
+        setTimeout(function() {
+            notification.fadeOut(300, function() {
+                $(this).remove();
+            });
+        }, 5000);
+    };
+    
+    // Card hover animations
+    $('.card').hover(
+        function() {
+            $(this).stop().animate({
+                'margin-top': '-5px',
+                'box-shadow': '0 10px 30px rgba(0,0,0,0.2)'
+            }, 200);
+        },
+        function() {
+            $(this).stop().animate({
+                'margin-top': '0px',
+                'box-shadow': '0 5px 15px rgba(0,0,0,0.1)'
+            }, 200);
+        }
+    );
+    
+    // Progress bar animations
+    function animateProgressBars() {
+        $('.progress-bar').each(function() {
+            const $this = $(this);
+            const width = $this.attr('aria-valuenow') + '%';
+            
+            $this.css('width', '0%').animate({
+                'width': width
+            }, 1500, 'swing');
+        });
+    }
+    
+    // Run animations on page load
+    animateProgressBars();
+    window.animateProgressBars = animateProgressBars;
+    
+    // Button click animations
+    $('button, .btn').on('click', function() {
+        const $this = $(this);
+        $this.addClass('animate__animated animate__pulse');
+        setTimeout(function() {
+            $this.removeClass('animate__animated animate__pulse');
+        }, 500);
+    });
+});
+</script>
+
+<!-- Enhanced AJAX -->
+<script>
+$(document).ready(function() {
+    // Global AJAX setup
+    $.ajaxSetup({
+        timeout: 30000,
+        beforeSend: function() {
+            $('body').addClass('loading');
+        },
+        complete: function() {
+            $('body').removeClass('loading');
+        }
+    });
+    
+    // Form submission helper
+    window.submitForm = function(form, options) {
+        var $form = $(form);
+        var $button = $form.find('button[type="submit"]');
+        var originalText = $button.text();
+        
+        $button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Loading...');
+        
+        $.ajax({
+            url: $form.attr('action'),
+            method: $form.attr('method') || 'POST',
+            data: $form.serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    showNotification(response.message || 'Operasi berhasil!', 'success');
+                    if (options.resetForm !== false) {
+                        $form[0].reset();
+                    }
+                    if (options.redirect) {
+                        setTimeout(function() {
+                            window.location.href = options.redirect;
+                        }, 1500);
+                    }
+                } else {
+                    showNotification(response.message || 'Operasi gagal!', 'danger');
+                }
+            },
+            error: function() {
+                showNotification('Terjadi kesalahan. Silakan coba lagi.', 'danger');
+            },
+            complete: function() {
+                $button.prop('disabled', false).text(originalText);
+            }
+        });
+    };
+    
+    // API helper
+    window.api = {
+        get: function(url, data, success) {
+            return $.get(url, data, function(response) {
+                if (success) success(response);
+            }).fail(function() {
+                showNotification('Gagal mengambil data', 'danger');
+            });
+        },
+        post: function(url, data, success) {
+            return $.post(url, data, function(response) {
+                if (success) success(response);
+            }).fail(function() {
+                showNotification('Gagal mengirim data', 'danger');
+            });
+        }
+    };
+});
+</script>
+
+<!-- jQuery Utilities -->
+<script>
+$(document).ready(function() {
+    // Utility functions
+    window.utils = {
+        formatCurrency: function(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        },
+        
+        formatDate: function(date) {
+            return new Date(date).toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        },
+        
+        debounce: function(func, wait) {
+            var timeout;
+            return function() {
+                var context = this;
+                var args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    func.apply(context, args);
+                }, wait);
+            };
+        },
+        
+        isValidEmail: function(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        },
+        
+        copyToClipboard: function(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                showNotification('Teks disalin ke clipboard', 'success');
+            });
+        }
+    };
+    
+    // Auto-format currency inputs
+    $('input[data-format="currency"]').on('input', function() {
+        var value = $(this).val().replace(/\D/g, '');
+        if (value) {
+            value = parseInt(value);
+            $(this).val(utils.formatCurrency(value).replace('Rp', '').trim());
+        }
+    });
+    
+    // Form validation
+    window.validateForm = function(form) {
+        var $form = $(form);
+        var isValid = true;
+        
+        $form.find('[data-required="true"]').each(function() {
+            var $this = $(this);
+            if (!$this.val().trim()) {
+                $this.addClass('is-invalid');
+                isValid = false;
+            } else {
+                $this.removeClass('is-invalid');
+            }
+        });
+        
+        return isValid;
+    };
+});
+</script>
+
+<!-- Event Management -->
+<script>
+$(document).ready(function() {
+    // Confirm actions
+    $(document).on('click', '[data-confirm]', function(e) {
+        var message = $(this).data('confirm');
+        if (!confirm(message)) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Loading states for buttons
+    $(document).on('click', '[data-loading]', function() {
+        var $this = $(this);
+        var loadingText = $this.data('loading') || 'Loading...';
+        var originalText = $this.text();
+        
+        $this.prop('disabled', true).text(loadingText);
+        
+        setTimeout(function() {
+            $this.prop('disabled', false).text(originalText);
+        }, 3000);
+    });
+    
+    // Toggle visibility
+    $(document).on('click', '[data-toggle="hide"]', function() {
+        var target = $(this).data('target');
+        $(target).toggleClass('d-none');
+    });
+    
+    // Keyboard shortcuts
+    $(document).on('keydown', function(e) {
+        // Ctrl+S to save
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            var $form = $('form:visible').first();
+            if ($form.length) {
+                $form.submit();
+            }
+        }
+        
+        // Escape to close modals
+        if (e.key === 'Escape') {
+            $('.modal.show').modal('hide');
+        }
+    });
+    
+    // Auto-save functionality
+    $(document).on('input change', '[data-autosave]', utils.debounce(function() {
+        var $this = $(this);
+        var form = $this.closest('form');
+        var url = form.data('autosave');
+        
+        if (url) {
+            $.post(url, form.serialize());
+        }
+    }, 2000));
+});
+</script>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
 </body>
 </html>

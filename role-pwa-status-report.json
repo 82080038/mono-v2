@@ -1,0 +1,75 @@
+{
+  "summary": {
+    "totalChecks": 10,
+    "successfulChecks": 8,
+    "failedChecks": 2,
+    "successRate": "80.0",
+    "timestamp": "2026-03-21T14:41:12.727Z"
+  },
+  "results": [
+    {
+      "success": true,
+      "message": "Login form functional",
+      "status": 200,
+      "title": "Masuk - KSP Lam Gabe Jaya"
+    },
+    {
+      "success": true,
+      "message": "Login form functional",
+      "status": 200,
+      "title": "Admin Login - KSP Lam Gabe Jaya"
+    },
+    {
+      "success": true,
+      "message": "Login form functional",
+      "status": 200,
+      "title": "Staff Login - KSP Lam Gabe Jaya"
+    },
+    {
+      "success": true,
+      "message": "Login form functional",
+      "status": 200,
+      "title": "Member Login - KSP Lam Gabe Jaya"
+    },
+    {
+      "success": false,
+      "message": "Dashboard incomplete",
+      "status": 200,
+      "title": "Admin Login - KSP Lam Gabe Jaya",
+      "components": {
+        "hasHeader": false,
+        "hasSidebar": false,
+        "hasContent": false
+      }
+    },
+    {
+      "success": true,
+      "message": "Dashboard functional",
+      "status": 200,
+      "title": "Dashboard Staff - KSP Lam Gabe Jaya"
+    },
+    {
+      "success": true,
+      "message": "Dashboard functional",
+      "status": 200,
+      "title": "Dashboard Member - KSP Lam Gabe Jaya"
+    },
+    {
+      "success": false,
+      "message": "HTTP 403",
+      "status": 403
+    },
+    {
+      "success": true,
+      "message": "File valid",
+      "status": 200,
+      "size": 1639
+    },
+    {
+      "success": true,
+      "message": "API not found (normal)",
+      "status": 404
+    }
+  ],
+  "overallStatus": "HEALTHY"
+}

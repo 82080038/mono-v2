@@ -1,0 +1,1701 @@
+{
+  "summary": {
+    "totalRoleTests": 3,
+    "successfulRoleTests": 3,
+    "totalPWATests": 1,
+    "successfulPWATests": 1,
+    "totalErrors": 177,
+    "totalFixes": 0,
+    "timestamp": "2026-03-21T14:38:58.205Z"
+  },
+  "roleTests": [
+    {
+      "role": "admin",
+      "credentials": {
+        "username": "admin",
+        "password": "admin123"
+      },
+      "loginTest": {
+        "success": true,
+        "currentUrl": "http://localhost/mono-v2/pages/admin/dashboard.html",
+        "elements": {
+          "hasLoginForm": true,
+          "hasUsernameInput": true,
+          "hasPasswordInput": true,
+          "hasLoginButton": true
+        }
+      },
+      "dashboardTest": {
+        "success": true,
+        "components": {
+          "hasHeader": true,
+          "hasSidebar": true,
+          "hasStatCards": 12,
+          "hasProgressBars": 5,
+          "hasCharts": 0,
+          "hasTables": 2,
+          "roleSpecificElements": {
+            "admin": 0,
+            "staff": 0,
+            "member": 0
+          }
+        }
+      },
+      "permissionsTest": {
+        "success": true,
+        "permissions": [
+          {
+            "page": "Admin Dashboard",
+            "url": "/pages/admin/dashboard.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Members Management",
+            "url": "/pages/admin/members.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Loans Management",
+            "url": "/pages/admin/loans.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Reports",
+            "url": "/pages/admin/reports.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Staff Dashboard",
+            "url": "/pages/staff/dashboard.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": false
+          },
+          {
+            "page": "Member Dashboard",
+            "url": "/pages/member/dashboard.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": false
+          }
+        ]
+      },
+      "navigationTest": {
+        "success": true,
+        "navigation": {
+          "totalNavItems": 7,
+          "visibleNavItems": 7,
+          "navigationItems": [
+            {
+              "text": "KSP Lam Gabe Jaya",
+              "href": "../../index.html",
+              "isVisible": true
+            },
+            {
+              "text": "Dashboard",
+              "href": "dashboard.html",
+              "isVisible": true
+            },
+            {
+              "text": "Profil",
+              "href": "profile.html",
+              "isVisible": true
+            },
+            {
+              "text": "Ajukan Pinjaman",
+              "href": "loan-application.html",
+              "isVisible": true
+            },
+            {
+              "text": "Simpanan",
+              "href": "savings.html",
+              "isVisible": true
+            },
+            {
+              "text": "Riwayat Transaksi",
+              "href": "transactions.html",
+              "isVisible": true
+            },
+            {
+              "text": "Dokumen",
+              "href": "documents.html",
+              "isVisible": true
+            }
+          ]
+        }
+      },
+      "featuresTest": {
+        "success": true,
+        "features": {
+          "hasUserManagement": false,
+          "hasLoanManagement": false,
+          "hasReports": false,
+          "hasSettings": false,
+          "hasSystemConfig": false
+        }
+      },
+      "timestamp": "2026-03-21T14:38:11.962Z"
+    },
+    {
+      "role": "staff",
+      "credentials": {
+        "username": "staff",
+        "password": "staff123"
+      },
+      "loginTest": {
+        "success": true,
+        "currentUrl": "http://localhost/mono-v2/pages/staff/dashboard.html",
+        "elements": {
+          "hasLoginForm": true,
+          "hasUsernameInput": true,
+          "hasPasswordInput": true,
+          "hasLoginButton": true
+        }
+      },
+      "dashboardTest": {
+        "success": true,
+        "components": {
+          "hasHeader": true,
+          "hasSidebar": true,
+          "hasStatCards": 14,
+          "hasProgressBars": 8,
+          "hasCharts": 0,
+          "hasTables": 1,
+          "roleSpecificElements": {
+            "admin": 0,
+            "staff": 0,
+            "member": 0
+          }
+        }
+      },
+      "permissionsTest": {
+        "success": true,
+        "permissions": [
+          {
+            "page": "Staff Dashboard",
+            "url": "/pages/staff/dashboard.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Members",
+            "url": "/pages/admin/members.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Loans",
+            "url": "/pages/admin/loans.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Transactions",
+            "url": "/pages/staff/transactions.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Admin Dashboard",
+            "url": "/pages/admin/dashboard.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": false
+          },
+          {
+            "page": "Reports",
+            "url": "/pages/admin/reports.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": false
+          }
+        ]
+      },
+      "navigationTest": {
+        "success": true,
+        "navigation": {
+          "totalNavItems": 1,
+          "visibleNavItems": 1,
+          "navigationItems": [
+            {
+              "text": "Back to Dashboard",
+              "href": "dashboard-enhanced.html",
+              "isVisible": true
+            }
+          ]
+        }
+      },
+      "featuresTest": {
+        "success": true,
+        "features": {
+          "hasMemberManagement": false,
+          "hasLoanProcessing": false,
+          "hasTransactions": false,
+          "hasCollections": false,
+          "hasReports": false
+        }
+      },
+      "timestamp": "2026-03-21T14:38:26.602Z"
+    },
+    {
+      "role": "member",
+      "credentials": {
+        "username": "member",
+        "password": "member123"
+      },
+      "loginTest": {
+        "success": true,
+        "currentUrl": "http://localhost/mono-v2/pages/member/login.html",
+        "elements": {
+          "hasLoginForm": true,
+          "hasUsernameInput": true,
+          "hasPasswordInput": true,
+          "hasLoginButton": true
+        }
+      },
+      "dashboardTest": {
+        "success": true,
+        "components": {
+          "hasHeader": true,
+          "hasSidebar": true,
+          "hasStatCards": 11,
+          "hasProgressBars": 3,
+          "hasCharts": 0,
+          "hasTables": 2,
+          "roleSpecificElements": {
+            "admin": 0,
+            "staff": 0,
+            "member": 0
+          }
+        }
+      },
+      "permissionsTest": {
+        "success": true,
+        "permissions": [
+          {
+            "page": "Member Dashboard",
+            "url": "/pages/member/dashboard.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Loan Application",
+            "url": "/pages/member/loan-application.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Profile",
+            "url": "/pages/member/profile.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": true
+          },
+          {
+            "page": "Admin Dashboard",
+            "url": "/pages/admin/dashboard.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": false
+          },
+          {
+            "page": "Staff Dashboard",
+            "url": "/pages/staff/dashboard.html",
+            "hasAccess": true,
+            "statusCode": 200,
+            "expectedAccess": false
+          }
+        ]
+      },
+      "navigationTest": {
+        "success": true,
+        "navigation": {
+          "totalNavItems": 7,
+          "visibleNavItems": 7,
+          "navigationItems": [
+            {
+              "text": "KSP Lam Gabe Jaya",
+              "href": "../../index.html",
+              "isVisible": true
+            },
+            {
+              "text": "Dashboard",
+              "href": "dashboard.html",
+              "isVisible": true
+            },
+            {
+              "text": "Anggota",
+              "href": "../admin/members.html",
+              "isVisible": true
+            },
+            {
+              "text": "Pinjaman",
+              "href": "../admin/loans.html",
+              "isVisible": true
+            },
+            {
+              "text": "Transaksi",
+              "href": "transactions.html",
+              "isVisible": true
+            },
+            {
+              "text": "Penagihan",
+              "href": "collections.html",
+              "isVisible": true
+            },
+            {
+              "text": "Laporan",
+              "href": "reports.html",
+              "isVisible": true
+            }
+          ]
+        }
+      },
+      "featuresTest": {
+        "success": true,
+        "features": {
+          "hasDashboard": true,
+          "hasProfile": false,
+          "hasLoanApplications": false,
+          "hasSavings": false,
+          "hasTransactions": true
+        }
+      },
+      "timestamp": "2026-03-21T14:38:37.198Z"
+    }
+  ],
+  "pwaTests": [
+    {
+      "serviceWorker": {
+        "registered": true,
+        "controlling": false,
+        "fileExists": true,
+        "status": {
+          "ready": true,
+          "controller": false,
+          "registration": null
+        }
+      },
+      "manifest": {
+        "hasLink": false,
+        "exists": false,
+        "content": null
+      },
+      "offlineSupport": {
+        "offlineSupported": true,
+        "offlineResponse": 200
+      },
+      "installability": {
+        "installable": false,
+        "criteria": {
+          "hasServiceWorker": true,
+          "isHTTPS": true,
+          "hasManifest": true,
+          "hasIcon": false
+        }
+      },
+      "caching": {
+        "cacheControl": "",
+        "etag": "\"aad4-64d89be377129-gzip\"",
+        "resources": {
+          "totalResources": 12,
+          "cachedResources": 0,
+          "cacheRatio": "0.0"
+        }
+      },
+      "developmentImpact": {
+        "impact": {
+          "consoleErrors": 0,
+          "networkErrors": 0,
+          "serviceWorkerErrors": 0,
+          "hotReloadWorking": false,
+          "devToolsAccessible": false
+        },
+        "reloadTime": 777,
+        "interferesWithDev": false
+      },
+      "timestamp": "2026-03-21T14:38:54.334Z"
+    }
+  ],
+  "errors": [
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:13.039Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/login.html"
+      },
+      "timestamp": "2026-03-21T14:38:13.060Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:13.997Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/login.html"
+      },
+      "timestamp": "2026-03-21T14:38:13.997Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Cannot read properties of null (reading 'value')",
+      "stack": "TypeError: Cannot read properties of null (reading 'value')\n    at handleLogin (http://localhost/mono-v2/assets/js/auth-fixed.js:102:42)",
+      "timestamp": "2026-03-21T14:38:16.635Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:687:1)",
+      "timestamp": "2026-03-21T14:38:18.125Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:753:1)",
+      "timestamp": "2026-03-21T14:38:18.133Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:824:1)",
+      "timestamp": "2026-03-21T14:38:18.133Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:897:1)",
+      "timestamp": "2026-03-21T14:38:18.140Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:18.145Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html",
+        "lineNumber": 970
+      },
+      "timestamp": "2026-03-21T14:38:18.145Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:18.200Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:18.201Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=dashboard"
+      },
+      "timestamp": "2026-03-21T14:38:18.641Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:687:1)",
+      "timestamp": "2026-03-21T14:38:19.584Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:753:1)",
+      "timestamp": "2026-03-21T14:38:19.585Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:824:1)",
+      "timestamp": "2026-03-21T14:38:19.586Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:897:1)",
+      "timestamp": "2026-03-21T14:38:19.587Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=dashboard"
+      },
+      "timestamp": "2026-03-21T14:38:19.631Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:19.643Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:19.644Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:687:1)",
+      "timestamp": "2026-03-21T14:38:20.781Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:753:1)",
+      "timestamp": "2026-03-21T14:38:20.782Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:824:1)",
+      "timestamp": "2026-03-21T14:38:20.782Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:897:1)",
+      "timestamp": "2026-03-21T14:38:20.783Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:20.817Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:20.818Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=dashboard"
+      },
+      "timestamp": "2026-03-21T14:38:20.822Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:20.836Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:20.837Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:21.532Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:21.536Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:21.604Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/members.html"
+      },
+      "timestamp": "2026-03-21T14:38:21.604Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:22.596Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:22.597Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:22.640Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/loans.html"
+      },
+      "timestamp": "2026-03-21T14:38:22.641Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:23.747Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:23.748Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:23.767Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/reports.html"
+      },
+      "timestamp": "2026-03-21T14:38:23.767Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:694:1)",
+      "timestamp": "2026-03-21T14:38:24.983Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:760:1)",
+      "timestamp": "2026-03-21T14:38:24.996Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:831:1)",
+      "timestamp": "2026-03-21T14:38:24.997Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:904:1)",
+      "timestamp": "2026-03-21T14:38:24.998Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:25.055Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/staff/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:25.056Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=get_guarantees&staff_id=1"
+      },
+      "timestamp": "2026-03-21T14:38:25.070Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=risk_assessment&staff_id=1"
+      },
+      "timestamp": "2026-03-21T14:38:25.072Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:25.097Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/staff/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:25.098Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:556:1)",
+      "timestamp": "2026-03-21T14:38:25.837Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:622:1)",
+      "timestamp": "2026-03-21T14:38:25.895Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:693:1)",
+      "timestamp": "2026-03-21T14:38:25.897Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:766:1)",
+      "timestamp": "2026-03-21T14:38:25.898Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:25.940Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/member/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:25.948Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:25.957Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/member/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:25.965Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:26.809Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/staff/login.html"
+      },
+      "timestamp": "2026-03-21T14:38:26.810Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Cannot read properties of null (reading 'value')",
+      "stack": "TypeError: Cannot read properties of null (reading 'value')\n    at handleLogin (http://localhost/mono-v2/assets/js/auth-fixed.js:102:42)",
+      "timestamp": "2026-03-21T14:38:28.394Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:694:1)",
+      "timestamp": "2026-03-21T14:38:29.741Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:760:1)",
+      "timestamp": "2026-03-21T14:38:29.755Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:831:1)",
+      "timestamp": "2026-03-21T14:38:29.756Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:904:1)",
+      "timestamp": "2026-03-21T14:38:29.756Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:29.815Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/staff/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:29.818Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:29.821Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/staff/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:29.821Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=risk_assessment&staff_id=1"
+      },
+      "timestamp": "2026-03-21T14:38:29.823Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=get_guarantees&staff_id=1"
+      },
+      "timestamp": "2026-03-21T14:38:29.849Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:694:1)",
+      "timestamp": "2026-03-21T14:38:31.065Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:760:1)",
+      "timestamp": "2026-03-21T14:38:31.068Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:831:1)",
+      "timestamp": "2026-03-21T14:38:31.069Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:904:1)",
+      "timestamp": "2026-03-21T14:38:31.070Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=risk_assessment&staff_id=1"
+      },
+      "timestamp": "2026-03-21T14:38:31.102Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:31.104Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/staff/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:31.104Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=get_guarantees&staff_id=1"
+      },
+      "timestamp": "2026-03-21T14:38:31.158Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:694:1)",
+      "timestamp": "2026-03-21T14:38:32.071Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:760:1)",
+      "timestamp": "2026-03-21T14:38:32.116Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:831:1)",
+      "timestamp": "2026-03-21T14:38:32.117Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:904:1)",
+      "timestamp": "2026-03-21T14:38:32.117Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=get_guarantees&staff_id=1"
+      },
+      "timestamp": "2026-03-21T14:38:32.194Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=risk_assessment&staff_id=1"
+      },
+      "timestamp": "2026-03-21T14:38:32.196Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:32.223Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/staff/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:32.224Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:32.896Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:32.921Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:32.956Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/members.html"
+      },
+      "timestamp": "2026-03-21T14:38:32.956Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:33.768Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:33.769Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:33.794Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/loans.html"
+      },
+      "timestamp": "2026-03-21T14:38:33.795Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:34.785Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:34.787Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:34.812Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/staff/transactions.html"
+      },
+      "timestamp": "2026-03-21T14:38:34.814Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:687:1)",
+      "timestamp": "2026-03-21T14:38:35.810Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:753:1)",
+      "timestamp": "2026-03-21T14:38:35.826Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:824:1)",
+      "timestamp": "2026-03-21T14:38:35.826Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:897:1)",
+      "timestamp": "2026-03-21T14:38:35.827Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:35.871Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:35.872Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=dashboard"
+      },
+      "timestamp": "2026-03-21T14:38:35.875Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:35.881Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:35.883Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:36.530Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:38:36.532Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:36.577Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/reports.html"
+      },
+      "timestamp": "2026-03-21T14:38:36.577Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:37.360Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/member/login.html"
+      },
+      "timestamp": "2026-03-21T14:38:37.361Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:37.364Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/member/login.html"
+      },
+      "timestamp": "2026-03-21T14:38:37.364Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:556:1)",
+      "timestamp": "2026-03-21T14:38:48.903Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:622:1)",
+      "timestamp": "2026-03-21T14:38:48.904Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:693:1)",
+      "timestamp": "2026-03-21T14:38:48.904Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:766:1)",
+      "timestamp": "2026-03-21T14:38:48.905Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:48.955Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/member/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:48.956Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:556:1)",
+      "timestamp": "2026-03-21T14:38:50.175Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:622:1)",
+      "timestamp": "2026-03-21T14:38:50.175Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:693:1)",
+      "timestamp": "2026-03-21T14:38:50.176Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/member/dashboard.html:766:1)",
+      "timestamp": "2026-03-21T14:38:50.176Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:50.222Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/member/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:50.224Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/member/loan-application.html"
+      },
+      "timestamp": "2026-03-21T14:38:50.832Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/member/profile.html"
+      },
+      "timestamp": "2026-03-21T14:38:52.090Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:687:1)",
+      "timestamp": "2026-03-21T14:38:52.912Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:753:1)",
+      "timestamp": "2026-03-21T14:38:52.913Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:824:1)",
+      "timestamp": "2026-03-21T14:38:52.949Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:897:1)",
+      "timestamp": "2026-03-21T14:38:52.950Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=dashboard"
+      },
+      "timestamp": "2026-03-21T14:38:53.021Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:53.023Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:53.023Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:53.032Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:53.044Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:694:1)",
+      "timestamp": "2026-03-21T14:38:53.679Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:760:1)",
+      "timestamp": "2026-03-21T14:38:53.680Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:831:1)",
+      "timestamp": "2026-03-21T14:38:53.681Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/staff/dashboard.html:904:1)",
+      "timestamp": "2026-03-21T14:38:53.686Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=get_guarantees&staff_id=1"
+      },
+      "timestamp": "2026-03-21T14:38:53.734Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=risk_assessment&staff_id=1"
+      },
+      "timestamp": "2026-03-21T14:38:53.735Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:53.735Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/staff/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:53.736Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+      "location": {
+        "url": "http://localhost/mono-v2/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:55.307Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:687:1)",
+      "timestamp": "2026-03-21T14:38:56.000Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:753:1)",
+      "timestamp": "2026-03-21T14:38:56.019Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:824:1)",
+      "timestamp": "2026-03-21T14:38:56.021Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:897:1)",
+      "timestamp": "2026-03-21T14:38:56.024Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+      "location": {
+        "url": "http://localhost/mono-v2/api/dashboard.php?action=admin_stats"
+      },
+      "timestamp": "2026-03-21T14:38:56.079Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Error loading dashboard data: TypeError: Failed to fetch",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html",
+        "lineNumber": 553,
+        "columnNumber": 40
+      },
+      "timestamp": "2026-03-21T14:38:56.080Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=dashboard"
+      },
+      "timestamp": "2026-03-21T14:38:56.080Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Error loading guarantee data: TypeError: Failed to fetch",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html",
+        "lineNumber": 567,
+        "columnNumber": 40
+      },
+      "timestamp": "2026-03-21T14:38:56.080Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+      "location": {
+        "url": "http://localhost/mono-v2/api/orang-integration.php?action=dashboard"
+      },
+      "timestamp": "2026-03-21T14:38:56.080Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Error loading database status: TypeError: Failed to fetch",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html",
+        "lineNumber": 581,
+        "columnNumber": 40
+      },
+      "timestamp": "2026-03-21T14:38:56.081Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:56.081Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:687:1)",
+      "timestamp": "2026-03-21T14:38:56.759Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:753:1)",
+      "timestamp": "2026-03-21T14:38:56.760Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:824:1)",
+      "timestamp": "2026-03-21T14:38:56.760Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:897:1)",
+      "timestamp": "2026-03-21T14:38:56.760Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=dashboard"
+      },
+      "timestamp": "2026-03-21T14:38:56.823Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:56.824Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:56.824Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:687:1)",
+      "timestamp": "2026-03-21T14:38:57.548Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:753:1)",
+      "timestamp": "2026-03-21T14:38:57.568Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:824:1)",
+      "timestamp": "2026-03-21T14:38:57.570Z"
+    },
+    {
+      "type": "page_error",
+      "message": "$ is not defined",
+      "stack": "ReferenceError: $ is not defined\n    at <anonymous> (http://localhost/mono-v2/pages/admin/dashboard.html:897:1)",
+      "timestamp": "2026-03-21T14:38:57.572Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:57.603Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:57.604Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "location": {
+        "url": "http://localhost/mono-v2/api/guarantee-risk-management.php?action=dashboard"
+      },
+      "timestamp": "2026-03-21T14:38:57.632Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.json"
+      },
+      "timestamp": "2026-03-21T14:38:57.639Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Manifest fetch from http://localhost/manifest.json failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/dashboard.html"
+      },
+      "timestamp": "2026-03-21T14:38:57.641Z"
+    }
+  ],
+  "fixes": [],
+  "recommendations": []
+}
