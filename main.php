@@ -2549,6 +2549,35 @@ function getDashboardData($role, $userId) {
             `;
         }
         
+        // Logout function
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                // Send logout request to server
+                fetch('api/auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=logout'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Redirect to login page
+                        window.location.href = 'login.php';
+                    } else {
+                        // Show error message
+                        showNotification('Logout gagal: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Logout error:', error);
+                    // Fallback: redirect anyway
+                    window.location.href = 'login.php';
+                });
+            }
+        }
+        
         // Handle window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
