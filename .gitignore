@@ -1,65 +1,42 @@
-# Environment files
-.env
-.env.local
-.env.production
-
-# Logs
-logs/
-*.log
-error.log
-access.log
-
-# Cache
-storage/cache/*
-*.cache
-
-# Sessions
-storage/sessions/*
-
-# Uploads
-storage/uploads/*
-public/uploads/*
-uploads/
-
-# Backup files
-*.bak
-*.backup
-*.old
+# Only ignore truly unnecessary files for development
+# Keep all application files for development on other computers
 
 # Temporary files
-tmp/
-temp/
 *.tmp
+*.temp
+temp/
+tmp/
 
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS files
+# OS specific files
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Composer
-vendor/
-composer.lock
+# Editor files
+*.swp
+*.swo
+*~
 
 # Node modules (if any)
 node_modules/
 
-# Build files
+# Build artifacts (if any)
 build/
 dist/
 
-# Database backups (keep structure)
-database/backup_*.sql
-database/*.backup.sql
+# Large binary files that should be handled separately
+*.exe
+*.dmg
+*.pkg
+*.deb
+*.rpm
 
-# Test files
-tests/temp/
-*.test
-
-# Documentation build
-docs/build/
+# Keep all application files for development:
+# - All PHP files
+# - All database files
+# - All configuration files
+# - All documentation
+# - All assets
+# - All uploads (for development)
+# - All logs (for debugging)
 backup-original/
