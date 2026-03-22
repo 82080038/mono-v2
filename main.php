@@ -1054,7 +1054,7 @@ function getDashboardData($role, $userId) {
                 ]
             };
             
-            const widgetActions = actions[userRole <= ROLE_ADMIN ? 'admin' : 'member'] || actions['member'];
+            const widgetActions = (userRole === 'bos' || userRole === 'admin') ? actions['admin'] : actions['member'];
             
             let html = '<div class="widget">';
             html += '<div class="widget-header"><h6>' + widget.title + '</h6></div>';
@@ -1070,6 +1070,22 @@ function getDashboardData($role, $userId) {
             
             html += '</div></div></div>';
             return html;
+        }
+        
+        // Handle quick action clicks
+        function handleQuickAction(actionLabel) {
+            showNotification('Quick action: ' + actionLabel, 'info');
+            // TODO: Implement actual action handling
+            console.log('Quick action clicked:', actionLabel);
+        }
+        
+        // Refresh dashboard
+        function refreshDashboard() {
+            showNotification('Dashboard refreshed', 'success');
+            loadDashboardWidgets();
+            // Reload current page content
+            const currentPage = window.location.hash.substring(1) || 'dashboard';
+            loadPageContent(currentPage);
         }
         
         // Generate notifications widget
