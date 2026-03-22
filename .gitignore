@@ -1,0 +1,64 @@
+# Environment files
+.env
+.env.local
+.env.production
+
+# Logs
+logs/
+*.log
+error.log
+access.log
+
+# Cache
+storage/cache/*
+*.cache
+
+# Sessions
+storage/sessions/*
+
+# Uploads
+storage/uploads/*
+public/uploads/*
+uploads/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Composer
+vendor/
+composer.lock
+
+# Node modules (if any)
+node_modules/
+
+# Build files
+build/
+dist/
+
+# Database backups (keep structure)
+database/backup_*.sql
+database/*.backup.sql
+
+# Test files
+tests/temp/
+*.test
+
+# Documentation build
+docs/build/
