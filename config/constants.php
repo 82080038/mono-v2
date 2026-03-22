@@ -38,8 +38,8 @@ define('APP_CACHE', APP_ROOT . '/cache');
 define('APP_TEMP', APP_ROOT . '/temp');
 
 // URL Constants
-define('BASE_URL', (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST']);
-define('APP_URL', BASE_URL . str_replace('/index.php', '', $_SERVER['PHP_SELF']));
+define('BASE_URL', (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . ($_SERVER['HTTP_HOST'] ?? 'localhost'));
+define('APP_URL', BASE_URL . str_replace('/index.php', '', $_SERVER['PHP_SELF'] ?? '/mono-v2/'));
 define('ASSETS_URL', APP_URL . '/assets');
 define('API_URL', APP_URL . '/api');
 define('UPLOADS_URL', APP_URL . '/uploads');
@@ -111,26 +111,73 @@ define('RATE_LIMIT_WINDOW', 3600); // 1 hour
 // USER ROLES & PERMISSIONS
 // ========================================
 
-// User Roles (Hierarchy: 0=highest, 4=lowest)
-define('ROLE_BOS', 0);           // Pemilik Koperasi
-define('ROLE_ADMIN', 1);         // Administrator Sistem
-define('ROLE_TELLER', 2);        // Petugas Kasir
-define('ROLE_FIELD_COLLECTOR', 3); // Petugas Lapangan/Kutipan
-define('ROLE_NASABAH', 4);       // Anggota/Nasabah
-
-// Role Names
-define('ROLE_NAMES', [
-    ROLE_BOS => 'Bos',
-    ROLE_ADMIN => 'Admin',
-    ROLE_TELLER => 'Teller',
-    ROLE_FIELD_COLLECTOR => 'Petugas Lapangan',
-    ROLE_NASABAH => 'Nasabah'
-]);
+// Note: Role data now stored in role_master table
+// This section kept for backward compatibility
+// Role hierarchy retrieved from database dynamically
 
 // Permission Levels
 define('PERMISSION_READ', 'read');
 define('PERMISSION_WRITE', 'write');
 define('PERMISSION_ADMIN', 'admin');
+
+// Role Helper Functions
+function getRoleData($roleName = null) {
+    static $roles = null;
+    
+    if ($roles === null) {
+        try {
+            $pdo = new PDO(
+                'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET,
+                DB_USER,
+                DB_PASS,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false
+                ]
+            );
+            
+            $stmt = $pdo->prepare("SELECT * FROM role_master WHERE is_active = TRUE ORDER BY role_level");
+            $stmt->execute();
+            $roles = $stmt->fetchAll();
+            
+        } catch (PDOException $e) {
+            error_log("Error loading roles: " . $e->getMessage());
+            $roles = [];
+        }
+    }
+    
+    if ($roleName) {
+        foreach ($roles as $role) {
+            if ($role['role_name'] === $roleName) {
+                return $role;
+            }
+        }
+        return null;
+    }
+    
+    return $roles;
+}
+
+function getRoleName($roleLevel) {
+    $roles = getRoleData();
+    foreach ($roles as $role) {
+        if ($role['role_level'] === $roleLevel) {
+            return $role['role_display_name'];
+        }
+    }
+    return 'Unknown';
+}
+
+function hasPermission($userRole, $requiredPermission) {
+    $roleData = getRoleData($userRole);
+    if (!$roleData) {
+        return false;
+    }
+    
+    $permissions = json_decode($roleData['permissions'], true);
+    return isset($permissions[$requiredPermission]) && $permissions[$requiredPermission] === true;
+}
 
 // ========================================
 // BUSINESS CONSTANTS
@@ -319,13 +366,6 @@ define('RISK_LEVEL_VERY_HIGH', 'very_high');
 // ========================================
 
 /**
- * Get role name by level
- */
-function getRoleName($roleLevel) {
-    return ROLE_NAMES[$roleLevel] ?? 'Unknown';
-}
-
-/**
  * Format currency
  */
 function formatCurrency($amount, $currency = 'IDR') {
@@ -399,27 +439,6 @@ function sanitizeInput($input) {
 function generateRandomPassword($length = 12) {
     $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     return substr(str_shuffle($chars), 0, $length);
-}
-
-/**
- * Check if user has permission
- */
-if (!function_exists('hasPermission')) {
-    function hasPermission($userRole, $requiredRole) {
-        // Role hierarchy: admin > manager > staff > member
-        $roleHierarchy = [
-            'admin' => 4,
-            'manager' => 3,
-            'staff' => 2,
-            'member' => 1
-        ];
-        
-        if (!isset($roleHierarchy[$userRole]) || !isset($roleHierarchy[$requiredRole])) {
-            return false;
-        }
-        
-        return $roleHierarchy[$userRole] >= $roleHierarchy[$requiredRole];
-    }
 }
 
 /**

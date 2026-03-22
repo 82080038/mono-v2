@@ -166,78 +166,75 @@ function handleLogin() {
     }
 }
 
-// Authenticate user against database (demo implementation)
+// Authenticate user against database
 function authenticateUser($username, $password) {
-    // Demo users (will be replaced with database query)
-    $demoUsers = [
-        'bos' => [
-            'password' => 'bos',
-            'user' => [
-                'id' => 1,
-                'username' => 'bos',
-                'name' => 'Pemilik Koperasi',
-                'role' => ROLE_BOS,
-                'email' => 'bos@ksplamgabejaya.co.id',
-                'last_login' => date('Y-m-d H:i:s')
+    try {
+        // Connect to database
+        $pdo = new PDO(
+            'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET,
+            DB_USER,
+            DB_PASS,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false
             ]
-        ],
-        'admin' => [
-            'password' => 'admin',
-            'user' => [
-                'id' => 2,
-                'username' => 'admin',
-                'name' => 'Administrator',
-                'role' => ROLE_ADMIN,
-                'email' => 'admin@ksplamgabejaya.co.id',
-                'last_login' => date('Y-m-d H:i:s')
-            ]
-        ],
-        'teller' => [
-            'password' => 'teller',
-            'user' => [
-                'id' => 3,
-                'username' => 'teller',
-                'name' => 'Petugas Teller',
-                'role' => ROLE_TELLER,
-                'email' => 'teller@ksplamgabejaya.co.id',
-                'last_login' => date('Y-m-d H:i:s')
-            ]
-        ],
-        'collector' => [
-            'password' => 'collector',
-            'user' => [
-                'id' => 4,
-                'username' => 'collector',
-                'name' => 'Petugas Lapangan',
-                'role' => ROLE_FIELD_COLLECTOR,
-                'email' => 'collector@ksplamgabejaya.co.id',
-                'last_login' => date('Y-m-d H:i:s')
-            ]
-        ],
-        'nasabah' => [
-            'password' => 'nasabah',
-            'user' => [
-                'id' => 5,
-                'username' => 'nasabah',
-                'name' => 'Anggota Koperasi',
-                'role' => ROLE_NASABAH,
-                'email' => 'nasabah@ksplamgabejaya.co.id',
-                'last_login' => date('Y-m-d H:i:s')
-            ]
-        ]
-    ];
-    
-    if (isset($demoUsers[$username]) && $demoUsers[$username]['password'] === $password) {
+        );
+        
+        // Query user from database with role information
+        $stmt = $pdo->prepare("
+            SELECT u.id, u.username, u.full_name, u.password, u.status, u.email,
+                   r.role_name, r.role_display_name, r.permissions
+            FROM users u 
+            JOIN role_master r ON u.role_id = r.id 
+            WHERE u.username = ? AND u.status = 'active' AND r.is_active = TRUE
+        ");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
+        
+        if (!$user) {
+            return [
+                'success' => false,
+                'message' => 'Username tidak ditemukan'
+            ];
+        }
+        
+        // Verify password using bcrypt
+        if (!password_verify($password, $user['password'])) {
+            return [
+                'success' => false,
+                'message' => 'Password salah'
+            ];
+        }
+        
+        // Update last login
+        $updateStmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
+        $updateStmt->execute([$user['id']]);
+        
+        // Return user data without password
+        unset($user['password']);
+        
         return [
             'success' => true,
-            'user' => $demoUsers[$username]['user']
+            'user' => [
+                'id' => $user['id'],
+                'username' => $user['username'],
+                'name' => $user['full_name'],
+                'role' => $user['role_name'],
+                'role_display_name' => $user['role_display_name'],
+                'permissions' => json_decode($user['permissions'], true),
+                'email' => $user['email'],
+                'last_login' => date('Y-m-d H:i:s')
+            ]
+        ];
+        
+    } catch (PDOException $e) {
+        error_log("Database error in authenticateUser: " . $e->getMessage());
+        return [
+            'success' => false,
+            'message' => 'Terjadi kesalahan sistem. Silakan coba lagi.'
         ];
     }
-    
-    return [
-        'success' => false,
-        'message' => 'Username atau password salah'
-    ];
 }
 
 // Generate JWT token (simplified)

@@ -16,7 +16,7 @@ header('Referrer-Policy: strict-origin-when-cross-origin');
 // Load required files
 require_once __DIR__ . '/config/constants.php';
 require_once __DIR__ . '/config/error-config.php';
-require_once __DIR__ . '/api/auth.php';
+// Don't load api/auth.php here - it's for API endpoints only
 
 // Start session
 if (session_status() === PHP_SESSION_NONE) {
@@ -25,28 +25,28 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Authentication check
 try {
-    $auth = new AuthSystem();
-    $user = $auth->getCurrentUser();
-    
-    if (!$user) {
-        // Not authenticated, redirect to login
-        header('Location: /login.php');
+    // Check session first
+    if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+        header('Location: /mono-v2/login.php');
         exit;
     }
+    
+    $user = $_SESSION['user'];
     
     // Update last activity
     $_SESSION['last_activity'] = time();
     
 } catch (Exception $e) {
-    logError("Authentication error in main.php: " . $e->getMessage());
-    header('Location: /login.php');
+    error_log("Authentication error in main.php: " . $e->getMessage());
+    header('Location: /mono-v2/login.php');
     exit;
 }
 
 // Get user role and permissions
-$userRole = $user['role'];
-$userName = $user['name'] ?? $user['username'];
-$userAvatar = $user['avatar'] ?? null;
+$userRole = $user['role'] ?? 'nasabah';
+$userName = $user['full_name'] ?? $user['username'];
+$userDisplayName = $user['role_display_name'] ?? ucfirst($userRole);
+$permissions = $user['permissions'] ?? [];
 
 // Determine dashboard layout based on role
 $dashboardLayout = getDashboardLayout($userRole);
@@ -60,11 +60,11 @@ $pageDescription = 'Sistem Koperasi Digital Terpadu';
 // Helper functions
 function getDashboardLayout($role) {
     $layouts = [
-        ROLE_BOS => 'bos',
-        ROLE_ADMIN => 'admin',
-        ROLE_TELLER => 'teller',
-        ROLE_FIELD_COLLECTOR => 'field_collector',
-        ROLE_NASABAH => 'nasabah'
+        'bos' => 'bos',
+        'admin' => 'admin',
+        'teller' => 'teller',
+        'collector' => 'collector',
+        'nasabah' => 'nasabah'
     ];
     
     return $layouts[$role] ?? 'nasabah';
@@ -73,48 +73,48 @@ function getDashboardLayout($role) {
 function getMenuItems($role) {
     $menus = [
         'bos' => [
-            ['key' => 'dashboard', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => '#'],
-            ['key' => 'laporan', 'title' => 'Laporan Keuangan', 'icon' => 'fas fa-chart-line', 'url' => '#'],
-            ['key' => 'nasabah', 'title' => 'Data Nasabah', 'icon' => 'fas fa-users', 'url' => '#'],
-            ['key' => 'pinjaman', 'title' => 'Pinjaman', 'icon' => 'fas fa-hand-holding-usd', 'url' => '#'],
-            ['key' => 'simpanan', 'title' => 'Simpanan', 'icon' => 'fas fa-piggy-bank', 'url' => '#'],
-            ['key' => 'pengaturan', 'title' => 'Pengaturan', 'icon' => 'fas fa-cog', 'url' => '#']
+            ['key' => 'dashboard', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => '#dashboard'],
+            ['key' => 'laporan', 'title' => 'Laporan Keuangan', 'icon' => 'fas fa-chart-line', 'url' => '#laporan'],
+            ['key' => 'nasabah', 'title' => 'Data Nasabah', 'icon' => 'fas fa-users', 'url' => '#nasabah'],
+            ['key' => 'pinjaman', 'title' => 'Pinjaman', 'icon' => 'fas fa-hand-holding-usd', 'url' => '#pinjaman'],
+            ['key' => 'simpanan', 'title' => 'Simpanan', 'icon' => 'fas fa-piggy-bank', 'url' => '#simpanan'],
+            ['key' => 'pengaturan', 'title' => 'Pengaturan', 'icon' => 'fas fa-cog', 'url' => '#pengaturan']
         ],
         'admin' => [
-            ['key' => 'dashboard', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => '#'],
-            ['key' => 'nasabah', 'title' => 'Nasabah', 'icon' => 'fas fa-users', 'url' => '#'],
-            ['key' => 'pinjaman', 'title' => 'Pinjaman', 'icon' => 'fas fa-hand-holding-usd', 'url' => '#'],
-            ['key' => 'simpanan', 'title' => 'Simpanan', 'icon' => 'fas fa-piggy-bank', 'url' => '#'],
-            ['key' => 'transaksi', 'title' => 'Transaksi', 'icon' => 'fas fa-exchange-alt', 'url' => '#'],
-            ['key' => 'laporan', 'title' => 'Laporan', 'icon' => 'fas fa-chart-bar', 'url' => '#']
+            ['key' => 'dashboard', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => '#dashboard'],
+            ['key' => 'nasabah', 'title' => 'Nasabah', 'icon' => 'fas fa-users', 'url' => '#nasabah'],
+            ['key' => 'pinjaman', 'title' => 'Pinjaman', 'icon' => 'fas fa-hand-holding-usd', 'url' => '#pinjaman'],
+            ['key' => 'simpanan', 'title' => 'Simpanan', 'icon' => 'fas fa-piggy-bank', 'url' => '#simpanan'],
+            ['key' => 'transaksi', 'title' => 'Transaksi', 'icon' => 'fas fa-exchange-alt', 'url' => '#transaksi'],
+            ['key' => 'laporan', 'title' => 'Laporan', 'icon' => 'fas fa-chart-bar', 'url' => '#laporan']
         ],
         'teller' => [
-            ['key' => 'dashboard', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => '#'],
-            ['key' => 'nasabah', 'title' => 'Nasabah', 'icon' => 'fas fa-users', 'url' => '#'],
-            ['key' => 'setoran', 'title' => 'Setoran', 'icon' => 'fas fa-plus-circle', 'url' => '#'],
-            ['key' => 'penarikan', 'title' => 'Penarikan', 'icon' => 'fas fa-minus-circle', 'url' => '#'],
-            ['key' => 'pembayaran', 'title' => 'Pembayaran', 'icon' => 'fas fa-credit-card', 'url' => '#'],
-            ['key' => 'laporan_harian', 'title' => 'Laporan Harian', 'icon' => 'fas fa-clipboard-list', 'url' => '#']
+            ['key' => 'dashboard', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => '#dashboard'],
+            ['key' => 'nasabah', 'title' => 'Nasabah', 'icon' => 'fas fa-users', 'url' => '#nasabah'],
+            ['key' => 'setoran', 'title' => 'Setoran', 'icon' => 'fas fa-plus-circle', 'url' => '#setoran'],
+            ['key' => 'penarikan', 'title' => 'Penarikan', 'icon' => 'fas fa-minus-circle', 'url' => '#penarikan'],
+            ['key' => 'pembayaran', 'title' => 'Pembayaran', 'icon' => 'fas fa-credit-card', 'url' => '#pembayaran'],
+            ['key' => 'laporan_harian', 'title' => 'Laporan Harian', 'icon' => 'fas fa-clipboard-list', 'url' => '#laporan_harian']
         ],
-        'field_collector' => [
-            ['key' => 'dashboard', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => '#'],
-            ['key' => 'jadwal', 'title' => 'Jadwal Kutipan', 'icon' => 'fas fa-calendar-alt', 'url' => '#'],
-            ['key' => 'rute', 'title' => 'Rute Hari Ini', 'icon' => 'fas fa-route', 'url' => '#'],
-            ['key' => 'nasabah_kunjungan', 'title' => 'Nasabah Kunjungan', 'icon' => 'fas fa-user-friends', 'url' => '#'],
-            ['key' => 'kutipan', 'title' => 'Kutipan', 'icon' => 'fas fa-money-bill-wave', 'url' => '#'],
-            ['key' => 'gps_log', 'title' => 'GPS Log', 'icon' => 'fas fa-map-marked-alt', 'url' => '#']
+        'collector' => [
+            ['key' => 'dashboard', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => '#dashboard'],
+            ['key' => 'jadwal', 'title' => 'Jadwal Kutipan', 'icon' => 'fas fa-calendar-alt', 'url' => '#jadwal'],
+            ['key' => 'rute', 'title' => 'Rute Hari Ini', 'icon' => 'fas fa-route', 'url' => '#rute'],
+            ['key' => 'nasabah_kunjungan', 'title' => 'Nasabah Kunjungan', 'icon' => 'fas fa-user-friends', 'url' => '#nasabah_kunjungan'],
+            ['key' => 'kutipan', 'title' => 'Kutipan', 'icon' => 'fas fa-money-bill-wave', 'url' => '#kutipan'],
+            ['key' => 'gps_log', 'title' => 'GPS Log', 'icon' => 'fas fa-map-marked-alt', 'url' => '#gps_log']
         ],
         'nasabah' => [
-            ['key' => 'dashboard', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => '#'],
-            ['key' => 'profil', 'title' => 'Profil Saya', 'icon' => 'fas fa-user', 'url' => '#'],
-            ['key' => 'simpanan', 'title' => 'Simpanan Saya', 'icon' => 'fas fa-piggy-bank', 'url' => '#'],
-            ['key' => 'pinjaman', 'title' => 'Pinjaman Saya', 'icon' => 'fas fa-hand-holding-usd', 'url' => '#'],
-            ['key' => 'riwayat', 'title' => 'Riwayat Transaksi', 'icon' => 'fas fa-history', 'url' => '#'],
-            ['key' => 'pembayaran', 'title' => 'Pembayaran', 'icon' => 'fas fa-credit-card', 'url' => '#']
+            ['key' => 'dashboard', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => '#dashboard'],
+            ['key' => 'profil', 'title' => 'Profil Saya', 'icon' => 'fas fa-user', 'url' => '#profil'],
+            ['key' => 'simpanan_saya', 'title' => 'Simpanan Saya', 'icon' => 'fas fa-piggy-bank', 'url' => '#simpanan_saya'],
+            ['key' => 'pinjaman_saya', 'title' => 'Pinjaman Saya', 'icon' => 'fas fa-hand-holding-usd', 'url' => '#pinjaman_saya'],
+            ['key' => 'riwayat', 'title' => 'Riwayat Transaksi', 'icon' => 'fas fa-history', 'url' => '#riwayat'],
+            ['key' => 'pembayaran', 'title' => 'Pembayaran', 'icon' => 'fas fa-credit-card', 'url' => '#pembayaran']
         ]
     ];
     
-    return $menus[$dashboardLayout] ?? $menus['nasabah'];
+    return $menus[$role] ?? $menus['nasabah'];
 }
 
 function getDashboardWidgets($role) {
@@ -139,7 +139,7 @@ function getDashboardWidgets($role) {
             'cash_balance' => ['title' => 'Saldo Kas', 'type' => 'balance'],
             'recent_transactions' => ['title' => 'Transaksi Terbaru', 'type' => 'transactions']
         ],
-        'field_collector' => [
+        'collector' => [
             'daily_target' => ['title' => 'Target Harian', 'type' => 'target'],
             'collection_status' => ['title' => 'Status Kutipan', 'type' => 'collection'],
             'route_progress' => ['title' => 'Progress Rute', 'type' => 'route'],
@@ -155,7 +155,7 @@ function getDashboardWidgets($role) {
         ]
     ];
     
-    return $widgets[$dashboardLayout] ?? $widgets['nasabah'];
+    return $widgets[$role] ?? $widgets['nasabah'];
 }
 
 // Get dashboard data (would typically come from database)
@@ -200,10 +200,12 @@ function getDashboardData($role, $userId) {
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome (reliable version with fallback) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onerror="this.href='/mono-v2/assets/css/fontawesome-fallback.css';" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/mono-v2/assets/css/dashboard.css">
     
     <style>
         :root {
@@ -660,7 +662,7 @@ function getDashboardData($role, $userId) {
             <i class="fas fa-bars"></i>
         </button>
         
-        <a href="#" class="brand">
+        <a href="#dashboard" class="brand" onclick="navigateTo('dashboard', event)">
             <i class="fas fa-university"></i>
             <?php echo APP_NAME; ?>
         </a>
@@ -680,7 +682,7 @@ function getDashboardData($role, $userId) {
                     <div class="dropdown-item-text">
                         <strong><?php echo htmlspecialchars($userName); ?></strong>
                         <br>
-                        <small class="text-muted"><?php echo getRoleName($userRole); ?></small>
+                        <small class="text-muted"><?php echo htmlspecialchars(ucfirst($userRole)); ?></small>
                     </div>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" onclick="showProfile()">
@@ -702,7 +704,7 @@ function getDashboardData($role, $userId) {
     <aside class="app-sidebar" id="sidebar">
         <nav class="sidebar-menu">
             <?php foreach ($menuItems as $item): ?>
-                <a href="<?php echo $item['url']; ?>" class="menu-item" onclick="navigateTo('<?php echo $item['key']; ?>')">
+                <a href="<?php echo $item['url']; ?>" class="menu-item" onclick="navigateTo('<?php echo $item['key']; ?>', event)">
                     <i class="<?php echo $item['icon']; ?>"></i>
                     <?php echo $item['title']; ?>
                 </a>
@@ -714,7 +716,7 @@ function getDashboardData($role, $userId) {
     <main class="app-main">
         <div class="dashboard-header">
             <h1>Selamat Datang, <?php echo htmlspecialchars($userName); ?>!</h1>
-            <p>Dashboard <?php echo getRoleName($userRole); ?> - <?php echo date('d F Y'); ?></p>
+            <p>Dashboard <?php echo htmlspecialchars(ucfirst($userRole)); ?> - <?php echo date('d F Y'); ?></p>
         </div>
         
         <div class="widget-grid" id="dashboardWidgets">
@@ -728,7 +730,7 @@ function getDashboardData($role, $userId) {
     <script>
         // Global variables
         let currentUser = <?php echo json_encode($user); ?>;
-        let userRole = <?php echo $userRole; ?>;
+        let userRole = <?php echo json_encode($userRole); ?>;
         
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
@@ -773,19 +775,79 @@ function getDashboardData($role, $userId) {
         
         // Generate stats widget
         function generateStatsWidget(key, widget) {
-            const stats = {
-                'overview_stats': [
-                    { label: 'Total Anggota', value: '150', change: '+12%', positive: true },
-                    { label: 'Pinjaman Aktif', value: '45', change: '+8%', positive: true },
-                    { label: 'Total Simpanan', value: 'Rp 250Jt', change: '+15%', positive: true }
-                ],
-                'account_summary': [
-                    { label: 'Saldo Simpanan', value: 'Rp 5Jt', change: '+2%', positive: true },
-                    { label: 'Pinjaman Aktif', value: 'Rp 10Jt', change: '0%', positive: false },
-                    { label: 'Cicilan Bulanan', value: 'Rp 500rb', change: '-', positive: false }
-                ]
+            // Role-based statistics
+            const userRole = '<?php echo $userRole; ?>';
+            
+            const roleStats = {
+                'bos': {
+                    'overview_stats': [
+                        { label: 'Total Anggota', value: '150', change: '+12%', positive: true },
+                        { label: 'Pinjaman Aktif', value: '45', change: '+8%', positive: true },
+                        { label: 'Total Simpanan', value: 'Rp 250Jt', change: '+15%', positive: true },
+                        { label: 'Total Omzet', value: 'Rp 450Jt', change: '+18%', positive: true }
+                    ],
+                    'account_summary': [
+                        { label: 'Total Aset', value: 'Rp 500Jt', change: '+22%', positive: true },
+                        { label: 'Laba Bulanan', value: 'Rp 25Jt', change: '+5%', positive: true },
+                        { label: 'NPL Ratio', value: '2.3%', change: '-0.5%', positive: true }
+                    ]
+                },
+                'admin': {
+                    'overview_stats': [
+                        { label: 'Anggota Aktif', value: '125', change: '+8%', positive: true },
+                        { label: 'Pinjaman Pending', value: '12', change: '-15%', positive: false },
+                        { label: 'Simpanan Baru', value: '8', change: '+25%', positive: true },
+                        { label: 'Transaksi Hari Ini', value: '45', change: '+10%', positive: true }
+                    ],
+                    'account_summary': [
+                        { label: 'User Terdaftar', value: '180', change: '+6%', positive: true },
+                        { label: 'Role Aktif', value: '5', change: '0%', positive: false },
+                        { label: 'System Uptime', value: '99.8%', change: '+0.2%', positive: true }
+                    ]
+                },
+                'teller': {
+                    'overview_stats': [
+                        { label: 'Transaksi Hari Ini', value: '28', change: '+12%', positive: true },
+                        { label: 'Setoran', value: 'Rp 15Jt', change: '+8%', positive: true },
+                        { label: 'Penarikan', value: 'Rp 8Jt', change: '-5%', positive: false },
+                        { label: 'Nasabah Dilayani', value: '35', change: '+15%', positive: true }
+                    ],
+                    'account_summary': [
+                        { label: 'Saldo Kas', value: 'Rp 50Jt', change: '+3%', positive: true },
+                        { label: 'Pending Setoran', value: '5', change: '-20%', positive: false },
+                        { label: 'Form Hari Ini', value: '18', change: '+10%', positive: true }
+                    ]
+                },
+                'collector': {
+                    'overview_stats': [
+                        { label: 'Target Hari Ini', value: '15', change: '0%', positive: false },
+                        { label: 'Kunjungan Selesai', value: '8', change: '+53%', positive: true },
+                        { label: 'Kutipan Terkumpul', value: 'Rp 2.5Jt', change: '+18%', positive: true },
+                        { label: 'Nasabah Dikunjungi', value: '12', change: '+80%', positive: true }
+                    ],
+                    'account_summary': [
+                        { label: 'Rute Selesai', value: '65%', change: '+15%', positive: true },
+                        { label: 'GPS Points', value: '24', change: '+20%', positive: true },
+                        { label: 'Efisiensi', value: '85%', change: '+5%', positive: true }
+                    ]
+                },
+                'nasabah': {
+                    'overview_stats': [
+                        { label: 'Saldo Simpanan', value: 'Rp 5Jt', change: '+2%', positive: true },
+                        { label: 'Pinjaman Aktif', value: 'Rp 10Jt', change: '0%', positive: false },
+                        { label: 'Cicilan Bulanan', value: 'Rp 500rb', change: '-', positive: false },
+                        { label: 'Total Transaksi', value: '245', change: '+8%', positive: true }
+                    ],
+                    'account_summary': [
+                        { label: 'Simpanan Wajib', value: 'Rp 2Jt', change: '+5%', positive: true },
+                        { label: 'Simpanan Sukarela', value: 'Rp 3Jt', change: '+1%', positive: true },
+                        { label: 'Sisa Pinjaman', value: 'Rp 8.5Jt', change: '-2%', positive: true }
+                    ]
+                }
             };
             
+            // Get role-specific stats or default to bos stats
+            const stats = roleStats[userRole] || roleStats['bos'];
             const widgetStats = stats[key] || stats['overview_stats'];
             
             let html = '<div class="widget stats-widget">';
@@ -954,109 +1016,1537 @@ function getDashboardData($role, $userId) {
         }
         
         // Navigate to page
-        function navigateTo(page) {
+        function navigateTo(page, event) {
+            if (event) {
+                event.preventDefault();
+            }
+            
             // Remove active class from all menu items
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.classList.remove('active');
             });
             
             // Add active class to clicked item
-            event.target.classList.add('active');
-            
-            // Load page content (would typically use AJAX)
-            console.log('Navigating to:', page);
-            
-            // For now, just show a message
-            showNotification('Navigasi ke ' + page, 'info');
-        }
-        
-        // Refresh dashboard
-        function refreshDashboard() {
-            loadDashboardWidgets();
-            showNotification('Dashboard refreshed', 'success');
-        }
-        
-        // Show profile
-        function showProfile() {
-            showNotification('Profile page coming soon', 'info');
-        }
-        
-        // Show settings
-        function showSettings() {
-            showNotification('Settings page coming soon', 'info');
-        }
-        
-        // Handle quick action
-        function handleQuickAction(action) {
-            showNotification('Action: ' + action, 'info');
-        }
-        
-        // Logout
-        function logout() {
-            if (confirm('Apakah Anda yakin ingin keluar?')) {
-                // Send logout request
-                fetch('/api/logout.php', {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: 'action=logout'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Clear local storage
-                        localStorage.removeItem('authToken');
-                        sessionStorage.removeItem('authToken');
-                        
-                        // Redirect to login
-                        window.location.href = '/login.php';
-                    } else {
-                        showNotification('Logout failed: ' + data.error, 'danger');
-                    }
-                })
-                .catch(error => {
-                    console.error('Logout error:', error);
-                    // Force redirect even on error
-                    window.location.href = '/login.php';
-                });
+            if (event && event.target) {
+                event.target.closest('.menu-item').classList.add('active');
             }
+            
+            // Load page content dynamically
+            loadPageContent(page);
+            
+            // Update URL hash without page reload
+            window.location.hash = page;
         }
         
-        // Show notification
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
-            notification.style.zIndex = '9999';
-            notification.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        // Load page content dynamically
+        function loadPageContent(page) {
+            const appMain = document.querySelector('.app-main');
+            const widgetsContainer = document.getElementById('dashboardWidgets');
+            
+            // Show loading state
+            if (widgetsContainer) {
+                widgetsContainer.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><div class="mt-3">Memuat halaman...</div></div>';
+            }
+            
+            // Page content mapping
+            const pageContents = {
+                'dashboard': {
+                    title: 'Dashboard',
+                    subtitle: 'Dashboard <?php echo htmlspecialchars(ucfirst($userRole)); ?> - <?php echo date("d F Y"); ?>',
+                    content: generateDashboardContent()
+                },
+                'laporan': {
+                    title: 'Laporan Keuangan',
+                    subtitle: 'Analisis dan laporan keuangan koperasi',
+                    content: generateLaporanContent()
+                },
+                'nasabah': {
+                    title: 'Data Nasabah',
+                    subtitle: 'Manajemen data anggota koperasi',
+                    content: generateNasabahContent()
+                },
+                'pinjaman': {
+                    title: 'Pinjaman',
+                    subtitle: 'Manajemen pinjaman dan angsuran',
+                    content: generatePinjamanContent()
+                },
+                'simpanan': {
+                    title: 'Simpanan',
+                    subtitle: 'Manajemen simpanan anggota',
+                    content: generateSimpananContent()
+                },
+                'pengaturan': {
+                    title: 'Pengaturan',
+                    subtitle: 'Pengaturan sistem koperasi',
+                    content: generatePengaturanContent()
+                },
+                'setoran': {
+                    title: 'Setoran',
+                    subtitle: 'Proses setoran simpanan anggota',
+                    content: generateSetoranContent()
+                },
+                'penarikan': {
+                    title: 'Penarikan',
+                    subtitle: 'Proses penarikan simpanan',
+                    content: generatePenarikanContent()
+                },
+                'pembayaran': {
+                    title: 'Pembayaran',
+                    subtitle: 'Pembayaran angsuran pinjaman',
+                    content: generatePembayaranContent()
+                },
+                'profil': {
+                    title: 'Profil Saya',
+                    subtitle: 'Data pribadi dan informasi akun',
+                    content: generateProfilContent()
+                },
+                'transaksi': {
+                    title: 'Transaksi',
+                    subtitle: 'Manajemen transaksi harian',
+                    content: generateTransaksiContent()
+                },
+                'laporan_harian': {
+                    title: 'Laporan Harian',
+                    subtitle: 'Laporan transaksi harian',
+                    content: generateLaporanHarianContent()
+                },
+                'simpanan_saya': {
+                    title: 'Simpanan Saya',
+                    subtitle: 'Informasi simpanan pribadi',
+                    content: generateSimpananSayaContent()
+                },
+                'pinjaman_saya': {
+                    title: 'Pinjaman Saya',
+                    subtitle: 'Status pinjaman pribadi',
+                    content: generatePinjamanSayaContent()
+                },
+                'riwayat': {
+                    title: 'Riwayat Transaksi',
+                    subtitle: 'Histori transaksi pribadi',
+                    content: generateRiwayatContent()
+                },
+                'jadwal': {
+                    title: 'Jadwal Kutipan',
+                    subtitle: 'Jadwal kunjungan harian',
+                    content: generateJadwalContent()
+                },
+                'rute': {
+                    title: 'Rute Hari Ini',
+                    subtitle: 'Rute kunjungan petugas lapangan',
+                    content: generateRuteContent()
+                },
+                'nasabah_kunjungan': {
+                    title: 'Nasabah Kunjungan',
+                    subtitle: 'Daftar nasabah yang akan dikunjungi',
+                    content: generateNasabahKunjunganContent()
+                },
+                'kutipan': {
+                    title: 'Kutipan',
+                    subtitle: 'Form kutipan pembayaran',
+                    content: generateKutipanContent()
+                },
+                'gps_log': {
+                    title: 'GPS Log',
+                    subtitle: 'Riwayat lokasi kunjungan',
+                    content: generateGpsLogContent()
+                }
+            };
+            
+            // Get page content or default to dashboard
+            const pageData = pageContents[page] || pageContents['dashboard'];
+            
+            // Update dashboard header
+            const dashboardHeader = appMain.querySelector('.dashboard-header');
+            if (dashboardHeader) {
+                dashboardHeader.innerHTML = `
+                    <h1>${pageData.title}</h1>
+                    <p>${pageData.subtitle}</p>
+                `;
+            }
+            
+            // Update main content
+            if (widgetsContainer) {
+                widgetsContainer.innerHTML = pageData.content;
+            }
+            
+            // Show notification
+            showNotification(`Halaman ${pageData.title} dimuat`, 'success');
+        }
+        
+        // Generate content functions
+        function generateDashboardContent() {
+            // Generate proper dashboard content (not from existing widgets)
+            const userRole = '<?php echo $userRole; ?>';
+            
+            const dashboardContent = {
+                'bos': `
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Anggota</h5>
+                                    <h3>150</h3>
+                                    <small>+12% dari bulan lalu</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Simpanan</h5>
+                                    <h3>Rp 250Jt</h3>
+                                    <small>+15% dari bulan lalu</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Pinjaman Aktif</h5>
+                                    <h3>45</h3>
+                                    <small>+8% dari bulan lalu</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Omzet</h5>
+                                    <h3>Rp 450Jt</h3>
+                                    <small>+18% dari bulan lalu</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Grafik Pertumbuhan</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="growthChart" height="100"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Aktivitas Terbaru</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item">
+                                            <small class="text-muted">2 jam lalu</small><br>
+                                            Anggota baru: Budi Santoso
+                                        </div>
+                                        <div class="list-group-item">
+                                            <small class="text-muted">3 jam lalu</small><br>
+                                            Pinjaman disetujui: Rp 10Jt
+                                        </div>
+                                        <div class="list-group-item">
+                                            <small class="text-muted">5 jam lalu</small><br>
+                                            Simpanan masuk: Rp 5Jt
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                'admin': `
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Anggota Aktif</h5>
+                                    <h3>125</h3>
+                                    <small>+8% dari bulan lalu</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Transaksi Hari Ini</h5>
+                                    <h3>45</h3>
+                                    <small>+10% dari kemarin</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Pinjaman Pending</h5>
+                                    <h3>12</h3>
+                                    <small>-15% dari minggu lalu</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">User Terdaftar</h5>
+                                    <h3>180</h3>
+                                    <small>+6% dari bulan lalu</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Statistik Operasional</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="operationalChart" height="100"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Task List</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item">
+                                            <input type="checkbox" class="form-check-input me-2"> Review 3 pinjaman pending
+                                        </div>
+                                        <div class="list-group-item">
+                                            <input type="checkbox" class="form-check-input me-2"> Update data anggota baru
+                                        </div>
+                                        <div class="list-group-item">
+                                            <input type="checkbox" class="form-check-input me-2"> Backup database mingguan
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                'teller': `
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Transaksi Hari Ini</h5>
+                                    <h3>28</h3>
+                                    <small>+12% dari kemarin</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Setoran</h5>
+                                    <h3>Rp 15Jt</h3>
+                                    <small>+8% dari kemarin</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Penarikan</h5>
+                                    <h3>Rp 8Jt</h3>
+                                    <small>-5% dari kemarin</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Nasabah Dilayani</h5>
+                                    <h3>35</h3>
+                                    <small>+15% dari kemarin</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Transaksi Terkini</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Waktu</th>
+                                                    <th>Nasabah</th>
+                                                    <th>Jenis</th>
+                                                    <th>Jumlah</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>09:15</td>
+                                                    <td>Ahmad</td>
+                                                    <td><span class="badge bg-success">Setoran</span></td>
+                                                    <td>Rp 2Jt</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>09:30</td>
+                                                    <td>Siti</td>
+                                                    <td><span class="badge bg-danger">Penarikan</span></td>
+                                                    <td>Rp 500rb</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10:00</td>
+                                                    <td>Budi</td>
+                                                    <td><span class="badge bg-success">Setoran</span></td>
+                                                    <td>Rp 1Jt</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Quick Actions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary" onclick="navigateTo('setoran')">
+                                            <i class="fas fa-plus me-2"></i>Setoran Baru
+                                        </button>
+                                        <button class="btn btn-warning" onclick="navigateTo('penarikan')">
+                                            <i class="fas fa-minus me-2"></i>Penarikan Baru
+                                        </button>
+                                        <button class="btn btn-success" onclick="navigateTo('pembayaran')">
+                                            <i class="fas fa-money-bill me-2"></i>Pembayaran
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                'collector': `
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Target Hari Ini</h5>
+                                    <h3>15</h3>
+                                    <small>0% dari target</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Kunjungan Selesai</h5>
+                                    <h3>8</h3>
+                                    <small>+53% dari kemarin</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Kutipan Terkumpul</h5>
+                                    <h3>Rp 2.5Jt</h3>
+                                    <small>+18% dari kemarin</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Efisiensi</h5>
+                                    <h3>85%</h3>
+                                    <small>+5% dari kemarin</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Rute Hari Ini</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-1">Rute A - Kelurahan A</h6>
+                                                    <small>8 nasabah • 5 selesai • 3 tersisa</small>
+                                                </div>
+                                                <div class="progress" style="width: 100px; height: 20px;">
+                                                    <div class="progress-bar bg-success" style="width: 62.5%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-1">Rute B - Kelurahan B</h6>
+                                                    <small>7 nasabah • 3 selesai • 4 tersisa</small>
+                                                </div>
+                                                <div class="progress" style="width: 100px; height: 20px;">
+                                                    <div class="progress-bar bg-warning" style="width: 42.8%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Next Action</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-map-marker-alt me-2"></i>
+                                        <strong>Nasabah Berikutnya:</strong><br>
+                                        Pak Haji Ahmad<br>
+                                        <small>Jl. Merdeka No. 45 • 500m</small>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary" onclick="navigateTo('kutipan')">
+                                            <i class="fas fa-money-bill-wave me-2"></i>Form Kutipan
+                                        </button>
+                                        <button class="btn btn-success" onclick="navigateTo('rute')">
+                                            <i class="fas fa-route me-2"></i>Lihat Rute
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                'nasabah': `
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Saldo Simpanan</h5>
+                                    <h3>Rp 5Jt</h3>
+                                    <small>+2% dari bulan lalu</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Simpanan Wajib</h5>
+                                    <h3>Rp 2Jt</h3>
+                                    <small>+5% dari bulan lalu</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Pinjaman Aktif</h5>
+                                    <h3>Rp 10Jt</h3>
+                                    <small>0% dari bulan lalu</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Cicilan Bulanan</h5>
+                                    <h3>Rp 500rb</h3>
+                                    <small>Due: 25 Maret</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Ringkasan Akun</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Jenis Simpanan</th>
+                                                    <th>Saldo</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Simpanan Pokok</td>
+                                                    <td>Rp 100rb</td>
+                                                    <td><span class="badge bg-success">Aktif</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Simpanan Wajib</td>
+                                                    <td>Rp 2Jt</td>
+                                                    <td><span class="badge bg-success">Aktif</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Simpanan Sukarela</td>
+                                                    <td>Rp 2.9Jt</td>
+                                                    <td><span class="badge bg-success">Aktif</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Quick Actions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary" onclick="navigateTo('simpanan_saya')">
+                                            <i class="fas fa-piggy-bank me-2"></i>Detail Simpanan
+                                        </button>
+                                        <button class="btn btn-warning" onclick="navigateTo('pinjaman_saya')">
+                                            <i class="fas fa-hand-holding-usd me-2"></i>Detail Pinjaman
+                                        </button>
+                                        <button class="btn btn-success" onclick="navigateTo('riwayat')">
+                                            <i class="fas fa-history me-2"></i>Riwayat Transaksi
+                                        </button>
+                                        <button class="btn btn-info" onclick="navigateTo('pembayaran')">
+                                            <i class="fas fa-credit-card me-2"></i>Bayar Cicilan
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            };
+            
+            return dashboardContent[userRole] || dashboardContent['bos'];
+        }
+        
+        function generateLaporanContent() {
+            return `
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5><i class="fas fa-chart-line me-2"></i>Laporan Keuangan</h5>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary active">Bulanan</button>
+                                    <button class="btn btn-outline-primary">Tahunan</button>
+                                    <button class="btn btn-outline-primary">Custom</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col-md-3">
+                                        <div class="card bg-primary text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Pendapatan Bulan Ini</h6>
+                                                <h3>Rp 45.2Jt</h3>
+                                                <small>+12% dari bulan lalu</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-success text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Total Simpanan</h6>
+                                                <h3>Rp 250Jt</h3>
+                                                <small>+8% dari bulan lalu</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-warning text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Pinjaman Disalurkan</h6>
+                                                <h3>Rp 180Jt</h3>
+                                                <small>+5% dari bulan lalu</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-info text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Laba Bersih</h6>
+                                                <h3>Rp 12.5Jt</h3>
+                                                <small>+15% dari bulan lalu</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h6>Grafik Pertumbuhan Keuangan</h6>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="financialChart" height="100"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6>Distribusi Aset</h6>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="assetChart" height="100"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6>Detail Laporan Keuangan</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Kategori</th>
+                                                                <th>Januari</th>
+                                                                <th>Februari</th>
+                                                                <th>Maret</th>
+                                                                <th>Total Q1</th>
+                                                                <th>% Growth</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Simpanan Anggota</td>
+                                                                <td>Rp 200Jt</td>
+                                                                <td>Rp 225Jt</td>
+                                                                <td>Rp 250Jt</td>
+                                                                <td>Rp 675Jt</td>
+                                                                <td class="text-success">+25%</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Pinjaman Beredar</td>
+                                                                <td>Rp 150Jt</td>
+                                                                <td>Rp 165Jt</td>
+                                                                <td>Rp 180Jt</td>
+                                                                <td>Rp 495Jt</td>
+                                                                <td class="text-success">+20%</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Pendapatan Bunga</td>
+                                                                <td>Rp 8.5Jt</td>
+                                                                <td>Rp 9.2Jt</td>
+                                                                <td>Rp 10.1Jt</td>
+                                                                <td>Rp 27.8Jt</td>
+                                                                <td class="text-success">+18%</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Biaya Operasional</td>
+                                                                <td>Rp 3.2Jt</td>
+                                                                <td>Rp 3.5Jt</td>
+                                                                <td>Rp 3.8Jt</td>
+                                                                <td>Rp 10.5Jt</td>
+                                                                <td class="text-danger">+19%</td>
+                                                            </tr>
+                                                            <tr class="table-success">
+                                                                <td><strong>Laba Bersih</strong></td>
+                                                                <td><strong>Rp 5.3Jt</strong></td>
+                                                                <td><strong>Rp 5.7Jt</strong></td>
+                                                                <td><strong>Rp 6.3Jt</strong></td>
+                                                                <td><strong>Rp 17.3Jt</strong></td>
+                                                                <td class="text-success"><strong>+19%</strong></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-4">
+                                    <div class="col-md-12 text-center">
+                                        <button class="btn btn-primary me-2">
+                                            <i class="fas fa-download me-2"></i>Export PDF
+                                        </button>
+                                        <button class="btn btn-success me-2">
+                                            <i class="fas fa-file-excel me-2"></i>Export Excel
+                                        </button>
+                                        <button class="btn btn-info">
+                                            <i class="fas fa-print me-2"></i>Cetak Laporan
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             `;
-            
-            document.body.appendChild(notification);
-            
-            // Auto dismiss after 5 seconds
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, 5000);
         }
         
-        // Check session timeout
-        function checkSessionTimeout() {
-            const sessionTimeout = 3600000; // 1 hour in milliseconds
-            const lastActivity = <?php echo time(); ?> * 1000;
-            
-            setInterval(() => {
-                const now = Date.now();
-                if (now - lastActivity > sessionTimeout) {
-                    showNotification('Session expired. Please login again.', 'warning');
-                    setTimeout(() => {
-                        window.location.href = '/login.php';
-                    }, 3000);
-                }
-            }, 60000); // Check every minute
+        function generateNasabahContent() {
+            return `
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5><i class="fas fa-users me-2"></i>Data Nasabah</h5>
+                                <div class="d-flex gap-2">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Cari nasabah..." style="width: 200px;">
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-plus me-1"></i>Tambah Nasabah
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-3">
+                                        <div class="card bg-primary text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Total Nasabah</h6>
+                                                <h3>150</h3>
+                                                <small>+12% dari bulan lalu</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-success text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Nasabah Aktif</h6>
+                                                <h3>125</h3>
+                                                <small>+8% dari bulan lalu</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-warning text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Nasabah Baru</h6>
+                                                <h3>8</h3>
+                                                <small>+25% dari bulan lalu</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-info text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Pinjaman Aktif</h6>
+                                                <h3>45</h3>
+                                                <small>+5% dari bulan lalu</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nama</th>
+                                                <th>Alamat</th>
+                                                <th>Telepon</th>
+                                                <th>Status</th>
+                                                <th>Simpanan</th>
+                                                <th>Pinjaman</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>NSB001</td>
+                                                <td>Budi Santoso</td>
+                                                <td>Jl. Merdeka No. 45</td>
+                                                <td>08123456789</td>
+                                                <td><span class="badge bg-success">Aktif</span></td>
+                                                <td>Rp 5Jt</td>
+                                                <td>Rp 10Jt</td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                        <button class="btn btn-outline-warning"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>NSB002</td>
+                                                <td>Siti Nurhaliza</td>
+                                                <td>Jl. Sudirman No. 12</td>
+                                                <td>08234567890</td>
+                                                <td><span class="badge bg-success">Aktif</span></td>
+                                                <td>Rp 3Jt</td>
+                                                <td>Rp 0</td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                        <button class="btn btn-outline-warning"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>NSB003</td>
+                                                <td>Ahmad Fauzi</td>
+                                                <td>Jl. Gatot Subroto No. 78</td>
+                                                <td>08345678901</td>
+                                                <td><span class="badge bg-warning">Tidak Aktif</span></td>
+                                                <td>Rp 2Jt</td>
+                                                <td>Rp 5Jt</td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                        <button class="btn btn-outline-warning"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <nav>
+                                            <ul class="pagination pagination-sm">
+                                                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button class="btn btn-success me-2">
+                                            <i class="fas fa-file-excel me-2"></i>Export Excel
+                                        </button>
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-download me-2"></i>Export PDF
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generatePinjamanContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman pinjaman sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-hand-holding-usd me-2"></i>Manajemen Pinjaman</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Pengajuan pinjaman</li>
+                                    <li>Approval pinjaman</li>
+                                    <li>Jadwal angsuran</li>
+                                    <li>Pelunasan pinjaman</li>
+                                    <li>Laporan pinjaman</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateSimpananContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman simpanan sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-piggy-bank me-2"></i>Manajemen Simpanan</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Jenis simpanan (wajib, sukarela, berjangka)</li>
+                                    <li>Setoran dan penarikan</li>
+                                    <li>Bunga simpanan</li>
+                                    <li>Laporan simpanan</li>
+                                    <li>Analisis simpanan</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generatePengaturanContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman pengaturan sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-cog me-2"></i>Pengaturan Sistem</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Pengaturan aplikasi</li>
+                                    <li>Manajemen user</li>
+                                    <li>Backup & restore</li>
+                                    <li>System configuration</li>
+                                    <li>Audit log</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateSetoranContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman setoran sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-plus-circle me-2"></i>Form Setoran</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Pencarian anggota berdasarkan nomor rekening atau nama</li>
+                                    <li>Form setoran dengan validasi otomatis</li>
+                                    <li>Cetak bukti setoran</li>
+                                    <li>Integrasi dengan sistem kas</li>
+                                    <li>Laporan transaksi harian</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generatePenarikanContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman penarikan sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-minus-circle me-2"></i>Form Penarikan</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Validasi saldo penarikan</li>
+                                    <li>Otorisasi penarikan</li>
+                                    <li>Cetak bukti penarikan</li>
+                                    <li>Batas penarikan harian</li>
+                                    <li>Laporan penarikan</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generatePembayaranContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman pembayaran sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-credit-card me-2"></i>Pembayaran Angsuran</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Pembayaran angsuran pinjaman</li>
+                                    <li>Perhitungan denda</li>
+                                    <li>Cetak bukti pembayaran</li>
+                                    <li>Update jadwal angsuran</li>
+                                    <li>Laporan pembayaran</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateProfilContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman profil sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-user me-2"></i>Informasi Profil</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Data pribadi lengkap</li>
+                                    <li>Informasi rekening simpanan</li>
+                                    <li>Status pinjaman aktif</li>
+                                    <li>Update profil dan password</li>
+                                    <li>Dokumen pribadi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Additional content generators for all roles
+        function generateTransaksiContent() {
+            return `
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5><i class="fas fa-exchange-alt me-2"></i>Manajemen Transaksi</h5>
+                                <div class="d-flex gap-2">
+                                    <select class="form-select form-select-sm" style="width: 150px;">
+                                        <option>Semua Jenis</option>
+                                        <option>Setoran</option>
+                                        <option>Penarikan</option>
+                                        <option>Pinjaman</option>
+                                        <option>Pembayaran</option>
+                                    </select>
+                                    <input type="date" class="form-control form-control-sm" style="width: 150px;">
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-plus me-1"></i>Transaksi Baru
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-3">
+                                        <div class="card bg-success text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Transaksi Hari Ini</h6>
+                                                <h3>28</h3>
+                                                <small>+12% dari kemarin</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-primary text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Total Setoran</h6>
+                                                <h3>Rp 15Jt</h3>
+                                                <small>+8% dari kemarin</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-warning text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Total Penarikan</h6>
+                                                <h3>Rp 8Jt</h3>
+                                                <small>-5% dari kemarin</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-info text-white">
+                                            <div class="card-body text-center">
+                                                <h6>Nilai Transaksi</h6>
+                                                <h3>Rp 23Jt</h3>
+                                                <small>+3% dari kemarin</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Waktu</th>
+                                                <th>Nasabah</th>
+                                                <th>Jenis</th>
+                                                <th>Jumlah</th>
+                                                <th>Metode</th>
+                                                <th>Kasir</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>TRX001</td>
+                                                <td>09:15</td>
+                                                <td>Budi Santoso</td>
+                                                <td><span class="badge bg-success">Setoran</span></td>
+                                                <td>Rp 2.000.000</td>
+                                                <td>Tunai</td>
+                                                <td>Teller 1</td>
+                                                <td><span class="badge bg-success">Sukses</span></td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-primary"><i class="fas fa-receipt"></i></button>
+                                                        <button class="btn btn-outline-info"><i class="fas fa-print"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>TRX002</td>
+                                                <td>09:30</td>
+                                                <td>Siti Nurhaliza</td>
+                                                <td><span class="badge bg-danger">Penarikan</span></td>
+                                                <td>Rp 500.000</td>
+                                                <td>Transfer</td>
+                                                <td>Teller 2</td>
+                                                <td><span class="badge bg-success">Sukses</span></td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-primary"><i class="fas fa-receipt"></i></button>
+                                                        <button class="btn btn-outline-info"><i class="fas fa-print"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>TRX003</td>
+                                                <td>10:00</td>
+                                                <td>Ahmad Fauzi</td>
+                                                <td><span class="badge bg-warning">Pinjaman</span></td>
+                                                <td>Rp 5.000.000</td>
+                                                <td>Transfer</td>
+                                                <td>Teller 1</td>
+                                                <td><span class="badge bg-warning">Pending</span></td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-success"><i class="fas fa-check"></i></button>
+                                                        <button class="btn btn-outline-danger"><i class="fas fa-times"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <nav>
+                                            <ul class="pagination pagination-sm">
+                                                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button class="btn btn-success me-2">
+                                            <i class="fas fa-file-excel me-2"></i>Export Excel
+                                        </button>
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-download me-2"></i>Export PDF
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateLaporanHarianContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman laporan harian sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-clipboard-list me-2"></i>Laporan Harian</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Ringkasan transaksi harian</li>
+                                    <li>Laporan kas harian</li>
+                                    <li>Statistik transaksi</li>
+                                    <li>Export laporan harian</li>
+                                    <li>Grafik transaksi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateSimpananSayaContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman simpanan pribadi sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-piggy-bank me-2"></i>Simpanan Saya</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Saldo simpanan</li>
+                                    <li>Riwayat setoran/penarikan</li>
+                                    <li>Bunga simpanan</li>
+                                    <li>Permintaan penarikan online</li>
+                                    <li>Laporan simpanan pribadi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generatePinjamanSayaContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman pinjaman pribadi sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-hand-holding-usd me-2"></i>Pinjaman Saya</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Status pinjaman aktif</li>
+                                    <li>Jadwal angsuran</li>
+                                    <li>Riwayat pembayaran</li>
+                                    <li>Pengajuan pinjaman online</li>
+                                    <li>Laporan pinjaman pribadi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateRiwayatContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman riwayat transaksi sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-history me-2"></i>Riwayat Transaksi</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Histori semua transaksi</li>
+                                    <li>Filter berdasarkan tanggal</li>
+                                    <li>Filter berdasarkan jenis transaksi</li>
+                                    <li>Export riwayat transaksi</li>
+                                    <li>Cetak bukti transaksi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateJadwalContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman jadwal kutipan sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-calendar-alt me-2"></i>Jadwal Kutipan</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Jadwal kunjungan harian</li>
+                                    <li>Daftar nasabah yang akan dikunjungi</li>
+                                    <li>Optimasi rute kunjungan</li>
+                                    <li>Notifikasi jadwal</li>
+                                    <li>Laporan kehadiran</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateRuteContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman rute kunjungan sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-route me-2"></i>Rute Hari Ini</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Peta rute kunjungan</li>
+                                    <li>Informasi lokasi nasabah</li>
+                                    <li>Estimasi waktu perjalanan</li>
+                                    <li>Progress kunjungan</li>
+                                    <li>GPS tracking real-time</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateNasabahKunjunganContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman nasabah kunjungan sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-user-friends me-2"></i>Nasabah Kunjungan</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Daftar nasabah yang akan dikunjungi</li>
+                                    <li>Informasi kontak nasabah</li>
+                                    <li>Catatan kunjungan</li>
+                                    <li>Status pembayaran</li>
+                                    <li>Histori kunjungan</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateKutipanContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman kutipan sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-money-bill-wave me-2"></i>Form Kutipan</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Form pembayaran angsuran</li>
+                                    <li>Validasi pembayaran</li>
+                                    <li>Cetak bukti pembayaran</li>
+                                    <li>Update jadwal angsuran</li>
+                                    <li>Laporan kutipan harian</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateGpsLogContent() {
+            return `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Coming Soon:</strong> Halaman GPS log sedang dalam pengembangan.
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-map-marked-alt me-2"></i>GPS Log</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Fitur yang akan tersedia:</p>
+                                <ul>
+                                    <li>Riwayat lokasi kunjungan</li>
+                                    <li>Peta jejak perjalanan</li>
+                                    <li>Waktu kunjungan per nasabah</li>
+                                    <li>Export GPS data</li>
+                                    <li>Laporan kehadiran</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
         
         // Handle window resize

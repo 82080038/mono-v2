@@ -2,7 +2,7 @@
 
 ## 📚 **API Overview**
 
-Complete RESTful API system for KSP Lam Gabe Jaya with proper authentication, validation, and error handling.
+Complete RESTful API system for KSP Lam Gabe Jaya with proper authentication, validation, and error handling. Supporting dynamic navigation system and role-based access control.
 
 ---
 
@@ -18,6 +18,397 @@ All API endpoints require authentication except for the login endpoint.
 ```
 Content-Type: application/json
 Authorization: Bearer <token>
+```
+
+---
+
+## 🎯 **User Roles & Permissions**
+
+### **Role Hierarchy:**
+1. **BOS** - Full system access
+2. **Admin** - Operational management
+3. **Teller** - Daily transactions
+4. **Collector** - Field operations
+5. **Nasabah** - Personal access
+
+### **Permission Matrix:**
+| Endpoint | BOS | Admin | Teller | Collector | Nasabah |
+|----------|-----|-------|--------|-----------|---------|
+| `/auth/login` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/auth/logout` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/users/*` | ✅ | ✅ | ❌ | ❌ | ❌ |
+| `/transactions/*` | ✅ | ✅ | ✅ | ⚠️ | ⚠️ |
+| `/reports/*` | ✅ | ✅ | ❌ | ❌ | ❌ |
+
+---
+
+## 📡 **API Endpoints**
+
+### **Authentication**
+
+#### **POST /api/auth.php**
+Login endpoint untuk mendapatkan session.
+
+**Request:**
+```http
+POST /api/auth.php
+Content-Type: application/x-www-form-urlencoded
+
+action=login&username=bos&password=bos
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "user": {
+        "id": 1,
+        "username": "bos",
+        "role": "bos",
+        "name": "Administrator",
+        "email": "admin@ksp-lamgabejaya.com",
+        "phone": "08123456789",
+        "address": "Jakarta, Indonesia"
+    },
+    "message": "Login successful",
+    "token": "session_token_here"
+}
+```
+
+**Error Response:**
+```json
+{
+    "success": false,
+    "message": "Invalid username or password",
+    "error_code": "AUTH_001"
+}
+```
+
+#### **POST /api/auth.php (Logout)**
+Logout endpoint untuk menghapus session.
+
+**Request:**
+```http
+POST /api/auth.php
+Content-Type: application/x-www-form-urlencoded
+
+action=logout
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Logout successful"
+}
+```
+
+---
+
+## 👥 **User Management**
+
+### **GET /api/users.php**
+Get all users (BOS & Admin only).
+
+**Response:**
+```json
+{
+    "success": true,
+    "users": [
+        {
+            "id": 1,
+            "username": "bos",
+            "role": "bos",
+            "name": "Administrator",
+            "email": "admin@ksp-lamgabejaya.com",
+            "status": "active",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    ],
+    "total": 1
+}
+```
+
+### **POST /api/users.php**
+Create new user (BOS only).
+
+**Request:**
+```json
+{
+    "action": "create",
+    "username": "newuser",
+    "password": "password123",
+    "role": "teller",
+    "name": "New User",
+    "email": "user@example.com",
+    "phone": "08123456789",
+    "address": "Jakarta, Indonesia"
+}
+```
+
+---
+
+## 💰 **Transaction Management**
+
+### **GET /api/transactions.php**
+Get transactions dengan filtering.
+
+**Query Parameters:**
+- `page`: Page number (default: 1)
+- `limit`: Items per page (default: 20)
+- `type`: Transaction type (setoran, penarikan, pinjaman)
+- `user_id`: Filter by user
+- `date_from`: Start date filter
+- `date_to`: End date filter
+
+**Response:**
+```json
+{
+    "success": true,
+    "transactions": [
+        {
+            "id": 1,
+            "user_id": 1,
+            "type": "setoran",
+            "amount": 1000000,
+            "description": "Simpanan bulanan",
+            "status": "completed",
+            "created_at": "2024-01-01T10:00:00Z",
+            "user": {
+                "name": "Budi Santoso",
+                "username": "budi"
+            }
+        }
+    ],
+    "pagination": {
+        "current_page": 1,
+        "total_pages": 5,
+        "total_items": 100
+    }
+}
+```
+
+### **POST /api/transactions.php**
+Create new transaction.
+
+**Request:**
+```json
+{
+    "action": "create",
+    "user_id": 1,
+    "type": "setoran",
+    "amount": 1000000,
+    "description": "Simpanan bulanan"
+}
+```
+
+---
+
+## 📊 **Reports & Analytics**
+
+### **GET /api/reports.php**
+Get financial reports.
+
+**Query Parameters:**
+- `type`: Report type (daily, monthly, yearly)
+- `date_from`: Start date
+- `date_to`: End date
+- `format`: Response format (json, csv)
+
+**Response:**
+```json
+{
+    "success": true,
+    "report": {
+        "period": "2024-01",
+        "total_savings": 250000000,
+        "total_loans": 180000000,
+        "total_transactions": 150,
+        "new_members": 8,
+        "active_members": 125,
+        "revenue": 12500000,
+        "expenses": 3200000,
+        "profit": 9300000
+    },
+    "charts": {
+        "savings_growth": [
+            {"date": "2024-01-01", "amount": 200000000},
+            {"date": "2024-01-31", "amount": 250000000}
+        ],
+        "loan_distribution": [
+            {"type": "produktif", "amount": 120000000},
+            {"type": "konsumtif", "amount": 60000000}
+        ]
+    }
+}
+```
+
+---
+
+## 📱 **Dynamic Content API**
+
+### **GET /api/content.php**
+Get dynamic content untuk SPA navigation.
+
+**Query Parameters:**
+- `page`: Page name (dashboard, laporan, nasabah, dll)
+- `role`: User role (bos, admin, teller, collector, nasabah)
+
+**Response:**
+```json
+{
+    "success": true,
+    "page": "dashboard",
+    "title": "Dashboard BOS",
+    "subtitle": "Overview Management - 22 Maret 2026",
+    "content": {
+        "stats": [
+            {"label": "Total Anggota", "value": "150", "change": "+12%"},
+            {"label": "Total Simpanan", "value": "Rp 250Jt", "change": "+15%"}
+        ],
+        "widgets": [
+            {"type": "chart", "title": "Grafik Pertumbuhan"},
+            {"type": "activity", "title": "Aktivitas Terbaru"}
+        ]
+    },
+    "navigation": {
+        "current": "dashboard",
+        "menu_items": [
+            {"key": "dashboard", "title": "Dashboard", "url": "#dashboard"},
+            {"key": "laporan", "title": "Laporan", "url": "#laporan"}
+        ]
+    }
+}
+```
+
+---
+
+## 🚨 **Error Handling**
+
+### **Standard Error Format:**
+```json
+{
+    "success": false,
+    "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Invalid input data",
+        "details": {
+            "field": "amount",
+            "issue": "Amount must be greater than 0"
+        }
+    }
+}
+```
+
+### **Error Codes:**
+- `AUTH_001`: Invalid credentials
+- `AUTH_002`: Session expired
+- `AUTH_003`: Insufficient permissions
+- `VALIDATION_ERROR`: Invalid input data
+- `NOT_FOUND`: Resource not found
+- `SERVER_ERROR`: Internal server error
+
+---
+
+## 📝 **Response Format**
+
+### **Success Response:**
+```json
+{
+    "success": true,
+    "data": { ... },
+    "message": "Operation successful",
+    "timestamp": "2024-01-01T12:00:00Z"
+}
+```
+
+### **Paginated Response:**
+```json
+{
+    "success": true,
+    "data": [ ... ],
+    "pagination": {
+        "current_page": 1,
+        "per_page": 20,
+        "total_pages": 5,
+        "total_items": 100,
+        "has_next": true,
+        "has_prev": false
+    }
+}
+```
+
+---
+
+## 🔧 **Development & Testing**
+
+### **Local Development:**
+```bash
+# Start development server
+php -S localhost:8000
+
+# Run tests
+php test-api-endpoints.php
+
+# Check API status
+curl -X GET http://localhost:8000/api/status.php
+```
+
+### **API Testing Tools:**
+- **Postman Collection**: Available in `/docs/postman/`
+- **Automated Tests**: `test-api-*.php` files
+- **Documentation**: Interactive API docs at `/api/docs`
+
+---
+
+## 🚀 **Rate Limiting & Security**
+
+### **Rate Limiting:**
+- **BOS/Admin**: 1000 requests/hour
+- **Teller/Collector**: 500 requests/hour
+- **Nasabah**: 200 requests/hour
+
+### **Security Headers:**
+```http
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Strict-Transport-Security: max-age=31536000
+```
+
+---
+
+## 📞 **Support**
+
+### **API Support:**
+- **Documentation**: `/api/docs`
+- **Status Check**: `/api/status`
+- **Version**: `/api/version`
+- **Health Check**: `/api/health`
+
+### **Contact:**
+- **Email**: api-support@ksp-lamgabejaya.com
+- **Documentation**: https://docs.ksp-lamgabejaya.com/api
+- **GitHub**: https://github.com/ksp-lamgabejaya/api
+
+---
+
+## 🔄 **Version History**
+
+### **v2.0.0** - Current
+- ✅ Dynamic content API
+- ✅ Role-based endpoints
+- ✅ Enhanced error handling
+- ✅ SPA navigation support
+
+### **v1.0.0** - Original
+- ✅ Basic authentication
+- ✅ CRUD operations
+- ✅ Simple reporting
+
+---
+
+**KSP Lam Gabe Jaya API v2.0** - RESTful API for Modern Cooperatives 🏦✨
 X-Auth-Token: <token>
 ```
 

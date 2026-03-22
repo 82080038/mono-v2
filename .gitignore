@@ -1,43 +1,141 @@
-# Only ignore truly unnecessary files for development
-# Keep all application files for development on other computers
+# KSP Lam Gabe Jaya - .gitignore
+# Optimized untuk development team collaboration
 
-# Temporary files
-*.tmp
-*.temp
+# Environment files
+.env
+.env.local
+.env.production
+config/config.php
+
+# Logs dan temporary files
+logs/
+*.log
+error.log
+access.log
 temp/
 tmp/
+*.tmp
+*.temp
+cookies.txt
+temp_*
 
-# OS specific files
+# Database backup files (keep structure)
+*.sql.backup
+*.sql.bak
+database/*.backup
+database/*.bak
+
+# IDE dan editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Editor files
-*.swp
-*.swo
-*~
-
-# Node modules (if any)
+# Node modules (jika menggunakan npm)
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Build artifacts (if any)
+# Composer (jika menggunakan composer)
+vendor/
+composer.lock
+
+# Build files
 build/
 dist/
+*.min.js
+*.min.css
 
-# Large binary files that should be handled separately
-*.exe
-*.dmg
-*.pkg
-*.deb
-*.rpm
+# Cache
+cache/
+*.cache
+.opcache/
 
-# Keep all application files for development:
-# - All PHP files
-# - All database files
-# - All configuration files
-# - All documentation
-# - All assets
-# - All uploads (for development)
-# - All logs (for debugging)
-# - All backup files (for development reference)
-# - All original files (for development reference)
+# Upload files
+uploads/
+files/
+attachments/
+
+# Session files
+sessions/
+*.sess
+
+# Certificate files
+*.pem
+*.key
+*.crt
+
+# Local development
+localhost/
+local/
+dev-*
+
+# Documentation build
+docs/build/
+docs/_build/
+
+# OS generated files
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Editor backup files
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# =====================================================
+# FILES TO KEEP FOR DEVELOPMENT COLLABORATION
+# =====================================================
+
+# Keep all test files (important for development)
+!test-login-all-roles.php
+!test-dynamic-navigation.php
+!test-comprehensive-errors.php
+!test-javascript-syntax.php
+!test-dynamic-content-pages.php
+!test-role-based-statistics.php
+!test-all-roles-consistency.php
+!test-session-management.php
+
+# Keep all documentation files
+!README.md
+!DEVELOPMENT_GUIDE.md
+!API_DOCUMENTATION.md
+!DATABASE_DOCUMENTATION.md
+!SYSTEM_STATUS_REPORT.md
+!UPDATE_SUMMARY.md
+
+# Keep database structure files
+!database/gabe.sql
+!database/gabe_v2.sql
+!database/update_gabe_v2.sql
+!database/DATABASE_DOCUMENTATION.md
+
+# Keep important assets
+!assets/css/fontawesome-fallback.css
+!assets/js/
+
+# Keep API documentation
+!api/API_DOCUMENTATION.md
+
+# Keep all application files for development
+!*.php
+!pages/
+!api/
+!config/
+!assets/
+
+# Keep configuration examples
+!config/config.example.php

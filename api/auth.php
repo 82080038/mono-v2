@@ -151,20 +151,6 @@ try {
  * Authenticate with database
  */
 function authenticateWithDatabase($username, $password) {
-    // Fallback authentication for testing
-    if ($username === 'admin' && $password === 'password') {
-        return [
-            'id' => 1,
-            'username' => 'admin',
-            'full_name' => 'Administrator',
-            'role' => 'admin',
-            'status' => 'active',
-            'email' => 'admin@kspgabejaya.com',
-            'last_login' => date('Y-m-d H:i:s'),
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-    }
-    
     // Try database connection if constants are available
     if (defined('DB_HOST') && defined('DB_NAME') && defined('DB_USER') && defined('DB_PASSWORD')) {
         try {
@@ -178,25 +164,59 @@ function authenticateWithDatabase($username, $password) {
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
             ]);
             
-            // Query user
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username AND status = 'active'");
+            // Query user with role information
+            $stmt = $pdo->prepare("
+                SELECT u.id, u.username, u.full_name, u.email, u.status, u.last_login, u.created_at,
+                       r.role_name, r.role_display_name, r.permissions
+                FROM users u 
+                JOIN role_master r ON u.role_id = r.id 
+                WHERE u.username = :username AND u.status = 'active' AND r.is_active = TRUE
+            ");
             $stmt->execute(['username' => $username]);
             $user = $stmt->fetch();
             
-            if ($user && password_verify($password, $user['password'])) {
-                // Update last login
-                $updateStmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = :id");
-                $updateStmt->execute(['id' => $user['id']]);
+            if ($user) {
+                // Get password for verification
+                $pwdStmt = $pdo->prepare("SELECT password FROM users WHERE username = :username");
+                $pwdStmt->execute(['username' => $username]);
+                $pwdData = $pwdStmt->fetch();
                 
-                // Remove sensitive data
-                unset($user['password']);
-                return $user;
+                if ($pwdData && password_verify($password, $pwdData['password'])) {
+                    // Update last login
+                    $updateStmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = :id");
+                    $updateStmt->execute(['id' => $user['id']]);
+                    
+                    // Add role data to user object
+                    $user['role'] = $user['role_name'];
+                    $user['permissions'] = json_decode($user['permissions'], true);
+                    
+                    return $user;
+                }
             }
             
         } catch (Exception $e) {
             // Log error but continue with fallback
             error_log("Database authentication failed: " . $e->getMessage());
         }
+    }
+    
+    // Fallback authentication for testing (remove in production)
+    $fallbackUsers = [
+        'bos' => ['id' => 1, 'username' => 'bos', 'full_name' => 'Pemilik Koperasi', 'role' => 'bos', 'role_display_name' => 'Bos/Pemilik Koperasi'],
+        'admin' => ['id' => 2, 'username' => 'admin', 'full_name' => 'Administrator', 'role' => 'admin', 'role_display_name' => 'Administrator'],
+        'teller' => ['id' => 3, 'username' => 'teller', 'full_name' => 'Petugas Teller', 'role' => 'teller', 'role_display_name' => 'Petugas Teller'],
+        'collector' => ['id' => 4, 'username' => 'collector', 'full_name' => 'Petugas Lapangan', 'role' => 'collector', 'role_display_name' => 'Petugas Lapangan'],
+        'nasabah' => ['id' => 5, 'username' => 'nasabah', 'full_name' => 'Nasabah', 'role' => 'nasabah', 'role_display_name' => 'Nasabah/Anggota']
+    ];
+    
+    if (isset($fallbackUsers[$username]) && $password === $username) {
+        $user = $fallbackUsers[$username];
+        $user['status'] = 'active';
+        $user['email'] = $username . '@ksplamgabejaya.co.id';
+        $user['last_login'] = date('Y-m-d H:i:s');
+        $user['created_at'] = date('Y-m-d H:i:s');
+        $user['permissions'] = [];
+        return $user;
     }
     
     return null;
