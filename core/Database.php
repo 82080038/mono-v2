@@ -32,7 +32,7 @@ class Database {
         $this->host = DB_HOST ?? 'localhost';
         $this->name = DB_NAME ?? 'gabe';
         $this->user = DB_USER ?? 'root';
-        $this->password = DB_PASSWORD ?? '';
+        $this->password = DB_PASS ?? (DB_PASSWORD ?? '');
         $this->charset = DB_CHARSET ?? 'utf8mb4';
         
         $this->connect();
@@ -44,7 +44,7 @@ class Database {
      */
     private function connect() {
         try {
-            $dsn = "mysql:host={$this->host};dbname={$this->name};charset={$this->charset}";
+            $dsn = "mysql:host={$this->host};dbname={$this->name};charset={$this->charset};unix_socket=/opt/lampp/var/mysql/mysql.sock";
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
