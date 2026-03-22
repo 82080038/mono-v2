@@ -39,4 +39,5 @@ dist/
 # - All assets
 # - All uploads (for development)
 # - All logs (for debugging)
-backup-original/
+# - All backup files (for development reference)
+# - All original files (for development reference)
