@@ -1,0 +1,114 @@
+{
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "successRate": "100.0"
+  },
+  "tests": [
+    {
+      "test": "File Structure",
+      "passed": true,
+      "details": {
+        "pages/admin/dashboard.html": true,
+        "assets/js/content-renderer.js": true,
+        "assets/css/dashboard-layout.css": true,
+        "assets/css/dashboard.css": true,
+        "assets/js/indonesian-translator.js": true
+      },
+      "error": null,
+      "timestamp": "2026-03-21T17:26:02.281Z"
+    },
+    {
+      "test": "HTTP Status",
+      "passed": true,
+      "details": {
+        "http://localhost/mono-v2/pages/admin/dashboard.html": {
+          "statusCode": "200",
+          "isOK": true
+        },
+        "http://localhost/mono-v2/assets/js/content-renderer.js": {
+          "statusCode": "200",
+          "isOK": true
+        },
+        "http://localhost/mono-v2/assets/css/dashboard-layout.css": {
+          "statusCode": "200",
+          "isOK": true
+        },
+        "http://localhost/mono-v2/assets/css/dashboard.css": {
+          "statusCode": "200",
+          "isOK": true
+        }
+      },
+      "error": null,
+      "timestamp": "2026-03-21T17:26:02.322Z"
+    },
+    {
+      "test": "Content Structure",
+      "passed": true,
+      "details": {
+        "sidebar": true,
+        "dashboard-main": true,
+        "dynamic-content": true,
+        "content-renderer": true,
+        "navigation-links": true,
+        "bootstrap": true,
+        "font-awesome": true
+      },
+      "error": null,
+      "timestamp": "2026-03-21T17:26:02.323Z"
+    },
+    {
+      "test": "SPA Components",
+      "passed": true,
+      "details": {
+        "ContentRenderer class": true,
+        "setupNavigation": true,
+        "loadContent": true,
+        "renderContent": true,
+        "updateActiveNav": true,
+        "getPageContent": true,
+        "getDashboardContent": true,
+        "getMembersContent": true,
+        "getNPLContent": true,
+        "DOMContentLoaded listener": true,
+        "navigation interception": true
+      },
+      "error": null,
+      "timestamp": "2026-03-21T17:26:02.324Z"
+    },
+    {
+      "test": "Assets Loading",
+      "passed": true,
+      "details": {
+        "assets/css/dashboard-layout.css": {
+          "type": "css",
+          "size": 9521,
+          "hasContent": true,
+          "isOK": true
+        },
+        "assets/css/dashboard.css": {
+          "type": "css",
+          "size": 773,
+          "hasContent": true,
+          "isOK": true
+        },
+        "assets/js/content-renderer.js": {
+          "type": "js",
+          "size": 28179,
+          "hasContent": true,
+          "isOK": true
+        },
+        "assets/js/indonesian-translator.js": {
+          "type": "js",
+          "size": 12294,
+          "hasContent": true,
+          "isOK": true
+        }
+      },
+      "error": null,
+      "timestamp": "2026-03-21T17:26:02.325Z"
+    }
+  ],
+  "timestamp": "2026-03-21T17:26:02.331Z"
+}

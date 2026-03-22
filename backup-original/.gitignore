@@ -1,0 +1,11 @@
+# Only exclude truly sensitive production files
+.env.production
+
+# Exclude very large generated files
+*.sql.gz
+*.zip
+*.tar.gz
+
+# IDE/OS system files
+.DS_Store
+Thumbs.db

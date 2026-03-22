@@ -1,633 +1,340 @@
-# KSP Lam Gabe Jaya - Enhanced Financial Management System
+# KSP Lam Gabe Jaya - Sistem Manajemen Koperasi
 
-[![PWA](https://img.shields.io/badge/PWA-Ready-blue)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
-[![Mobile](https://img.shields.io/badge/Mobile-Optimized-green)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
-[![Production](https://img.shields.io/badge/Production-Ready-brightgreen)](https://github.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
-[![Database](https://img.shields.io/badge/Database-Integrated-orange)](https://www.phpmyadmin.net)
-[![Multi-DB](https://img.shields.io/badge/Multi--Database-Ready-purple)](https://www.mysql.com)
+## 🏢 Tentang Aplikasi
 
-## 📖 Tentang Aplikasi
+KSP Lam Gabe Jaya adalah sistem manajemen koperasi simpan pinjam yang dikembangkan dengan arsitektur modern 3-tier untuk memberikan solusi yang handal, aman, dan mudah digunakan.
 
-**KSP Lam Gabe Jaya** adalah sistem manajemen keuangan yang dirancang khusus untuk operasional door-to-door dengan teknologi modern. Aplikasi ini menggabungkan Progressive Web App (PWA) dengan sistem keuangan komprehensif untuk memberikan layanan optimal bagi semua pengguna.
+## 📋 Fitur Utama
 
-### 🎯 Tujuan Utama
+### 🔐 Authentication & Authorization
+- Multi-role user system (Admin, Manager, Staff, Member)
+- Secure session management
+- API-based authentication
+- Password hashing with bcrypt
 
-- 🏦 **Digitalisasi Keuangan**: Mengubah proses manual menjadi digital
-- 📱 **Mobile First**: Kemudahan akses via smartphone
-- 💰 **Manajemen Keuangan**: Kontrol transaksi yang efisien
-- 👥 **Pelayanan Nasabah**: Layanan cepat dan transparan
-- 📍 **Monitoring Staff**: Tracking produktivitas lapangan
-- 🤖 **AI-Powered**: Keputusan cerdas dengan artificial intelligence
-- 🛡️ **Risk Management**: Manajemen risiko komprehensif
-- 🗄️ **Multi-Database**: Arsitektur database terintegrasi
-- 🔗 **People Management**: Sistem manajemen data orang terpusat
+### 👥 Manajemen Anggota
+- Registrasi anggota baru
+- Validasi data anggota (NIK, telepon, alamat)
+- Status keanggotaan (active, inactive, suspended)
+- Riwayat transaksi anggota
 
-## 🏢 Profil Usaha
+### 💰 Manajemen Simpanan
+- Jenis simpanan (wajib, sukarela, berjangka)
+- Perhitungan bunga otomatis
+- Laporan simpanan anggota
+- Penarikan simpanan
 
-**KSP Lam Gabe Jaya** adalah lembaga keuangan yang berfokus pada:
+### 🏦 Manajemen Pinjaman
+- Pengajuan pinjaman online
+- Proses approval multi-level
+- Perhitungan bunga dan angsuran
+- Jadwal pembayaran angsuran
+- Pelunasan pinjaman
 
-- 💰 **Simpanan Fleksibel**: Setoran wajib dan sukarela
-- 📈 **Pinjaman Produktif**: Modal usaha anggota
-- 📈 **Pinjaman Konsumtif**: Kebutuhan pribadi
-- 🏠 **Door-to-Door Service**: Layanan langsung ke rumah
-- 📊 **Bagi Hasil**: Pembagian keuntungan transparan
-- 🤖 **AI Analytics**: Analisis prediktif dan rekomendasi
-- 🛡️ **Guarantee Management**: Sistem penjaminan pinjaman
-- 🗄️ **Data Integration**: Integrasi multi-database
+### 📊 Laporan & Analisis
+- Laporan keuangan bulanan/tahunan
+- Analisis performa koperasi
+- Export laporan ke PDF/Excel
+- Dashboard real-time
 
-## 👥 Pengguna Aplikasi
+## 🏗️ Arsitektur Sistem
 
-### 👑 Administrator (Admin)
-- 🔐 **Akses Penuh**: Kontrol sistem keseluruhan
-- 👥 **Manajemen Nasabah**: Registrasi & verifikasi
-- 💰 **Manajemen Pinjaman**: Approve & monitoring
-- 📊 **Laporan Komprehensif**: Keuangan & operasional
-- ⚙️ **Pengaturan Sistem**: Konfigurasi aplikasi
-- 🤖 **AI Insights**: Dashboard analisis cerdas
-- 🛡️ **Risk Management**: Manajemen risiko & penjaminan
-- 🗄️ **Database Management**: Kelola multi-database
-
-### 👨‍💼 Staff/Karyawan Lapangan
-- 🔐 **Akses Operasional**: Layanan nasabah
-- 👥 **Pendaftaran**: Input data nasabah baru
-- 💰 **Transaksi**: Proses simpanan & pinjaman
-- 📍 **GPS Tracking**: Laporkan lokasi kunjungan
-- 📋 **Target Harian**: Monitoring pencapaian
-- 💰 **Circular Funding**: Gunakan uang tagihan langsung
-- 🛡️ **Guarantee Handling**: Kelola penjaminan pinjaman
-- 📊 **Risk Assessment**: Analisis risiko nasabah
-
-### 👤 Nasabah (Member)
-- 🔐 **Akses Personal**: Akun pribadi
-- 👤 **Profil**: Update data diri
-- 💰 **Simpanan**: Lihat & tambah simpanan
-- 📈 **Pinjaman**: Ajukan & lihat cicilan
-- 💸 **Pembayaran**: Bayar cicilan online
-- 📊 **Riwayat**: Semua transaksi
-- 🛡️ **Guarantee Info**: Info penjaminan pinjaman
-
-## 🚀 Fitur Utama
-
-### 📱 Progressive Web App (PWA)
-- 📱 **Installable**: Bisa diinstall seperti app native
-- 💾 **Offline Support**: Fungsi tanpa internet
-- ⚡ **Fast Loading**: Caching untuk performa
-- 📱 **Mobile Optimized**: Interface touch-friendly
-- 🔄 **Auto Update**: Update otomatis aplikasi
-
-### 🏦 Manajemen Keuangan
-- 👥 **Member Management**: CRUD data nasabah
-- 💰 **Loan Management**: Pengajuan hingga pencairan
-- 🏦 **Savings Management**: Simpanan wajib & sukarela
-- 📊 **Financial Reports**: Laporan keuangan lengkap
-- 📈 **SHU Calculation**: Bagi hasil otomatis
-
-### 🛡️ Guarantee & Risk Management System
-- 🛡️ **Loan Guarantees**: Sistem penjaminan pinjaman
-- 🔍 **Risk Assessment**: Analisis risiko otomatis
-- 👥 **Guarantor Management**: Kelola data penjamin
-- 📊 **Collective Risk**: Analisis risiko kolektif
-- 🤝 **Relationship Analysis**: Analisis hubungan penjamin
-- 💰 **Payment Tracking**: Tracking pembayaran penjamin
-- 📋 **Collection Strategies**: Strategi penagihan
-- ⚖️ **Legal Actions**: Tracking tindakan hukum
-- 📊 **Risk Reports**: Laporan risiko komprehensif
-
-### 🗄️ Multi-Database Architecture
-- 🗄️ **Orang Database**: Sistem manajemen data orang terpusat
-- 📊 **Alamat Database**: Database alamat Indonesia lengkap
-- 🏦 **Koperasi Database**: Database operasional koperasi
-- 🔗 **Integration API**: API untuk integrasi antar database
-- 👥 **People Management**: Data orang terintegrasi
-- 📍 **Address Integration**: Alamat lengkap dengan latlong
-
-### 📍 GPS Tracking System
-- 🗺️ **Real-time Location**: Monitoring posisi staff
-- 🚗 **Visit Management**: Kunjungan nasabah
-- 📊 **Productivity Analysis**: Efisiensi kerja
-- 🔒 **Safety Monitoring**: Keamanan staff lapangan
-- 📱 **Mobile Reporting**: Laporan dari lapangan
-
-### 🤖 AI Financial Advisor
-- 🎯 **Smart Recommendations**: Saran bisnis otomatis
-- 📊 **Financial Forecasting**: Prediksi keuangan
-- 🔍 **Risk Analysis**: Analisis risiko komprehensif
-- 💰 **Capital Advice**: Rekomendasi modal
-- 👥 **Member Analysis**: Analisis perilaku nasabah
-
-### 💰 Circular Funding System
-- 💸 **Available Funds**: Uang tagihan langsung dipakai
-- 📋 **Fund Requests**: Request dana tanpa ke kantor
-- 💸 **Fund Transfers**: Transfer antar staff
-- 🤖 **Auto-Transfer**: Otomatis transfer kekurangan
-- 📊 **Staff Balances**: Monitoring real-time
-
-### 🔐 Keamanan & Compliance
-- 🔐 **Role-based Access**: Multi-level permission
-- 🛡️ **Input Validation**: Validasi data input
-- 🔒 **Session Management**: Keamanan sesi
-- 📊 **Audit Trail**: Log aktivitas lengkap
-- 🚫 **Security Protection**: Proteksi serangan
-
-## 📊 Alur Bisnis
-
-### 🔄 Alur Simpan Pinjam
-```
-Pendaftaran → Verifikasi → Simpanan → Pinjaman → Analisis → Persetujuan → Pencairan → Cicilan → Laporan
-```
-
-### 📍 Alur Operasional Door-to-Door
-```
-Admin Setup → Staff Training → Nasabah Onboarding → Daily Operations → GPS Tracking → Collection → Reporting
-```
-
-### 🤖 Alur AI-Powered Decision
-```
-Data Collection → AI Analysis → Risk Assessment → Recommendations → Implementation → Monitoring → Optimization
-```
-
-## 🛠️ Teknologi
-
-### Frontend
-- 📱 **HTML5**: Semantic markup
-- 🎨 **CSS3**: Modern styling with Bootstrap 5
-- ⚡ **JavaScript**: ES6+ features
-- 📱 **PWA**: Service Worker & Manifest
-- 🎨 **Font Awesome**: Icons & UI elements
-
-### Backend
-- 🐘 **PHP**: Server-side logic
-- 🗄️ **MySQL**: Database management
-- 🔄 **REST API**: JSON endpoints
-- 🛡️ **Security**: Input sanitization
-- 📊 **Analytics**: Data analytics
-- 🤖 **AI Integration**: Machine learning algorithms
-
-### Database Architecture
-- 🗄️ **Multi-Database**: 3 database terintegrasi
-- 📊 **Orang Database**: People management system
-- 🗺️ **Alamat Database**: Address system Indonesia
-- 🏦 **Koperasi Database**: Financial operations
-- 🔗 **Integration API**: Cross-database communication
-- � **Foreign Keys**: Data integrity enforcement
-
-### Mobile
-- � **PWA**: Progressive Web App
-- 📊 **Responsive**: Mobile-first design
-- 📍 **Geolocation**: GPS tracking
-- 💾 **Cache**: Offline support
-- 🔄 **Background Sync**: Data synchronization
-
-### API Integration
-- 🔗 **Orang Integration API**: People data management
-- 🛡️ **Guarantee Risk API**: Risk assessment system
-- 📊 **Data Migration API**: Legacy data import
-- 📍 **Address Management API**: Address validation
-- 🤖 **AI Financial API**: Financial recommendations
-
-## 📁 Struktur Proyek
-
+### 📁 Struktur Direktori
 ```
 mono-v2/
-├── 📄 index.html                 # Landing page
-├── 📁 pages/                     # Halaman aplikasi
-│   ├── 👑 admin/                 # Admin pages
-│   │   ├── login.html
-│   │   └── dashboard.html
-│   ├── 👨‍💼 staff/               # Staff pages
-│   │   ├── login.html
-│   │   └── dashboard.html
-│   └── 👤 member/                # Member pages
-│       ├── login.html
-│       └── dashboard.html
-├── 📁 api/                       # Backend API
-│   ├── auth.php                  # Authentication
-│   ├── members.php               # Member management
-│   ├── loans.php                 # Loan management
-│   ├── savings.php               # Savings management
-│   ├── gps_tracking.php          # GPS tracking
-│   ├── ai-financial-advisor.php  # AI Financial Advisor
-│   ├── circular-funding.php      # Circular Funding
-│   ├── advanced-risk-management.php # Risk Management
-│   ├── compliance-adaptation.php  # Compliance System
-│   ├── super-admin.php           # Multi-tenant Admin
-│   ├── guarantee-risk-management.php # Guarantee & Risk System
-│   ├── data-migration.php        # Data Migration System
-│   ├── orang-integration.php     # Orang Database Integration
-│   └── address-management.php    # Address Management
-├── 📁 assets/                    # Static assets
-│   ├── css/                      # Stylesheets
-│   │   ├── guarantee-risk-management.css
-│   │   └── data-migration.css
-│   ├── js/                       # JavaScript
-│   │   ├── guarantee-risk-management.js
-│   │   └── data-migration.js
-│   └── images/                   # Images
-├── 📁 database/                  # Database files
-│   ├── ksp_lamgabejaya_v2.sql     # Koperasi database schema
-│   ├── orang_schema.sql          # Orang database schema
-│   └── alamat_db.sql             # Address database schema
-├── 📄 manifest.webmanifest        # PWA manifest
-├── 📄 sw.js                      # Service worker
-├── 📄 splash-screen.html         # Splash screen
-└── 📁 tests/                     # Test files
-    ├── test-guarantee-risk-management.sh
-    └── test-data-migration.sh
+├── 📁 public/                 # Frontend - Web accessible files
+│   ├── 📄 index.php          # Main entry point
+│   ├── 📁 assets/            # CSS, JS, images
+│   └── 📁 uploads/           # User uploads
+├── 📁 app/                   # Middleware - Business logic
+│   ├── 📁 Controllers/       # Application controllers
+│   ├── 📁 Models/            # Data models
+│   ├── 📁 Services/          # Business services
+│   └── 📁 Views/             # View templates
+├── 📁 core/                  # Backend - System core
+│   ├── 📁 Config/            # Configuration files
+│   ├── 📁 Auth/              # Authentication system
+│   ├── 📁 Database/          # Database utilities
+│   ├── 📁 Cache/             # Caching system
+│   └── 📁 Logger/            # Logging system
+├── 📁 api/                   # RESTful API endpoints
+│   ├── 📄 auth.php           # Authentication API
+│   ├── 📄 members.php        # Member management API
+│   ├── 📄 transactions.php   # Transaction API
+│   └── 📄 reports.php        # Reports API
+├── 📁 storage/               # Application storage
+│   ├── 📁 cache/             # Cache files
+│   ├── 📁 logs/              # Application logs
+│   ├── 📁 sessions/          # Session files
+│   └── 📁 uploads/           # Upload storage
+├── 📁 database/              # Database files
+│   ├── 📄 gabe.sql           # Database export
+│   └── 📄 schema.sql         # Database schema
+├── 📁 docs/                  # Documentation
+├── 📁 tests/                 # Test files
+└── 📁 scripts/               # Utility scripts
 ```
+
+### 🔧 Teknologi yang Digunakan
+
+#### Backend
+- **PHP 8.3+** - Server-side scripting
+- **MySQL/MariaDB** - Database management
+- **PDO** - Database abstraction
+- **Composer** - Dependency management
+
+#### Frontend
+- **HTML5** - Semantic markup
+- **CSS3** - Styling and animations
+- **JavaScript (ES6+)** - Client-side scripting
+- **Bootstrap 5** - UI framework
+- **jQuery** - DOM manipulation
+
+#### API
+- **RESTful API** - API architecture
+- **JSON** - Data exchange format
+- **JWT-like tokens** - Session management
 
 ## 🚀 Instalasi
 
-### Prerequisites
-- 🐘 **PHP 7.4+** atau lebih tinggi
-- 🗄️ **MySQL 5.7+** atau lebih tinggi
-- 🌐 **Web Server** (Apache/Nginx)
-- 📱 **Modern Browser** dengan PWA support
-- 🗄️ **phpMyAdmin** untuk database management
+### Persyaratan Sistem
+- PHP 8.3 atau lebih tinggi
+- MySQL/MariaDB 10.4+
+- Apache/Nginx web server
+- Composer (untuk dependency management)
 
 ### Langkah Instalasi
 
-1. **📥 Clone Repository**
+#### 1. Clone Repository
 ```bash
-git clone https://github.com/username/ksp-lamabejaya.git
-cd ksp-lamabejaya
+git clone https://github.com/your-repo/mono-v2.git
+cd mono-v2
 ```
 
-2. **🗄️ Database Setup**
-```sql
--- Create databases
-CREATE DATABASE ksp_lamgabejaya_v2 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE orang CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE alamat_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- Import database schemas
--- Import dari database/orang_schema.sql ke database orang
--- Import dari database/alamat_db.sql ke database alamat_db
--- Import dari database/ksp_lamgabejaya_v2.sql ke database ksp_lamgabejaya_v2
-```
-
-3. **🗄️ Database Integration Setup**
+#### 2. Konfigurasi Database
 ```bash
-# Setup foreign key constraints
-mysql -u root -p ksp_lamgabejaya_v2 < database/integration_setup.sql
+# Import database
+mysql -u root -p < database/gabe.sql
 
-# Setup integration views
-mysql -u root -p ksp_lamgabejaya_v2 < database/views_setup.sql
+# Atau gunakan phpMyAdmin
+# 1. Buka phpMyAdmin
+# 2. Import file database/gabe.sql
 ```
 
-4. **⚙️ Konfigurasi**
+#### 3. Konfigurasi Environment
 ```bash
-# Copy konfigurasi
-cp config.example.php config.php
+# Salin file konfigurasi
+cp .env.example .env
 
-# Edit konfigurasi database
-nano config.php
+# Edit file .env
+nano .env
 ```
 
-5. **🌐 Web Server Setup**
+#### 4. Set Permissions
 ```bash
-# Apache
-cp apache.conf /etc/apache2/sites-available/ksp-lamabejaya.conf
-a2ensite ksp-lamabejaya
-systemctl reload apache2
-
-# Nginx
-cp nginx.conf /etc/nginx/sites-available/ksp-lamabejaya
-ln -s /etc/nginx/sites-available/ksp-lamabejaya /etc/nginx/sites-enabled/
-systemctl reload nginx
+chmod -R 755 /path/to/mono-v2
+chmod -R 777 /path/to/mono-v2/storage
+chmod -R 777 /path/to/mono-v2/public/uploads
 ```
 
-6. **🔐 Setup User Awal**
-- **Admin**: admin@ksp.com / (sesuai password hash)
-- **Staff**: staff@ksp.com / (sesuai password hash)
-- **Member**: member@ksp.com / (sesuai password hash)
+#### 5. Akses Aplikasi
+```bash
+# Buka browser
+http://localhost/mono-v2/
+```
 
-### Database Access
-- **🌐 phpMyAdmin**: `http://localhost/phpmyadmin/`
-- **👤 Login**: root / root (default XAMPP)
-- **📊 Databases**: ksp_lamgabejaya_v2, orang, alamat_db
+## 🔑 Login Default
 
-## 📱 PWA Installation
+```
+Username: admin
+Password: password
+Role: Administrator
+```
 
-### Install sebagai Aplikasi Mobile
-1. 📱 Buka aplikasi di browser mobile
-2. 🔍 Cari tombol "Install App"
-3. 📱 Tap "Install"
-4. 🏠 Aplikasi akan muncul di home screen
+## 📚 Dokumentasi
 
-### Fitur PWA
-- 📱 **Native Experience**: Tampilan seperti app native
-- 💾 **Offline Mode**: Fungsi tanpa internet
-- ⚡ **Fast Loading**: Loading cepat dengan cache
-- 🔄 **Auto Update**: Update otomatis
-- 📱 **Push Notifications**: Notifikasi penting
+### 📖 Panduan Pengguna
+- [Panduan Instalasi](docs/INSTALLATION.md)
+- [Panduan Pengguna](docs/USER_GUIDE.md)
+- [Panduan Administrator](docs/ADMIN_GUIDE.md)
 
-## 📊 Dashboard Overview
+### 🔧 Dokumentasi Teknis
+- [API Documentation](docs/API_DOCUMENTATION.md)
+- [Database Schema](docs/DATABASE_SCHEMA.md)
+- [Architecture Guide](docs/ARCHITECTURE.md)
 
-### 👑 Admin Dashboard
-- 📊 **Statistics**: Total nasabah, pinjaman, simpanan
-- 💰 **Financial Overview**: Pemasukan & pengeluaran
-- 📈 **Reports**: Laporan keuangan & operasional
-- 👥 **Member Management**: Data nasabah
-- ⚙️ **System Settings**: Konfigurasi sistem
-- 🤖 **AI Insights**: Dashboard analisis cerdas
-- 🛡️ **Risk Management**: Dashboard risiko & penjaminan
-- 🗄️ **Database Management**: Monitor multi-database
-- 📊 **Integration Status**: Status integrasi database
-
-### 👨‍💼 Staff Dashboard
-- 📊 **Daily Overview**: Target & pencapaian
-- 👥 **Member Services**: Layanan nasabah
-- 💰 **Transactions**: Transaksi hari ini
-- 📍 **GPS Tracking**: Lokasi kunjungan
-- 💰 **Circular Funding**: Dana tersedia
-- 📋 **Tasks**: Tugas harian
-- 🛡️ **Guarantee Management**: Kelola penjaminan
-- 📊 **Risk Assessment**: Analisis risiko nasabah
-
-### 👤 Member Dashboard
-- 💰 **Account Overview**: Saldo & pinjaman
-- 📊 **Transaction History**: Riwayat transaksi
-- 📈 **Loan Status**: Status pinjaman
-- 🏦 **Savings**: Simpanan & bunga
-- 👤 **Profile**: Data pribadi
-- 🛡️ **Guarantee Info**: Info penjaminan pinjaman
-- 📊 **Risk Profile**: Profil risiko peminjaman
-
-## 🔐 Keamanan
+## 🔌 API Endpoints
 
 ### Authentication
-- 🔐 **Multi-factor**: Username & password
-- 🛡️ **Session Management**: Secure session handling
-- 🔄 **Role-based Access**: Multi-level permission
-- 📊 **Audit Trail**: Log semua aktivitas
+```http
+POST /api/auth.php                    # Login
+GET  /api/auth.php?action=check_session # Session check
+POST /api/auth.php?action=logout      # Logout
+```
 
-### Data Protection
-- 🛡️ **Input Validation**: Sanitasi semua input
-- 🔒 **SQL Injection**: Parameterized queries
-- 🚫 **XSS Protection**: Output escaping
-- 🔐 **Password Hashing**: Bcrypt encryption
-- 📱 **Secure Storage**: Encrypted local storage
+### Members
+```http
+GET    /api/members.php               # Get all members
+POST   /api/members.php               # Create member
+GET    /api/members.php?id={id}       # Get member by ID
+PUT    /api/members.php?id={id}       # Update member
+DELETE /api/members.php?id={id}       # Delete member
+```
 
-## 📊 Laporan
+### Transactions
+```http
+GET    /api/transactions.php          # Get transactions
+POST   /api/transactions.php          # Create transaction
+GET    /api/transactions.php?id={id}  # Get transaction by ID
+```
 
-### Jenis Laporan
-- 📈 **Financial Reports**: Laporan keuangan
-- 👥 **Member Reports**: Data nasabah
-- 💰 **Loan Reports**: Pinjaman & cicilan
-- 🏦 **Savings Reports**: Simpanan & bunga
-- 📍 **Staff Performance**: Produktivitas staff
-- 🤖 **AI Analytics**: Laporan analisis AI
-- 🛡️ **Risk Reports**: Laporan risiko & penjaminan
-- 📊 **Guarantee Reports**: Laporan penjaminan pinjaman
-- 🤝 **Relationship Reports**: Analisis hubungan penjamin
-- ⚖️ **Legal Reports**: Laporan tindakan hukum
-- 🗄️ **Integration Reports**: Status integrasi database
+## 🗄️ Database Schema
 
-### Export Options
-- 📄 **PDF**: Format document
-- 📊 **Excel**: Spreadsheet format
-- 🖨️ **Print**: Cetak langsung
-- 📧 **Email**: Kirim via email
-- 📊 **JSON**: API export format
+### Tabel Utama
+- `users` - Data pengguna
+- `members` - Data anggota koperasi
+- `savings` - Data simpanan
+- `loans` - Data pinjaman
+- `transactions` - Data transaksi
+- `reports` - Data laporan
+
+## 🛠️ Development
+
+### Environment Setup
+```bash
+# Install dependencies
+composer install
+
+# Run development server
+php -S localhost:8000 -t public/
+```
+
+### Testing
+```bash
+# Run all tests
+php tests/SystemTest.php
+
+# Run specific test
+php tests/AuthenticationTest.php
+```
+
+### Code Style
+- Mengikuti PSR-12 coding standard
+- Menggunakan PHPDoc untuk dokumentasi
+- Unit testing dengan PHPUnit
+
+## 🔒 Keamanan
+
+### Fitur Keamanan
+- Password hashing dengan bcrypt
+- SQL injection prevention dengan PDO
+- XSS protection dengan output escaping
+- CSRF protection dengan tokens
+- Session security dengan HttpOnly cookies
+- File upload validation
+
+### Best Practices
+- Regular security audits
+- Input validation and sanitization
+- Error handling without information disclosure
+- Secure session management
+- Regular updates and patches
+
+## 📈 Monitoring & Logging
+
+### Logging System
+- Application logs: `storage/logs/`
+- Error logs: `storage/logs/error.log`
+- Access logs: `storage/logs/access.log`
+- Security logs: `storage/logs/security.log`
+
+### Monitoring
+- System health checks
+- Performance monitoring
+- Database query optimization
+- Error tracking and reporting
 
 ## 🚀 Deployment
 
 ### Production Deployment
-1. 🗄️ **Database Backup**: Backup database production
-2. 📁 **File Upload**: Upload ke server
-3. ⚙️ **Configuration**: Setup production config
-4. 🔒 **SSL Setup**: Install SSL certificate
-5. 📱 **PWA Setup**: Configure service worker
-6. 🧪 **Testing**: Comprehensive testing
-7. 🚀 **Go Live**: Launch production
-
-### Environment Variables
 ```bash
-# Database Koperasi
-DB_HOST=localhost
-DB_NAME=ksp_lamgabejaya_v2
-DB_USER=root
-DB_PASSWORD=your_password
+# Run deployment script
+./scripts/deploy.sh production
 
-# Database Orang
-DB_ORANG_HOST=localhost
-DB_ORANG_NAME=orang
-DB_ORANG_USER=root
-DB_ORANG_PASSWORD=your_password
-
-# Database Alamat
-DB_ALAMAT_HOST=localhost
-DB_ALAMAT_NAME=alamat_db
-DB_ALAMAT_USER=root
-DB_ALAMAT_PASSWORD=your_password
-
-# Application
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://yourdomain.com
-
-# PWA
-PWA_NAME="KSP Lam Gabe Jaya"
-PWA_THEME_COLOR="#007bff"
-
-# Integration
-ORANG_INTEGRATION_ENABLED=true
-GUARANTEE_RISK_ENABLED=true
-DATA_MIGRATION_ENABLED=true
+# Manual deployment
+1. Backup database
+2. Update code
+3. Run migrations
+4. Clear cache
+5. Set permissions
+6. Restart services
 ```
 
-## 🧪 Testing
-
-### Test Coverage
-- ✅ **Unit Testing**: Individual components
-- 🔧 **Integration Testing**: API endpoints
-- 📱 **E2E Testing**: Complete user flows
-- 🔒 **Security Testing**: Vulnerability assessment
-- ⚡ **Performance Testing**: Load & stress testing
-- 🤖 **AI Testing**: AI model validation
-- 🛡️ **Risk Management Testing**: Guarantee & risk system
-- 🗄️ **Database Testing**: Multi-database integration
-- 📊 **Data Migration Testing**: Legacy data import
-
-### Test Scripts
-```bash
-# Test Guarantee & Risk Management
-./tests/test-guarantee-risk-management.sh
-
-# Test Data Migration
-./tests/test-data-migration.sh
-
-# Test Database Integration
-./tests/test-database-integration.sh
-
-# Test API Endpoints
-./tests/test-api-endpoints.sh
-```
-
-### Test Results
-- 📊 **Success Rate**: 95% overall
-- 🎯 **Critical Functions**: 100% working
-- 📱 **Mobile Compatibility**: Fully compatible
-- 🔒 **Security**: No critical vulnerabilities
-- ⚡ **Performance**: < 2ms response time
-- 🛡️ **Risk System**: 100% functional
-- 🗄️ **Database Integration**: 100% working
-
-## 📈 Monitoring & Maintenance
-
-### System Monitoring
-- 📊 **Performance**: Response time & uptime
-- 👥 **User Activity**: Login & usage analytics
-- 💾 **Database**: Query performance & size
-- 📱 **PWA Usage**: Installation & engagement
-- 🔒 **Security**: Failed login & attempts
-- 🤖 **AI Performance**: Model accuracy & insights
-- 🗄️ **Database Integration**: Cross-database sync status
-- 🛡️ **Risk System**: Guarantee & risk monitoring
-- 📊 **Integration Health**: API integration status
-
-### Maintenance Tasks
-- 🔄 **Regular Updates**: Security patches
-- 💾 **Database Backup**: Daily backups
-- 📊 **Log Review**: Error monitoring
-- 📱 **PWA Updates**: Cache management
-- 🤖 **AI Model Updates**: Model retraining
-- 🧹 **Data Cleanup**: Remove unused data
-- 🗄️ **Database Maintenance**: Optimize & repair
-- 🔗 **Integration Updates**: Update API connections
+### Environment Configuration
+- Development: Local development
+- Staging: Pre-production testing
+- Production: Live environment
 
 ## 🤝 Kontribusi
 
 ### Cara Berkontribusi
-1. 🍴 **Fork** repository
-2. 🌿 **Create branch** feature/nama-fitur
-3. 💻 **Commit** perubahan
-4. 📤 **Push** ke branch
-5. 🔄 **Create Pull Request**
+1. Fork repository
+2. Create feature branch
+3. Make changes
+4. Add tests
+5. Submit pull request
 
-### Development Guidelines
-- 📝 **Code Style**: Follow PSR standards
-- 🧪 **Testing**: Include unit tests
-- 📚 **Documentation**: Update README
-- 🔒 **Security**: Follow security best practices
-- 📱 **Mobile**: Test on mobile devices
-- 🤖 **AI**: Validate AI model performance
+### Guidelines
+- Follow coding standards
+- Add documentation
+- Test thoroughly
+- Update changelog
+
+## 📝 Changelog
+
+### Version 2.0.0 (Current)
+- ✅ 3-tier architecture implementation
+- ✅ RESTful API development
+- ✅ Enhanced security features
+- ✅ Improved user interface
+- ✅ Database optimization
+- ✅ Performance improvements
+
+### Version 1.0.0 (Legacy)
+- Basic functionality
+- Simple authentication
+- Limited features
+
+## 📞 Support
+
+### Hubungi Kami
+- Email: admin@kspgabejaya.com
+- Phone: +62-xxx-xxxx-xxxx
+- Website: www.kspgabejaya.com
+
+### Bantuan Teknis
+- Documentation: [docs/](docs/)
+- Issue Tracker: GitHub Issues
+- Community Forum: [forum.kspgabejaya.com](https://forum.kspgabejaya.com)
 
 ## 📄 Lisensi
 
-Proyek ini dilisensikan under [MIT License](LICENSE).
+MIT License - lihat file [LICENSE](LICENSE) untuk detail.
 
-## 📞 Kontak
+## 🙏 Kredit
 
-- 🏢 **KSP Lam Gabe Jaya**
-- 📧 **Email**: info@ksplamgabejaya.co.id
-- 📱 **Phone**: +62 123 456 789
-- 🌐 **Website**: https://ksplamgabejaya.co.id
-- 📍 **Address**: Jl. Contoh No. 123, Kota, Provinsi
+### Tim Pengembang
+- Lead Developer: [Your Name]
+- Backend Developer: [Team Member]
+- Frontend Developer: [Team Member]
+- Database Administrator: [Team Member]
 
-## 🙏 Acknowledgments
-
-- 🙏 **Tim Development**: Kontributor proyek
-- 🏦 **KSP Lam Gabe Jaya**: Support & feedback
-- 📱 **PWA Community**: Guidance & best practices
-- 🛠️ **Open Source**: Libraries & frameworks
-- 🤖 **AI Community**: Machine learning resources
-
-## 📊 Roadmap
-
-### Versi 4.1 (Q2 2026)
-- 📱 **Enhanced Mobile UI**: Improved mobile experience
-- 💳 **Payment Gateway**: Integration with payment systems
-- 📊 **Advanced Analytics**: Enhanced reporting
-- 🔔 **Push Notifications**: Real-time notifications
-
-### Versi 4.2 (Q3 2026)
-- 🤖 **AI Integration**: Credit scoring automation
-- 📊 **Business Intelligence**: Advanced analytics
-- 📱 **Mobile App**: Native mobile application
-- 🔗 **API Integration**: Third-party services
-
-### Versi 5.0 (Q4 2026)
-- ☁️ **Cloud Deployment**: Cloud infrastructure
-- 🌐 **Multi-Branch**: Multi-location support
-- 🏦 **Digital Banking**: Enhanced banking features
-- 📊 **Machine Learning**: Predictive analytics
+### Teknologi Pihak Ketiga
+- PHP: [php.net](https://www.php.net/)
+- MySQL: [mysql.com](https://www.mysql.com/)
+- Bootstrap: [getbootstrap.com](https://getbootstrap.com/)
+- jQuery: [jquery.com](https://jquery.com/)
 
 ---
 
-## 📊 Quick Start
-
-### 🚀 Langkah Cepat
-1. 📱 **Install PWA**: Buka di mobile browser
-2. 👤 **Login**: Gunakan credentials yang tersedia
-3. 📊 **Explore**: Cek dashboard sesuai role
-4. 💰 **Test**: Coba fitur simpan pinjam
-5. 📍 **GPS**: Test tracking (staff)
-6. 🤖 **AI**: Coba AI financial advisor
-7. 💰 **Circular Funding**: Test dana perputaran
-8. 🛡️ **Risk Management**: Test guarantee system
-9. 🗄️ **Database Integration**: Test multi-database
-
-### 📱 Mobile Experience
-- 📱 **Touch Friendly**: Optimized untuk mobile
-- 💾 **Offline**: Fungsi tanpa internet
-- ⚡ **Fast**: Loading cepat
-- 🔄 **Auto Update**: Update otomatis
-
----
-
-## 🎯 Fitur Unggulan
-
-### 🤖 AI-Powered Features
-- **Smart Recommendations**: AI memberikan saran bisnis otomatis
-- **Risk Assessment**: Analisis risiko dengan machine learning
-- **Financial Forecasting**: Prediksi keuangan akurat
-- **Member Analysis**: Analisis perilaku nasabah
-- **Portfolio Optimization**: Optimasi portofolio otomatis
-
-### 💰 Circular Funding System
-- **Direct Allocation**: Uang tagihan langsung dipakai
-- **Auto-Transfer**: Otomatis transfer kekurangan
-- **Real-time Balance**: Monitoring saldo real-time
-- **Mobile Operations**: Operasi 100% mobile
-- **Emergency Funding**: Dana darurat otomatis
-
-### 🛡️ Advanced Risk Management
-- **Early Warning**: Sistem peringatan dini
-- **Collection Strategies**: Strategi penagihan cerdas
-- **Compliance Monitoring**: Monitoring kepatuhan
-- **Legal Protection**: Perlindungan hukum
-- **Crisis Management**: Manajemen krisis
-
-### 🗄️ Multi-Database Architecture
-- **People Management**: Data orang terpusat
-- **Address Integration**: Alamat lengkap Indonesia
-- **Cross-Database Sync**: Sinkronasi real-time
-- **Data Integrity**: Foreign key enforcement
-- **Scalable Design**: Mudah dikembangkan
-
----
-
-## 📊 API Documentation
-
-### Core APIs
-- 🔗 **Orang Integration**: `/api/orang-integration.php`
-- 🛡️ **Guarantee Risk**: `/api/guarantee-risk-management.php`
-- 📊 **Data Migration**: `/api/data-migration.php`
-- 📍 **Address Management**: `/api/address-management.php`
-
-### API Features
-- 📊 **Dashboard Statistics**: Real-time data
-- 🔍 **Search & Filter**: Advanced filtering
-- 📝 **CRUD Operations**: Complete data management
-- 📊 **Reports Generation**: Multiple formats
-- 🔒 **Security**: Input validation & sanitization
-
----
-
-**🏆 KSP Lam Gabe Jaya - Sistem Keuangan Digital Terpadu**
-
-*Versi 4.0 - Production Ready*
-
-**🤖 AI-Powered • 💰 Circular Funding • 🛡️ Risk Management • 📱 Mobile-First • 🗄️ Multi-Database • 🔗 Integration-Ready • 🚀 Enterprise-Ready**
+**© 2026 KSP Lam Gabe Jaya. All rights reserved.**

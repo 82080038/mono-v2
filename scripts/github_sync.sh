@@ -1,0 +1,46 @@
+#!/bin/bash
+
+echo "=== KSP Lam Gabe Jaya - GitHub Sync Script ==="
+echo ""
+
+echo "📋 Repository Information:"
+echo "   Name: mono-v2"
+echo "   Owner: ksp-lamgabejaya"
+echo "   Description: KSP Lam Gabe Jaya - Sistem Manajemen Koperasi"
+echo "   Type: Public"
+echo ""
+
+echo "🔧 Manual Setup Steps:"
+echo "====================="
+echo ""
+echo "1. Create GitHub Repository:"
+echo "   • Go to: https://github.com/new"
+echo "   • Repository name: mono-v2"
+echo "   • Owner: ksp-lamgabejaya"
+echo "   • Description: KSP Lam Gabe Jaya - Sistem Manajemen Koperasi"
+echo "   • Set as Public"
+echo "   • DO NOT initialize with README (already exists)"
+echo "   • Click 'Create repository'"
+echo ""
+
+echo "2. Push to GitHub:"
+echo "   git remote set-url origin https://github.com/ksp-lamgabejaya/mono-v2.git"
+echo "   git push -u origin master"
+echo "   git push origin --tags"
+echo ""
+
+echo "3. Verify Upload:"
+echo "   • Visit: https://github.com/ksp-lamgabejaya/mono-v2"
+echo "   • Check README.md appears correctly"
+echo "   • Verify all files are uploaded"
+echo "   • Confirm tags are visible (v2.0.0)"
+echo ""
+
+echo "📊 Repository Statistics:"
+echo "   • Commits: $(git rev-list --count HEAD)"
+echo "   • Branches: $(git branch | wc -l)"
+echo "   • Tags: $(git tag | wc -l)"
+echo "   • Size: $(du -sh . | cut -f1)"
+echo ""
+
+echo "🚀 Ready to sync to GitHub!"

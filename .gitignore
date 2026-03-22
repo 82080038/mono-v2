@@ -1,11 +1,43 @@
-# Only exclude truly sensitive production files
-.env.production
+# Only ignore truly unnecessary files for development
+# Keep all application files for development on other computers
 
-# Exclude very large generated files
-*.sql.gz
-*.zip
-*.tar.gz
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
 
-# IDE/OS system files
+# OS specific files
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Node modules (if any)
+node_modules/
+
+# Build artifacts (if any)
+build/
+dist/
+
+# Large binary files that should be handled separately
+*.exe
+*.dmg
+*.pkg
+*.deb
+*.rpm
+
+# Keep all application files for development:
+# - All PHP files
+# - All database files
+# - All configuration files
+# - All documentation
+# - All assets
+# - All uploads (for development)
+# - All logs (for debugging)
+# - All backup files (for development reference)
+# - All original files (for development reference)

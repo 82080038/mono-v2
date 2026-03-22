@@ -1,0 +1,71 @@
+{
+    "name": "KSP Lam Gabe Jaya",
+    "short_name": "KSP Lam Gabe",
+    "description": "Sistem Manajemen Keuangan Koperasi",
+    "start_url": "/mono-v2/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#667eea",
+    "orientation": "portrait-primary",
+    "scope": "/mono-v2/",
+    "lang": "id-ID",
+    "dir": "ltr",
+    "categories": [
+        "finance",
+        "business",
+        "productivity"
+    ],
+    "icons": [
+        {
+            "src": "/mono-v2/assets/images/logo.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "/mono-v2/assets/images/cooperative-building.jpg",
+            "sizes": "any",
+            "type": "image/jpeg"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Dashboard",
+            "short_name": "Dashboard",
+            "description": "Buka dashboard utama",
+            "url": "/mono-v2/pages/dynamic-dashboard.html",
+            "icons": [
+                {
+                    "src": "/mono-v2/assets/images/logo.svg",
+                    "sizes": "any",
+                    "type": "image/svg+xml"
+                }
+            ]
+        },
+        {
+            "name": "Simpanan",
+            "short_name": "Simpanan",
+            "description": "Kelola simpanan",
+            "url": "/mono-v2/pages/dynamic-dashboard.html",
+            "icons": [
+                {
+                    "src": "/mono-v2/assets/images/logo.svg",
+                    "sizes": "any",
+                    "type": "image/svg+xml"
+                }
+            ]
+        },
+        {
+            "name": "Pinjaman",
+            "short_name": "Pinjaman",
+            "description": "Ajukan pinjaman",
+            "url": "/mono-v2/pages/dynamic-dashboard.html",
+            "icons": [
+                {
+                    "src": "/mono-v2/assets/images/logo.svg",
+                    "sizes": "any",
+                    "type": "image/svg+xml"
+                }
+            ]
+        }
+    ]
+}
