@@ -1,0 +1,63 @@
+#!/bin/bash
+# Complete phpMyAdmin setup script
+
+echo "=== phpMyAdmin Setup for KSP Lam Gabe Jaya ==="
+echo ""
+echo "Target Credentials:"
+echo "Username: root"
+echo "Password: root"
+echo ""
+
+echo "Step 1: Access phpMyAdmin"
+echo "Open browser: http://localhost/phpmyadmin/"
+echo "Current login: Username: root, Password: (empty)"
+echo ""
+
+echo "Step 2: Run SQL Script"
+echo "Click on 'SQL' tab"
+echo "Copy and paste the content from:"
+echo "/opt/lampp/htdocs/mono-v2/database/update_root_password.sql"
+echo "Click 'Go' to execute"
+echo ""
+
+echo "Step 3: Create Database 'gabe'"
+echo "After password is updated, run this SQL:"
+echo "CREATE DATABASE IF NOT EXISTS \`gabe\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+echo ""
+
+echo "Step 4: Test New Login"
+echo "Logout from phpMyAdmin"
+echo "Login again with: Username: root, Password: root"
+echo ""
+
+echo "Step 5: Verify Database"
+echo "Database 'gabe' should be visible in the left panel"
+echo ""
+
+echo "=== Quick Commands ==="
+echo "1. Set password:"
+echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
+echo ""
+echo "2. Create database:"
+echo "CREATE DATABASE IF NOT EXISTS \`gabe\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+echo ""
+echo "3. Flush privileges:"
+echo "FLUSH PRIVILEGES;"
+echo ""
+
+echo "=== File Locations ==="
+echo "Password update: /opt/lampp/htdocs/mono-v2/database/update_root_password.sql"
+echo "Database creation: /opt/lampp/htdocs/mono-v2/database/quick_create_gabe.sql"
+echo ""
+echo "=== Access Links ==="
+echo "phpMyAdmin: http://localhost/phpmyadmin/"
+echo "Application: http://localhost/mono-v2/"
+echo ""
+
+echo "=== Troubleshooting ==="
+echo "If password update fails:"
+echo "1. Ensure you're logged in as root with empty password"
+echo "2. Check for SQL syntax errors"
+echo "3. Try running commands one by one"
+echo "4. Restart XAMPP if needed: sudo /opt/lampp/lampp restart"
+echo ""

@@ -1,0 +1,21 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# API Router - Route all API requests to index.php
+RewriteRule ^api/(.*)$ api/index.php [L,QSA]
+
+# Direct API file access (fallback)
+RewriteRule ^api/(.+)\.php$ api/$1.php [L,QSA]
+
+# Handle specific API endpoints without .php extension
+RewriteRule ^api/auth$ api/auth.php [L,QSA]
+RewriteRule ^api/members$ api/members.php [L,QSA]
+RewriteRule ^api/accounts$ api/accounts.php [L,QSA]
+RewriteRule ^api/transactions$ api/transactions.php [L,QSA]
+RewriteRule ^api/loans$ api/loans.php [L,QSA]
+RewriteRule ^api/reports$ api/reports.php [L,QSA]
+RewriteRule ^api/logout$ api/logout.php [L,QSA]
+
+# API Info endpoint
+RewriteRule ^api/?$ api/index.php?info=1 [L,QSA]
