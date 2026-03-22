@@ -1,7 +1,7 @@
 <?php
 /**
- * KSP Lam Gabe Jaya - Main Dashboard Page
- * Primary dashboard after successful login
+ * KSP Lam Gabe Jaya - Enhanced Main Dashboard Page
+ * Based on OOP best practices and documentation
  */
 
 // Define access flag for constants
@@ -16,25 +16,27 @@ header('Referrer-Policy: strict-origin-when-cross-origin');
 // Load required files
 require_once __DIR__ . '/config/constants.php';
 require_once __DIR__ . '/config/error-config.php';
-// Don't load api/auth.php here - it's for API endpoints only
+require_once __DIR__ . '/core/Database.php';
+require_once __DIR__ . '/core/Auth.php';
+require_once __DIR__ . '/core/UserManager.php';
 
 // Start session
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Authentication check
+// Initialize authentication with enhanced security
 try {
-    // Check session first
-    if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    $auth = new Auth();
+    $authCheck = $auth->checkAuth();
+    
+    if (!$authCheck['authenticated']) {
+        error_log("Authentication failed in main.php: " . $authCheck['reason']);
         header('Location: /mono-v2/login.php');
         exit;
     }
     
-    $user = $_SESSION['user'];
-    
-    // Update last activity
-    $_SESSION['last_activity'] = time();
+    $user = $authCheck['user'];
     
 } catch (Exception $e) {
     error_log("Authentication error in main.php: " . $e->getMessage());
@@ -42,22 +44,32 @@ try {
     exit;
 }
 
-// Get user role and permissions
-$userRole = $user['role'] ?? 'nasabah';
-$userName = $user['full_name'] ?? $user['username'];
-$userDisplayName = $user['role_display_name'] ?? ucfirst($userRole);
-$permissions = $user['permissions'] ?? [];
+// Initialize managers based on OOP principles
+$userManager = new UserManager();
+$dashboardManager = new DashboardManager($user);
 
-// Determine dashboard layout based on role
-$dashboardLayout = getDashboardLayout($userRole);
-$menuItems = getMenuItems($userRole);
-$widgets = getDashboardWidgets($userRole);
+// Get user data and permissions
+$userRole = $user['role'];
+$userName = $user['full_name'] ?? $user['username'];
+$userDisplayName = $user['role_display_name'];
+$permissions = $user['permissions'];
+
+// Get dashboard configuration with proper structure
+$dashboardLayout = $dashboardManager->getDashboardLayout($userRole);
+$menuItems = $dashboardManager->getMenuItems($userRole);
+$widgets = $dashboardManager->getDashboardWidgets($userRole);
 
 // Page metadata
 $pageTitle = 'Dashboard - ' . APP_NAME;
 $pageDescription = 'Sistem Koperasi Digital Terpadu';
 
-// Helper functions
+// Get additional data for dashboard
+$recentActivities = $userManager->getRecentActivities($user['id']);
+$notifications = $userManager->getNotifications($user['id']);
+$systemInfo = $userManager->getSystemInfo();
+
+// Helper functions (deprecated - using classes instead)
+// Note: These functions are kept for backward compatibility
 function getDashboardLayout($role) {
     $layouts = [
         'bos' => 'bos',
