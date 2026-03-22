@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Pinjaman - KSP Lam Gabe Jaya</title>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "/mono-v2/../../login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var headerUserName = document.getElementById("headerUserName");
+            if (headerUserName && userName) {
+                headerUserName.textContent = userName;
+            }
+        });
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/enhanced-ui.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .dashboard-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed ~ .dashboard-main {
+            margin-left: 70px;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="p-3 text-white">
+            <h5 class="mb-0">KSP Lam Gabe Jaya</h5>
+            <small class="text-white-50">Admin Dashboard</small>
+        </div>
+        <nav class="nav flex-column p-3">
+            <a class="nav-link text-white" href="/mono-v2/teller/dashboard.html">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/teller/members.html">
+                <i class="fas fa-users me-2"></i>
+                <span class="sidebar-text">Anggota</span>
+            </a>
+            <a class="nav-link text-white active" href="/mono-v2/teller/loans.html">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/teller/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/teller/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/teller/npl.html">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span class="sidebar-text">NPL</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/teller/risk-fraud.html">
+                <i class="fas fa-shield-alt me-2"></i>
+                <span class="sidebar-text">Risiko & Fraud</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/teller/reports.html">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/teller/settings.html">
+                <i class="fas fa-cog me-2"></i>
+                <span class="sidebar-text">Pengaturan</span>
+            </a>
+            <div class="mt-auto pt-3 border-top border-white-50">
+                <a class="nav-link text-white" href="/mono-v2/teller/role-access.html">
+                    <i class="fas fa-user-shield me-2"></i>
+                    <span class="sidebar-text">Role & Akses</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/teller/guarantee-management.html">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    <span class="sidebar-text">Penjaminan</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/teller/database-management.html">
+                    <i class="fas fa-database me-2"></i>
+                    <span class="sidebar-text">Database</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link text-white" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h5 class="mb-0" id="pageTitle">Manajemen Pinjaman</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshLoans()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Refresh
+                    </button>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addLoanModal">
+                        <i class="fas fa-plus me-1"></i>
+                        Ajukan Pinjaman
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span id="headerUserName">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="main-content p-4">
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-hand-holding-usd text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Total Pinjaman</h6>
+                                    <div class="h4 mb-0" id="totalLoans">Loading...</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 15%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Pinjaman Aktif</h6>
+                                    <div class="h4 mb-0" id="activeLoans">Loading...</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 8%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-clock text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Menunggu Persetujuan</h6>
+                                    <div class="h4 mb-0" id="pendingLoans">Loading...</div>
+                                    <small class="text-warning"><i class="fas fa-minus"></i> 0%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-danger bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-exclamation-triangle text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Pinjaman Bermasalah</h6>
+                                    <div class="h4 mb-0" id="problemLoans">Loading...</div>
+                                    <small class="text-danger"><i class="fas fa-arrow-down"></i> 2%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Cari pinjaman..." id="searchLoan">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="filterStatus">
+                        <option value="">Semua Status</option>
+                        <option value="active">Aktif</option>
+                        <option value="pending">Menunggu</option>
+                        <option value="approved">Disetujui</option>
+                        <option value="rejected">Ditolak</option>
+                        <option value="completed">Selesai</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="filterType">
+                        <option value="">Semua Tipe</option>
+                        <option value="konsumtif">Konsumtif</option>
+                        <option value="produktif">Produktif</option>
+                        <option value="investasi">Investasi</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Loans Table -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Data Pinjaman</h6>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-success" onclick="exportData('excel')">
+                                <i class="fas fa-file-excel me-1"></i>Excel
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="exportData('pdf')">
+                                <i class="fas fa-file-pdf me-1"></i>PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="loansTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Anggota</th>
+                                    <th>Jumlah</th>
+                                    <th>Tipe</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loansTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Memuat data pinjaman...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Loan Modal -->
+    <div class="modal fade" id="addLoanModal" tabindex="-1" aria-labelledby="addLoanModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addLoanModalLabel">Ajukan Pinjaman Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addLoanForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="memberSelect" class="form-label">Pilih Anggota</label>
+                                    <select class="form-select" id="memberSelect" required>
+                                        <option value="">-- Pilih Anggota --</option>
+                                        <option value="M001">John Doe</option>
+                                        <option value="M002">Jane Smith</option>
+                                        <option value="M003">Robert Johnson</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="loanAmount" class="form-label">Jumlah Pinjaman</label>
+                                    <input type="number" class="form-control" id="loanAmount" placeholder="Rp 0" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="loanType" class="form-label">Tipe Pinjaman</label>
+                                    <select class="form-select" id="loanType">
+                                        <option value="konsumtif">Konsumtif</option>
+                                        <option value="produktif">Produktif</option>
+                                        <option value="investasi">Investasi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="loanDuration" class="form-label">Durasi (bulan)</label>
+                                    <input type="number" class="form-control" id="loanDuration" placeholder="12" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loanPurpose" class="form-label">Tujuan Pinjaman</label>
+                            <textarea class="form-control" id="loanPurpose" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="addLoan()">Ajukan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Loans management functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "/mono-v2/../../login.html";
+        }
+
+        function refreshLoans() {
+            loadLoansData();
+        }
+
+        // Load loans data from API
+        function loadLoansData() {
+            fetch('../../api/loans.php?action=list&test=true')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderLoansTable(data.data);
+                        updateStatistics(data.statistics);
+                        showNotification('Data berhasil dimuat', 'success');
+                    } else {
+                        showNotification('Gagal memuat data', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading loans data:', error);
+                    showNotification('Terjadi kesalahan saat memuat data', 'error');
+                    // Load mock data for testing
+                    loadMockData();
+                });
+        }
+
+        // Load mock data for testing
+        function loadMockData() {
+            const mockData = [
+                {
+                    id: 'L001',
+                    member_name: 'John Doe',
+                    amount: 5000000,
+                    type: 'konsumtif',
+                    status: 'active',
+                    date: '2024-01-15'
+                },
+                {
+                    id: 'L002',
+                    member_name: 'Jane Smith',
+                    amount: 10000000,
+                    type: 'produktif',
+                    status: 'pending',
+                    date: '2024-01-18'
+                },
+                {
+                    id: 'L003',
+                    member_name: 'Robert Johnson',
+                    amount: 7500000,
+                    type: 'investasi',
+                    status: 'approved',
+                    date: '2024-01-20'
+                }
+            ];
+            
+            renderLoansTable(mockData);
+            updateStatistics({
+                total: mockData.length,
+                active: mockData.filter(l => l.status === 'active').length,
+                pending: mockData.filter(l => l.status === 'pending').length,
+                problem: 0
+            });
+        }
+
+        // Render loans table
+        function renderLoansTable(loans) {
+            const tbody = document.getElementById('loansTableBody');
+            tbody.innerHTML = '';
+            
+            loans.forEach(loan => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${loan.id}</td>
+                    <td>${loan.member_name}</td>
+                    <td>Rp ${loan.amount.toLocaleString('id-ID')}</td>
+                    <td><span class="badge bg-info">${loan.type}</span></td>
+                    <td><span class="badge bg-${loan.status === 'active' ? 'success' : loan.status === 'pending' ? 'warning' : loan.status === 'approved' ? 'primary' : 'secondary'}">${loan.status === 'active' ? 'Aktif' : loan.status === 'pending' ? 'Menunggu' : loan.status === 'approved' ? 'Disetujui' : loan.status}</span></td>
+                    <td>${loan.date}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="viewLoan('${loan.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning me-1" onclick="editLoan('${loan.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteLoan('${loan.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Update statistics
+        function updateStatistics(stats) {
+            document.getElementById('totalLoans').textContent = stats.total || 0;
+            document.getElementById('activeLoans').textContent = stats.active || 0;
+            document.getElementById('pendingLoans').textContent = stats.pending || 0;
+            document.getElementById('problemLoans').textContent = stats.problem || 0;
+        }
+
+        // Add loan
+        function addLoan() {
+            const form = document.getElementById('addLoanForm');
+            const formData = new FormData(form);
+            
+            // Mock implementation
+            showNotification('Pinjaman berhasil diajukan', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('addLoanModal')).hide();
+            form.reset();
+            loadLoansData();
+        }
+
+        // View loan
+        function viewLoan(id) {
+            showNotification(`Melihat detail pinjaman ${id}`, 'info');
+        }
+
+        // Edit loan
+        function editLoan(id) {
+            showNotification(`Mengedit pinjaman ${id}`, 'info');
+        }
+
+        // Delete loan
+        function deleteLoan(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus pinjaman ini?')) {
+                showNotification(`Pinjaman ${id} berhasil dihapus`, 'success');
+                loadLoansData();
+            }
+        }
+
+        // Export data
+        function exportData(format) {
+            showNotification(`Mengekspor data dalam format ${format}`, 'info');
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.createElement('div');
+            container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            container.appendChild(toast);
+            document.body.appendChild(container);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => {
+                container.remove();
+            }, 5000);
+        }
+
+        // Search functionality
+        document.getElementById('searchLoan').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#loansTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadLoansData();
+            
+            // Handle sidebar collapse text visibility
+            document.getElementById('sidebar').addEventListener('transitionend', function() {
+                const isCollapsed = this.classList.contains('collapsed');
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                sidebarTexts.forEach(text => {
+                    text.style.display = isCollapsed ? 'none' : 'inline';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+        }
+        .feature-list {
+            text-align: left;
+            margin: 30px 0;
+        }
+        .feature-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+        .feature-item i {
+            color: #667eea;
+            margin-right: 10px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="content-card">
+            <div class="feature-icon">
+                <i class="fas fa-hand-holding-usd"></i>
+            </div>
+            
+            <h1 class="page-title">Manajemen Pinjaman</h1>
+            
+            <p class="page-description">
+                Kelola semua pinjaman anggota dengan sistem yang komprehensif dan terintegrasi
+            </p>
+            
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-plus-circle"></i>
+                    <strong>Pengajuan Pinjaman:</strong> Proses pengajuan pinjaman baru dengan validasi otomatis
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <strong>Approval Pinjaman:</strong> Sistem persetujuan multi-level dengan workflow yang jelas
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-calculator"></i>
+                    <strong>Perhitungan Bunga:</strong> Kalkulasi bunga otomatis sesuai kebijakan koperasi
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <strong>Analisis Risiko:</strong> Penilaian risiko pinjaman dengan AI-powered analytics
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-history"></i>
+                    <strong>Riwayat Pinjaman:</strong> Tracking lengkap riwayat pembayaran dan keterlambatan
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="/mono-v2/teller/dashboard.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Kembali ke Dashboard
+                </a>
+                <button class="btn btn-secondary" onclick="loadLoanManagement()">
+                    <i class="fas fa-sync-alt me-2"></i>Muat Fitur
+                </button>
+            </div>
+            
+            <div class="mt-4">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Fitur manajemen pinjaman akan segera tersedia
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function loadLoanManagement() {
+            const card = document.querySelector('.content-card');
+            card.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3">Memuat fitur manajemen pinjaman...</p>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                window.location.href = '/mono-v2/dashboard.html';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

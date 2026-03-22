@@ -1,0 +1,65 @@
+{
+    "timestamp": "2026-03-22 03:56:20",
+    "total_files": 37,
+    "updated_files": 31,
+    "error_files": 6,
+    "updated_list": [
+        "advanced-analytics.php",
+        "ai-risk-assessment.php",
+        "api-response.php",
+        "auth-simple.php",
+        "auth_helper.php",
+        "backup-databases.php",
+        "cache.php",
+        "collection-automation.php",
+        "config.example.php",
+        "dashboard-simple.php",
+        "data-migration.php",
+        "database-activities.php",
+        "database-helper.php",
+        "database-stats.php",
+        "digital-payments.php",
+        "error-handler.php",
+        "gps_tracking.php",
+        "gps_tracking_original.php",
+        "guarantee-risk-management.php",
+        "helpers.php",
+        "loans.php",
+        "members-enhanced.php",
+        "members.php",
+        "multiple-identities.php",
+        "orang-integration.php",
+        "password-reset.php",
+        "payments.php",
+        "savings.php",
+        "sync-databases.php",
+        "system-logger.php",
+        "validator.php"
+    ],
+    "error_list": [
+        {
+            "file": "auth.php",
+            "error": "File already updated"
+        },
+        {
+            "file": "batch-update-legacy.php",
+            "error": "File already updated"
+        },
+        {
+            "file": "dashboard.php",
+            "error": "File already updated"
+        },
+        {
+            "file": "security-middleware.php",
+            "error": "File already updated"
+        },
+        {
+            "file": "security.php",
+            "error": "File already updated"
+        },
+        {
+            "file": "simple-security.php",
+            "error": "File already updated"
+        }
+    ]
+}

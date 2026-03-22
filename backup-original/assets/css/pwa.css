@@ -1,0 +1,108 @@
+
+/* PWA Specific Styles */
+.pwa-install-prompt {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.pwa-install-prompt:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+}
+
+.pwa-install-prompt.hidden {
+    display: none;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .mobile-optimized {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+    
+    .mobile-button {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 12px 20px;
+    }
+    
+    .mobile-input {
+        font-size: 16px; /* Prevent zoom on iOS */
+        padding: 12px;
+    }
+}
+
+/* Offline Indicator */
+.offline-indicator {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #ff6b6b;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1001;
+}
+
+.offline-indicator.online {
+    background: #51cf66;
+}
+
+/* Push Notification Styles */
+.push-notification {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    background: white;
+    border-left: 4px solid #667eea;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    max-width: 300px;
+    z-index: 1002;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Safe Area Insets for iPhone X+ */
+@supports (padding: max(0px)) {
+    .safe-area-inset-top {
+        padding-top: max(20px, env(safe-area-inset-top));
+    }
+    
+    .safe-area-inset-bottom {
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+    
+    .safe-area-inset-left {
+        padding-left: max(20px, env(safe-area-inset-left));
+    }
+    
+    .safe-area-inset-right {
+        padding-right: max(20px, env(safe-area-inset-right));
+    }
+}

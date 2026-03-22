@@ -1,0 +1,5 @@
+{"timestamp":"2026-03-21 23:27:46","level":"INFO","message":"Test log message","context":[],"ip":"CLI","user_agent":"CLI","request_uri":"CLI"}
+{"timestamp":"2026-03-21 23:28:02","level":"INFO","message":"Test log message","context":[],"ip":"CLI","user_agent":"CLI","request_uri":"CLI"}
+{"timestamp":"2026-03-21 23:28:19","level":"INFO","message":"Test log message","context":[],"ip":"CLI","user_agent":"CLI","request_uri":"CLI"}
+[2026-03-22 03:29:30] INFO: Test message
+[2026-03-22 03:29:41] INFO: Test message

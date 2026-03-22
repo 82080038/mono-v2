@@ -1,0 +1,702 @@
+<?php
+/**
+ * Login Page with Error Reporting
+ */
+
+require_once __DIR__ . '/config/error-config.php';
+?>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="manifest" href="/mono-v2/manifest.json">
+    <link href="assets/css/main.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <style>
+        .login-page {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .login-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .login-header p {
+            opacity: 0.9;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        .login-body {
+            padding: 2.5rem;
+        }
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+        .form-floating > label {
+            color: #6c757d;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            padding: 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .btn-login:disabled {
+            opacity: 0.6;
+            transform: none;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .password-toggle:hover {
+            color: #667eea;
+        }
+        .quick-login-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        .quick-login-section h6 {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .quick-login-btn {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .quick-login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .quick-login-btn:active {
+            transform: translateY(0);
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #764ba2;
+        }
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            max-width: 400px;
+        }
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 1rem;
+            }
+            .login-card {
+                border-radius: 15px;
+            }
+            .login-header {
+                padding: 1.5rem;
+            }
+            .login-body {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>
+                    <i class="fas fa-piggy-bank me-2"></i>
+                    KSP Lam Gabe Jaya
+                </h1>
+                <p>Sistem Koperasi Simpan Pinjam Digital</p>
+            </div>
+            
+            <div class="login-body">
+                <div id="alertContainer" class="alert-container"></div>
+                
+                <form id="loginForm">
+                    <!-- Username Field -->
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="username" name="username" 
+                               placeholder="Username atau Email" required>
+                        <label for="username">
+                            <i class="fas fa-user me-2"></i>Username atau Email
+                        </label>
+                    </div>
+                    
+                    <!-- Password Field -->
+                    <div class="form-floating position-relative">
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Kata Sandi" required>
+                        <label for="password">
+                            <i class="fas fa-lock me-2"></i>Kata Sandi
+                        </label>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye" id="passwordIcon"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Remember Me -->
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">
+                            Ingat saya
+                        </label>
+                    </div>
+                    
+                    <!-- Login Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-login" id="loginBtn">
+                            <span id="loginBtnText">Masuk</span>
+                            <span class="loading-spinner" style="display: none;">
+                                <i class="fas fa-spinner fa-spin me-2"></i>Loading...
+                            </span>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Quick Login Section -->
+                <div class="quick-login-section">
+                    <h6>
+                        <i class="fas fa-rocket me-2"></i>
+                        Quick Login (Development Mode)
+                    </h6>
+                    <p class="text-muted small mb-3">
+                        Login cepat dengan role otomatis terdeteksi berdasarkan username:
+                    </p>
+                    
+                    <!-- System Creator -->
+                    <div class="mb-3">
+                        <small class="text-muted">System Creator:</small>
+                        <div class="row g-2 mt-1">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-danger btn-sm w-100 quick-login-btn" 
+                                        data-role="creator" data-username="creator" data-password="creator123">
+                                    <i class="fas fa-god me-1"></i>
+                                    Creator (System)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Business Management -->
+                    <div class="mb-3">
+                        <small class="text-muted">Business Management:</small>
+                        <div class="row g-2 mt-1">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-warning btn-sm w-100 quick-login-btn" 
+                                        data-role="owner" data-username="owner" data-password="owner123">
+                                    <i class="fas fa-crown me-1"></i>
+                                    Owner
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-warning btn-sm w-100 quick-login-btn" 
+                                        data-role="general_manager" data-username="gm" data-password="gm123">
+                                    <i class="fas fa-briefcase me-1"></i>
+                                    Gen Manager
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Technical Management -->
+                    <div class="mb-3">
+                        <small class="text-muted">Technical Management:</small>
+                        <div class="row g-2 mt-1">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-info btn-sm w-100 quick-login-btn" 
+                                        data-role="it_manager" data-username="itmanager" data-password="itmanager123">
+                                    <i class="fas fa-cog me-1"></i>
+                                    IT Manager
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-info btn-sm w-100 quick-login-btn" 
+                                        data-role="finance_manager" data-username="financemgr" data-password="financemgr123">
+                                    <i class="fas fa-chart-line me-1"></i>
+                                    Finance Mgr
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Operations Management -->
+                    <div class="mb-3">
+                        <small class="text-muted">Operations Management:</small>
+                        <div class="row g-2 mt-1">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-success btn-sm w-100 quick-login-btn" 
+                                        data-role="supervisor" data-username="supervisor" data-password="supervisor123">
+                                    <i class="fas fa-user-tie me-1"></i>
+                                    Supervisor
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-success btn-sm w-100 quick-login-btn" 
+                                        data-role="teller" data-username="teller" data-password="teller123">
+                                    <i class="fas fa-cash-register me-1"></i>
+                                    Teller
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Field Operations -->
+                    <div class="mb-3">
+                        <small class="text-muted">Field Operations:</small>
+                        <div class="row g-2 mt-1">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-primary btn-sm w-100 quick-login-btn" 
+                                        data-role="field_officer" data-username="fieldofficer" data-password="fieldofficer123">
+                                    <i class="fas fa-user me-1"></i>
+                                    Field Officer
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-outline-primary btn-sm w-100 quick-login-btn" 
+                                        data-role="member" data-username="member" data-password="member123">
+                                    <i class="fas fa-user me-1"></i>
+                                    Member
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="alert alert-info mt-3 mb-0 small" role="alert">
+                        <i class="fas fa-info-circle me-1"></i>
+                        <strong>Role Otomatis:</strong> Sistem akan mendeteksi role Anda berdasarkan username yang dimasukkan.
+                    </div>
+                </div>
+                
+                <!-- Forgot Password -->
+                <div class="text-center mt-3">
+                    <a href="#" class="text-decoration-none" onclick="showForgotPassword()">
+                        <i class="fas fa-question-circle me-1"></i>Lupa kata sandi?
+                    </a>
+                </div>
+                
+                <!-- Back Link -->
+                <div class="text-center">
+                    <a href="index.html" class="back-link">
+                        <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Password toggle functionality
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('passwordIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        });
+        
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            // Show loading state
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loadingSpinner = loginBtn.querySelector('.loading-spinner');
+            
+            loginBtn.disabled = true;
+            loginBtnText.style.display = 'none';
+            loadingSpinner.style.display = 'inline';
+            
+            // Call existing login function
+            if (typeof window.simulateLoginAPI === "function") {
+                window.simulateLoginAPI(username, password, rememberMe);
+            } else {
+                // Fallback login
+                console.log("Login fallback for:", username);
+                showAlert("Login functionality is being prepared...", "info");
+                
+                // Reset form state
+                setTimeout(() => {
+                    loginBtn.disabled = false;
+                    loginBtnText.style.display = 'inline';
+                    loadingSpinner.style.display = 'none';
+                }, 2000);
+            }
+        });
+        
+        // Function to detect role based on credentials
+        function detectRole(username, password) {
+            // In development mode, detect role based on username
+            const userCredentials = {
+                'creator': { role: 'creator', password: 'creator123' },
+                'owner': { role: 'owner', password: 'owner123' },
+                'gm': { role: 'general_manager', password: 'gm123' },
+                'itmanager': { role: 'it_manager', password: 'itmanager123' },
+                'financemgr': { role: 'finance_manager', password: 'financemgr123' },
+                'supervisor': { role: 'supervisor', password: 'supervisor123' },
+                'teller': { role: 'teller', password: 'teller123' },
+                'fieldofficer': { role: 'field_officer', password: 'fieldofficer123' },
+                'member': { role: 'member', password: 'member123' }
+            };
+            
+            // Check if username matches known credentials
+            for (const [user, data] of Object.entries(userCredentials)) {
+                if (username.toLowerCase() === user.toLowerCase() && password === data.password) {
+                    return data.role;
+                }
+            }
+            
+            // Default fallback - in production this would be determined by database
+            if (username.toLowerCase().includes('creator')) return 'creator';
+            if (username.toLowerCase().includes('owner')) return 'owner';
+            if (username.toLowerCase().includes('gm')) return 'general_manager';
+            if (username.toLowerCase().includes('itmanager')) return 'it_manager';
+            if (username.toLowerCase().includes('financemgr')) return 'finance_manager';
+            if (username.toLowerCase().includes('supervisor')) return 'supervisor';
+            if (username.toLowerCase().includes('teller')) return 'teller';
+            if (username.toLowerCase().includes('fieldofficer')) return 'field_officer';
+            if (username.toLowerCase().includes('staff')) return 'field_officer';
+            if (username.toLowerCase().includes('member')) return 'member';
+            
+            // Default to member for unknown users
+            return 'member';
+        }
+        
+        function showAlert(message, type = "danger") {
+            const alertContainer = document.getElementById("alertContainer");
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-${type === "success" ? "check-circle" : type === "danger" ? "exclamation-triangle" : "info-circle"} me-2"></i>
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            alertContainer.innerHTML = alertHtml;
+            
+            // Auto dismiss after 5 seconds
+            setTimeout(() => {
+                const alert = alertContainer.querySelector(".alert");
+                if (alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }
+            }, 5000);
+        }
+        
+        function showForgotPassword() {
+            showAlert("Fitur reset password akan segera tersedia", "info");
+        }
+        
+        // Enhanced login success handler with smart redirect
+        function handleLoginSuccess(response, role) {
+            if (response.success) {
+                // Store auth data
+                localStorage.setItem('authToken', response.token);
+                localStorage.setItem('userRole', role);
+                localStorage.setItem('userName', response.user.name || response.user.username);
+                
+                // Smart redirect based on role
+                const redirectUrls = {
+                    creator: '/mono-v2/pages/dynamic-dashboard.html',
+                    owner: '/mono-v2/pages/dynamic-dashboard.html',
+                    general_manager: '/mono-v2/pages/dynamic-dashboard.html',
+                    it_manager: '/mono-v2/pages/dynamic-dashboard.html',
+                    finance_manager: '/mono-v2/pages/dynamic-dashboard.html',
+                    supervisor: '/mono-v2/pages/dynamic-dashboard.html',
+                    teller: '/mono-v2/pages/dynamic-dashboard.html',
+                    field_officer: '/mono-v2/pages/dynamic-dashboard.html',
+                    member: '/mono-v2/pages/dynamic-dashboard.html'
+                };
+                
+                const redirectUrl = redirectUrls[role] || '/mono-v2/pages/member/dashboard.html';
+                
+                // Show success message
+                showAlert(`Login berhasil sebagai ${role.replace('_', ' ').charAt(0).toUpperCase() + role.replace('_', ' ').slice(1)}!`, 'success');
+                
+                // Redirect after short delay
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 1500);
+            } else {
+                showAlert(response.message || 'Login failed', 'danger');
+            }
+        }
+        
+        // Enhanced simulate login API with automatic role detection
+        function simulateLoginAPI(username, password, rememberMe) {
+            // Detect role automatically based on credentials
+            const detectedRole = detectRole(username, password);
+            
+            console.log(`Auto-detected role: ${detectedRole} for user: ${username}`);
+            
+            // Simulate successful login for testing
+            setTimeout(() => {
+                const detectedRole = detectRole(username, password);
+                const userId = getUserIdByRole(detectedRole);
+                
+                // Generate proper JSON token with role
+                const tokenData = {
+                    id: userId,
+                    username: username,
+                    role: detectedRole,
+                    email: username + '@example.com',
+                    full_name: username.charAt(0).toUpperCase() + username.slice(1),
+                    timestamp: Math.floor(Date.now() / 1000)
+                };
+                const validToken = btoa(JSON.stringify(tokenData));
+                
+                const response = {
+                    success: true,
+                    token: validToken,
+                    user: { 
+                        name: username.charAt(0).toUpperCase() + username.slice(1), 
+                        username: username, 
+                        role: detectedRole,
+                        id: userId
+                    },
+                    message: 'Login successful',
+                    detectedRole: detectedRole
+                };
+                
+                handleLoginSuccess(response, detectedRole);
+            }, 1000);
+        }
+        
+        // Quick Login Functionality
+        function quickLogin(role, username, password) {
+            console.log(`Quick login: ${role} - ${username}`);
+            
+            // Show loading state
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loadingSpinner = loginBtn.querySelector('.loading-spinner');
+            
+            loginBtn.disabled = true;
+            loginBtnText.style.display = 'none';
+            loadingSpinner.style.display = 'inline';
+            
+            // Clear any existing invalid token before quick login
+        localStorage.removeItem('authToken');
+        sessionStorage.removeItem('authToken');
+        
+        // Fill form fields
+        document.getElementById('username').value = username;
+        document.getElementById('password').value = password;
+        
+        // Simulate login process with automatic role detection
+        setTimeout(() => {
+            const detectedRole = detectRole(username, password);
+            const userId = getUserIdByRole(detectedRole);
+            
+            // Generate proper JSON token with role
+            const tokenData = {
+                id: userId,
+                username: username,
+                role: detectedRole,
+                email: username + '@example.com',
+                full_name: username.charAt(0).toUpperCase() + username.slice(1),
+                timestamp: Math.floor(Date.now() / 1000)
+            };
+            const validToken = btoa(JSON.stringify(tokenData));
+            console.log('Generated token data:', tokenData);
+            console.log('Generated token:', validToken);
+            console.log('Token decoded back:', atob(validToken));
+            const response = {
+                success: true,
+                token: validToken,
+                user: { 
+                    name: username.charAt(0).toUpperCase() + username.slice(1), 
+                    username: username, 
+                    role: detectedRole,
+                    id: userId
+                },
+                message: 'Quick login successful',
+                detectedRole: detectedRole
+            };
+            
+            handleLoginSuccess(response, detectedRole);
+            
+            // Show success message
+            showAlert(`Login berhasil sebagai ${detectedRole.replace('_', ' ').charAt(0).toUpperCase() + detectedRole.replace('_', ' ').slice(1)}!`, 'success');
+        }, 1000);
+        }
+        
+        // Get user ID by role
+        function getUserIdByRole(role) {
+            const roleIds = {
+                creator: 0,
+                owner: 1,
+                general_manager: 2,
+                it_manager: 3,
+                finance_manager: 4,
+                supervisor: 5,
+                teller: 6,
+                field_officer: 7,
+                member: 8
+            };
+            return roleIds[role] || 8;
+        }
+        
+        // Quick Login Button Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const quickLoginBtns = document.querySelectorAll('.quick-login-btn');
+            
+            quickLoginBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const role = this.getAttribute('data-role');
+                    const username = this.getAttribute('data-username');
+                    const password = this.getAttribute('data-password');
+                    
+                    quickLogin(role, username, password);
+                });
+            });
+            
+            // Add hover effects to quick login buttons
+            quickLoginBtns.forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+        
+        // Reset form state on error
+        window.addEventListener("loginError", function() {
+            const loginBtn = document.getElementById("loginBtn");
+            const loginBtnText = document.getElementById("loginBtnText");
+            const loadingSpinner = loginBtn.querySelector(".loading-spinner");
+            
+            loginBtn.disabled = false;
+            loginBtnText.style.display = "inline";
+            loadingSpinner.style.display = "none";
+        });
+    </script>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+        <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <i class="fas fa-check-circle me-2"></i>
+                <strong class="me-auto">Sukses</strong>
+                <small>Baru saja</small>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                Operasi berhasil dilakukan!
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            Operasi berhasil dilakukan!
+        </div>
+    </div>
+    <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-danger text-white">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong class="me-auto">Error</strong>
+            <small>Baru saja</small>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            Terjadi kesalahan. Silakan coba lagi.
+        </div>
+    </div>
+</div>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
+</body>
+</html>

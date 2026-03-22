@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Transaksi - KSP Lam Gabe Jaya</title>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "/mono-v2/../../login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var headerUserName = document.getElementById("headerUserName");
+            if (headerUserName && userName) {
+                headerUserName.textContent = userName;
+            }
+        });
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/enhanced-ui.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .dashboard-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed ~ .dashboard-main {
+            margin-left: 70px;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="p-3 text-white">
+            <h5 class="mb-0">KSP Lam Gabe Jaya</h5>
+            <small class="text-white-50">Admin Dashboard</small>
+        </div>
+        <nav class="nav flex-column p-3">
+            <a class="nav-link text-white" href="/mono-v2/admin/dashboard.html">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/members.html">
+                <i class="fas fa-users me-2"></i>
+                <span class="sidebar-text">Anggota</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/loans.html">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white active" href="/mono-v2/admin/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/npl.html">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span class="sidebar-text">NPL</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/risk-fraud.html">
+                <i class="fas fa-shield-alt me-2"></i>
+                <span class="sidebar-text">Risiko & Fraud</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/reports.html">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/settings.html">
+                <i class="fas fa-cog me-2"></i>
+                <span class="sidebar-text">Pengaturan</span>
+            </a>
+            <div class="mt-auto pt-3 border-top border-white-50">
+                <a class="nav-link text-white" href="/mono-v2/admin/role-access.html">
+                    <i class="fas fa-user-shield me-2"></i>
+                    <span class="sidebar-text">Role & Akses</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/admin/guarantee-management.html">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    <span class="sidebar-text">Penjaminan</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/admin/database-management.html">
+                    <i class="fas fa-database me-2"></i>
+                    <span class="sidebar-text">Database</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link text-white" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h5 class="mb-0" id="pageTitle">Manajemen Transaksi</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshTransactions()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Refresh
+                    </button>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addTransactionModal">
+                        <i class="fas fa-plus me-1"></i>
+                        New Transaction
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span id="headerUserName">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="main-content p-4">
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-exchange-alt text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Total Transaksi</h6>
+                                    <div class="h4 mb-0" id="totalTransactions">Loading...</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 25%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-arrow-up text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Pemasukan</h6>
+                                    <div class="h4 mb-0" id="totalIncome">Loading...</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 18%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-danger bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-arrow-down text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Pengeluaran</h6>
+                                    <div class="h4 mb-0" id="totalExpense">Loading...</div>
+                                    <small class="text-danger"><i class="fas fa-arrow-down"></i> 8%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-calendar-day text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Hari Ini</h6>
+                                    <div class="h4 mb-0" id="todayTransactions">Loading...</div>
+                                    <small class="text-info"><i class="fas fa-arrow-up"></i> 12%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Cari transaksi..." id="searchTransaction">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="filterType">
+                        <option value="">Semua Tipe</option>
+                        <option value="income">Pemasukan</option>
+                        <option value="expense">Pengeluaran</option>
+                        <option value="transfer">Transfer</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="filterStatus">
+                        <option value="">Semua Status</option>
+                        <option value="completed">Selesai</option>
+                        <option value="pending">Menunggu</option>
+                        <option value="failed">Gagal</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" class="form-control" id="filterDate">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-primary w-100" onclick="resetFilters()">
+                        <i class="fas fa-redo me-1"></i>Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Transactions Table -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Data Transaksi</h6>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-success" onclick="exportData('excel')">
+                                <i class="fas fa-file-excel me-1"></i>Excel
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="exportData('pdf')">
+                                <i class="fas fa-file-pdf me-1"></i>PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="transactionsTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tanggal</th>
+                                    <th>Deskripsi</th>
+                                    <th>Tipe</th>
+                                    <th>Jumlah</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Memuat data transaksi...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Transaction Modal -->
+    <div class="modal fade" id="addTransactionModal" tabindex="-1" aria-labelledby="addTransactionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTransactionModalLabel">Tambah Transaksi Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addTransactionForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transactionType" class="form-label">Tipe Transaksi</label>
+                                    <select class="form-select" id="transactionType" required>
+                                        <option value="">-- Pilih Tipe --</option>
+                                        <option value="income">Pemasukan</option>
+                                        <option value="expense">Pengeluaran</option>
+                                        <option value="transfer">Transfer</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transactionAmount" class="form-label">Jumlah</label>
+                                    <input type="number" class="form-control" id="transactionAmount" placeholder="Rp 0" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transactionDate" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" id="transactionDate" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transactionCategory" class="form-label">Kategori</label>
+                                    <select class="form-select" id="transactionCategory">
+                                        <option value="">-- Pilih Kategori --</option>
+                                        <option value="simpanan">Simpanan</option>
+                                        <option value="pinjaman">Pinjaman</option>
+                                        <option value="operasional">Operasional</option>
+                                        <option value="lainnya">Lainnya</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="transactionDescription" class="form-label">Deskripsi</label>
+                            <textarea class="form-control" id="transactionDescription" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="addTransaction()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Transactions management functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "/mono-v2/../../login.html";
+        }
+
+        function refreshTransactions() {
+            loadTransactionsData();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchTransaction').value = '';
+            document.getElementById('filterType').value = '';
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('filterDate').value = '';
+            loadTransactionsData();
+        }
+
+        // Load transactions data from API
+        function loadTransactionsData() {
+            fetch('../../api/transactions.php?action=list&test=true')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderTransactionsTable(data.data);
+                        updateStatistics(data.statistics);
+                        showNotification('Data berhasil dimuat', 'success');
+                    } else {
+                        showNotification('Gagal memuat data', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading transactions data:', error);
+                    showNotification('Terjadi kesalahan saat memuat data', 'error');
+                    // Load mock data for testing
+                    loadMockData();
+                });
+        }
+
+        // Load mock data for testing
+        function loadMockData() {
+            const mockData = [
+                {
+                    id: 'T001',
+                    date: '2024-01-15',
+                    description: 'Setoran Simpanan - John Doe',
+                    type: 'income',
+                    amount: 2500000,
+                    status: 'completed'
+                },
+                {
+                    id: 'T002',
+                    date: '2024-01-15',
+                    description: 'Pencairan Pinjaman - Jane Smith',
+                    type: 'expense',
+                    amount: 5000000,
+                    status: 'completed'
+                },
+                {
+                    id: 'T003',
+                    date: '2024-01-16',
+                    description: 'Biaya Operasional',
+                    type: 'expense',
+                    amount: 500000,
+                    status: 'pending'
+                }
+            ];
+            
+            renderTransactionsTable(mockData);
+            updateStatistics({
+                total: mockData.length,
+                income: mockData.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0),
+                expense: mockData.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0),
+                today: 2
+            });
+        }
+
+        // Render transactions table
+        function renderTransactionsTable(transactions) {
+            const tbody = document.getElementById('transactionsTableBody');
+            tbody.innerHTML = '';
+            
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.date}</td>
+                    <td>${transaction.description}</td>
+                    <td><span class="badge bg-${transaction.type === 'income' ? 'success' : transaction.type === 'expense' ? 'danger' : 'info'}">${transaction.type === 'income' ? 'Pemasukan' : transaction.type === 'expense' ? 'Pengeluaran' : 'Transfer'}</span></td>
+                    <td class="${transaction.type === 'income' ? 'text-success' : 'text-danger'}">
+                        ${transaction.type === 'income' ? '+' : '-'}Rp ${transaction.amount.toLocaleString('id-ID')}
+                    </td>
+                    <td><span class="badge bg-${transaction.status === 'completed' ? 'success' : transaction.status === 'pending' ? 'warning' : 'danger'}">${transaction.status === 'completed' ? 'Selesai' : transaction.status === 'pending' ? 'Menunggu' : 'Gagal'}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="viewTransaction('${transaction.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning me-1" onclick="editTransaction('${transaction.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteTransaction('${transaction.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Update statistics
+        function updateStatistics(stats) {
+            document.getElementById('totalTransactions').textContent = stats.total || 0;
+            document.getElementById('totalIncome').textContent = formatCurrency(stats.income || 0);
+            document.getElementById('totalExpense').textContent = formatCurrency(stats.expense || 0);
+            document.getElementById('todayTransactions').textContent = stats.today || 0;
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            const num = parseFloat(amount);
+            if (num >= 1000000000) {
+                return 'Rp ' + (num / 1000000000).toFixed(1) + 'M';
+            } else if (num >= 1000000) {
+                return 'Rp ' + (num / 1000000).toFixed(1) + 'Jt';
+            } else {
+                return 'Rp ' + num.toLocaleString('id-ID');
+            }
+        }
+
+        // Add transaction
+        function addTransaction() {
+            const form = document.getElementById('addTransactionForm');
+            const formData = new FormData(form);
+            
+            // Mock implementation
+            showNotification('Transaksi berhasil ditambahkan', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('addTransactionModal')).hide();
+            form.reset();
+            loadTransactionsData();
+        }
+
+        // View transaction
+        function viewTransaction(id) {
+            showNotification(`Melihat detail transaksi ${id}`, 'info');
+        }
+
+        // Edit transaction
+        function editTransaction(id) {
+            showNotification(`Mengedit transaksi ${id}`, 'info');
+        }
+
+        // Delete transaction
+        function deleteTransaction(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) {
+                showNotification(`Transaksi ${id} berhasil dihapus`, 'success');
+                loadTransactionsData();
+            }
+        }
+
+        // Export data
+        function exportData(format) {
+            showNotification(`Mengekspor data dalam format ${format}`, 'info');
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.createElement('div');
+            container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            container.appendChild(toast);
+            document.body.appendChild(container);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => {
+                container.remove();
+            }, 5000);
+        }
+
+        // Search functionality
+        document.getElementById('searchTransaction').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#transactionsTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date as default
+            document.getElementById('transactionDate').valueAsDate = new Date();
+            
+            loadTransactionsData();
+            
+            // Handle sidebar collapse text visibility
+            document.getElementById('sidebar').addEventListener('transitionend', function() {
+                const isCollapsed = this.classList.contains('collapsed');
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                sidebarTexts.forEach(text => {
+                    text.style.display = isCollapsed ? 'none' : 'inline';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white active" href="/mono-v2/admin/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/reports.html">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/settings.html">
+                <i class="fas fa-cog me-2"></i>
+                <span class="sidebar-text">Pengaturan</span>
+            </a>
+        </nav>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="d-flex justify-content-between align-items-center p-3">
+                <div>
+                    <h4 class="mb-0">Transaksi</h4>
+                    <small class="text-muted">Manajemen transaksi keuangan</small>
+                </div>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-primary btn-sm me-2" onclick="exportTransactions()">
+                        <i class="fas fa-download me-1"></i>Export
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-plus me-1"></i>Transaksi Baru
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="openDepositModal()">
+                                <i class="fas fa-arrow-down me-2"></i>Setoran Simpanan
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="openWithdrawalModal()">
+                                <i class="fas fa-arrow-up me-2"></i>Penarikan Simpanan
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="openLoanPaymentModal()">
+                                <i class="fas fa-money-bill-wave me-2"></i>Pembayaran Pinjaman
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="openTransferModal()">
+                                <i class="fas fa-exchange-alt me-2"></i>Transfer Antar Rekening
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="openAdjustmentModal()">
+                                <i class="fas fa-balance-scale me-2"></i>Penyesuaian Saldo
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-4">
+            <!-- Transaction Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Total Transaksi Hari Ini</h6>
+                                    <h3 id="todayTransactions">0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-exchange-alt fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Total Pemasukan</h6>
+                                    <h3 id="totalIncome">Rp 0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-arrow-down fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Total Pengeluaran</h6>
+                                    <h3 id="totalExpense">Rp 0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-arrow-up fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Saldo Kas</h6>
+                                    <h3 id="cashBalance">Rp 0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-wallet fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Cari Transaksi</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <input type="text" class="form-control" id="searchTransaction" placeholder="No. transaksi atau nama">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Jenis Transaksi</label>
+                            <select class="form-select" id="transactionType">
+                                <option value="">Semua Jenis</option>
+                                <option value="deposit">Setoran</option>
+                                <option value="withdrawal">Penarikan</option>
+                                <option value="loan_payment">Pembayaran Pinjaman</option>
+                                <option value="transfer">Transfer</option>
+                                <option value="adjustment">Penyesuaian</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Metode Pembayaran</label>
+                            <select class="form-select" id="paymentMethod">
+                                <option value="">Semua Metode</option>
+                                <option value="cash">Tunai</option>
+                                <option value="transfer">Transfer</option>
+                                <option value="debit">Debit/Kredit</option>
+                                <option value="check">Cek/Giro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="transactionStatus">
+                                <option value="">Semua Status</option>
+                                <option value="completed">Selesai</option>
+                                <option value="pending">Pending</option>
+                                <option value="failed">Gagal</option>
+                                <option value="cancelled">Dibatalkan</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="transactionDate" value="">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button class="btn btn-primary" onclick="filterTransactions()">
+                                <i class="fas fa-filter me-1"></i>Filter
+                            </button>
+                            <button class="btn btn-outline-secondary" onclick="resetFilters()">
+                                <i class="fas fa-redo me-1"></i>Reset
+                            </button>
+                            <button class="btn btn-outline-info" onclick="printTransactions()">
+                                <i class="fas fa-print me-1"></i>Cetak
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Table -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Daftar Transaksi</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="transactionsTable">
+                            <thead>
+                                <tr>
+                                    <th>No. Transaksi</th>
+                                    <th>Tanggal</th>
+                                    <th>Jenis</th>
+                                    <th>Anggota</th>
+                                    <th>Keterangan</th>
+                                    <th>Pemasukan</th>
+                                    <th>Pengeluaran</th>
+                                    <th>Metode</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Transactions will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Transaction Modals -->
+    <!-- Deposit Modal -->
+    <div class="modal fade" id="depositModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Setoran Simpanan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="depositForm">
+                        <div class="mb-3">
+                            <label class="form-label">No. Rekening *</label>
+                            <input type="text" class="form-control" name="accountNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jumlah Setoran *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="number" class="form-control" name="amount" min="10000" step="1000" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Metode Pembayaran</label>
+                            <select class="form-select" name="paymentMethod">
+                                <option value="cash">Tunai</option>
+                                <option value="transfer">Transfer</option>
+                                <option value="debit">Debit/Kredit</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Keterangan</label>
+                            <textarea class="form-control" name="notes" rows="2" placeholder="Keterangan transaksi (opsional)"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success" onclick="processDeposit()">
+                        <i class="fas fa-check me-1"></i>Proses
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
+    <div class="modal fade" id="withdrawalModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Penarikan Simpanan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="withdrawalForm">
+                        <div class="mb-3">
+                            <label class="form-label">No. Rekening *</label>
+                            <input type="text" class="form-control" name="accountNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jumlah Penarikan *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="number" class="form-control" name="amount" min="10000" step="1000" required>
+                            </div>
+                            <small class="text-muted">Saldo tersedia: <span id="availableBalance">Rp 0</span></small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alasan Penarikan</label>
+                            <select class="form-select" name="reason">
+                                <option value="">Pilih Alasan</option>
+                                <option value="kebutuhan">Kebutuhan Pribadi</option>
+                                <option value="investasi">Investasi</option>
+                                <option value="darurat">Keadaan Darurat</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Keterangan</label>
+                            <textarea class="form-control" name="notes" rows="2" placeholder="Keterangan tambahan (opsional)"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-warning" onclick="processWithdrawal()">
+                        <i class="fas fa-check me-1"></i>Proses
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loan Payment Modal -->
+    <div class="modal fade" id="loanPaymentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pembayaran Pinjaman</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loanPaymentForm">
+                        <div class="mb-3">
+                            <label class="form-label">No. Pinjaman *</label>
+                            <input type="text" class="form-control" name="loanNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jumlah Pembayaran *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="number" class="form-control" name="amount" min="10000" step="1000" required>
+                            </div>
+                            <small class="text-muted">Angsuran: <span id="installmentAmount">Rp 0</span></small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Metode Pembayaran</label>
+                            <select class="form-select" name="paymentMethod">
+                                <option value="cash">Tunai</option>
+                                <option value="transfer">Transfer</option>
+                                <option value="debit">Debit/Kredit</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="payFull" id="payFull">
+                                <label class="form-check-label" for="payFull">
+                                    Bayar Pelunasan
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Keterangan</label>
+                            <textarea class="form-control" name="notes" rows="2" placeholder="Keterangan pembayaran (opsional)"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="processLoanPayment()">
+                        <i class="fas fa-check me-1"></i>Proses Pembayaran
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/assets/js/content-renderer.js"></script>
+    <script src="/assets/js/modal-manager.js"></script>
+    <script>
+        // Sample data for demonstration
+        const sampleTransactions = [
+            {
+                id: 'TRX001',
+                date: '2024-01-31',
+                type: 'deposit',
+                memberName: 'Ahmad Wijaya',
+                description: 'Setoran Simpanan Wajib',
+                income: 100000,
+                expense: 0,
+                paymentMethod: 'cash',
+                status: 'completed'
+            },
+            {
+                id: 'TRX002',
+                date: '2024-01-31',
+                type: 'loan_payment',
+                memberName: 'Siti Nurhaliza',
+                description: 'Angsuran Pinjaman #3',
+                income: 1500000,
+                expense: 0,
+                paymentMethod: 'transfer',
+                status: 'completed'
+            },
+            {
+                id: 'TRX003',
+                date: '2024-01-31',
+                type: 'withdrawal',
+                memberName: 'Budi Santoso',
+                description: 'Penarikan Simpanan Sukarela',
+                income: 0,
+                expense: 500000,
+                paymentMethod: 'cash',
+                status: 'completed'
+            },
+            {
+                id: 'TRX004',
+                date: '2024-01-30',
+                type: 'transfer',
+                memberName: 'Dewi Lestari',
+                description: 'Transfer ke Rekening SA005',
+                income: 0,
+                expense: 2000000,
+                paymentMethod: 'transfer',
+                status: 'pending'
+            }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date
+            document.getElementById('transactionDate').value = new Date().toISOString().split('T')[0];
+            
+            loadTransactions();
+            updateSummaryCards();
+        });
+
+        function loadTransactions() {
+            const tbody = document.querySelector('#transactionsTable tbody');
+            tbody.innerHTML = '';
+            
+            sampleTransactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.date}</td>
+                    <td>
+                        <span class="badge bg-${getTransactionTypeColor(transaction.type)}">
+                            ${getTransactionTypeLabel(transaction.type)}
+                        </span>
+                    </td>
+                    <td>${transaction.memberName}</td>
+                    <td>${transaction.description}</td>
+                    <td class="text-end text-success">${transaction.income > 0 ? formatCurrency(transaction.income) : '-'}</td>
+                    <td class="text-end text-danger">${transaction.expense > 0 ? formatCurrency(transaction.expense) : '-'}</td>
+                    <td>
+                        <span class="badge bg-secondary">
+                            ${getPaymentMethodLabel(transaction.paymentMethod)}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-${getStatusColor(transaction.status)}">
+                            ${getStatusLabel(transaction.status)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary" onclick="viewTransaction('${transaction.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-outline-success" onclick="printTransaction('${transaction.id}')">
+                                <i class="fas fa-print"></i>
+                            </button>
+                            <button class="btn btn-outline-danger" onclick="cancelTransaction('${transaction.id}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateSummaryCards() {
+            const todayTransactions = sampleTransactions.filter(t => t.date === new Date().toISOString().split('T')[0]);
+            const totalIncome = sampleTransactions.reduce((sum, t) => sum + t.income, 0);
+            const totalExpense = sampleTransactions.reduce((sum, t) => sum + t.expense, 0);
+            const cashBalance = totalIncome - totalExpense;
+            
+            document.getElementById('todayTransactions').textContent = todayTransactions.length;
+            document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
+            document.getElementById('totalExpense').textContent = formatCurrency(totalExpense);
+            document.getElementById('cashBalance').textContent = formatCurrency(cashBalance);
+        }
+
+        function getTransactionTypeColor(type) {
+            const colors = {
+                'deposit': 'success',
+                'withdrawal': 'warning',
+                'loan_payment': 'primary',
+                'transfer': 'info',
+                'adjustment': 'secondary'
+            };
+            return colors[type] || 'secondary';
+        }
+
+        function getTransactionTypeLabel(type) {
+            const labels = {
+                'deposit': 'Setoran',
+                'withdrawal': 'Penarikan',
+                'loan_payment': 'Pembayaran Pinjaman',
+                'transfer': 'Transfer',
+                'adjustment': 'Penyesuaian'
+            };
+            return labels[type] || type;
+        }
+
+        function getPaymentMethodLabel(method) {
+            const labels = {
+                'cash': 'Tunai',
+                'transfer': 'Transfer',
+                'debit': 'Debit/Kredit',
+                'check': 'Cek/Giro'
+            };
+            return labels[method] || method;
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'completed': 'success',
+                'pending': 'warning',
+                'failed': 'danger',
+                'cancelled': 'secondary'
+            };
+            return colors[status] || 'secondary';
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                'completed': 'Selesai',
+                'pending': 'Pending',
+                'failed': 'Gagal',
+                'cancelled': 'Dibatalkan'
+            };
+            return labels[status] || status;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function openDepositModal() {
+            const modal = new bootstrap.Modal(document.getElementById('depositModal'));
+            modal.show();
+        }
+
+        function openWithdrawalModal() {
+            const modal = new bootstrap.Modal(document.getElementById('withdrawalModal'));
+            modal.show();
+        }
+
+        function openLoanPaymentModal() {
+            const modal = new bootstrap.Modal(document.getElementById('loanPaymentModal'));
+            modal.show();
+        }
+
+        function openTransferModal() {
+            showNotification('Fitur transfer akan segera tersedia', 'info');
+        }
+
+        function openAdjustmentModal() {
+            showNotification('Fitur penyesuaian akan segera tersedia', 'info');
+        }
+
+        function processDeposit() {
+            const form = document.getElementById('depositForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            showNotification('Setoran berhasil diproses!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('depositModal')).hide();
+            form.reset();
+            loadTransactions();
+            updateSummaryCards();
+        }
+
+        function processWithdrawal() {
+            const form = document.getElementById('withdrawalForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            showNotification('Penarikan berhasil diproses!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('withdrawalModal')).hide();
+            form.reset();
+            loadTransactions();
+            updateSummaryCards();
+        }
+
+        function processLoanPayment() {
+            const form = document.getElementById('loanPaymentForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            showNotification('Pembayaran pinjaman berhasil diproses!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('loanPaymentModal')).hide();
+            form.reset();
+            loadTransactions();
+            updateSummaryCards();
+        }
+
+        function filterTransactions() {
+            const search = document.getElementById('searchTransaction').value;
+            const type = document.getElementById('transactionType').value;
+            const method = document.getElementById('paymentMethod').value;
+            const status = document.getElementById('transactionStatus').value;
+            const date = document.getElementById('transactionDate').value;
+            
+            console.log('Filtering transactions:', { search, type, method, status, date });
+            showNotification('Filter diterapkan', 'info');
+        }
+
+        function resetFilters() {
+            document.getElementById('searchTransaction').value = '';
+            document.getElementById('transactionType').value = '';
+            document.getElementById('paymentMethod').value = '';
+            document.getElementById('transactionStatus').value = '';
+            document.getElementById('transactionDate').value = new Date().toISOString().split('T')[0];
+            
+            loadTransactions();
+            showNotification('Filter direset', 'info');
+        }
+
+        function viewTransaction(transactionId) {
+            console.log('Viewing transaction:', transactionId);
+            showNotification('Melihat detail transaksi...', 'info');
+        }
+
+        function printTransaction(transactionId) {
+            console.log('Printing transaction:', transactionId);
+            showNotification('Mencetak transaksi...', 'success');
+        }
+
+        function cancelTransaction(transactionId) {
+            if (confirm('Apakah Anda yakin ingin membatalkan transaksi ini?')) {
+                console.log('Cancelling transaction:', transactionId);
+                showNotification('Transaksi dibatalkan', 'warning');
+                loadTransactions();
+                updateSummaryCards();
+            }
+        }
+
+        function exportTransactions() {
+            showNotification('Mengekspor data transaksi...', 'success');
+        }
+
+        function printTransactions() {
+            showNotification('Mencetak daftar transaksi...', 'success');
+        }
+
+        function showNotification(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

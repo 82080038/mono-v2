@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan Sistem - KSP Lam Gabe Jaya</title>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "/mono-v2/../../login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var headerUserName = document.getElementById("headerUserName");
+            if (headerUserName && userName) {
+                headerUserName.textContent = userName;
+            }
+        });
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/enhanced-ui.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .dashboard-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed ~ .dashboard-main {
+            margin-left: 70px;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .config-card {
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+        .config-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-online {
+            background-color: #28a745;
+            animation: pulse 2s infinite;
+        }
+        .status-offline {
+            background-color: #dc3545;
+        }
+        .status-warning {
+            background-color: #ffc107;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="p-3 text-white">
+            <h5 class="mb-0">KSP Lam Gabe Jaya</h5>
+            <small class="text-white-50">Admin Dashboard</small>
+        </div>
+        <nav class="nav flex-column p-3">
+            <a class="nav-link text-white" href="/mono-v2/admin/dashboard.html">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/members.html">
+                <i class="fas fa-users me-2"></i>
+                <span class="sidebar-text">Anggota</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/loans.html">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/guarantee-management.html">
+                <i class="fas fa-shield-alt me-2"></i>
+                <span class="sidebar-text">Penjaminan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/reports.html">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <div class="mt-auto pt-3 border-top border-white-50">
+                <a class="nav-link text-white" href="/mono-v2/admin/bi-analytics.html">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    <span class="sidebar-text">BI & Analytics</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/admin/role-access.html">
+                    <i class="fas fa-user-shield me-2"></i>
+                    <span class="sidebar-text">Role & Akses</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/admin/users.html">
+                    <i class="fas fa-users-cog me-2"></i>
+                    <span class="sidebar-text">User Management</span>
+                </a>
+                <a class="nav-link text-white active" href="/mono-v2/admin/system-config.html">
+                    <i class="fas fa-cogs me-2"></i>
+                    <span class="sidebar-text">System Config</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/admin/database-management.html">
+                    <i class="fas fa-database me-2"></i>
+                    <span class="sidebar-text">Database</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link text-white" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h5 class="mb-0" id="pageTitle">Pengaturan Sistem</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshSystemStatus()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Refresh
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span id="headerUserName">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="main-content p-4">
+            <!-- System Status -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-server text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Server Status</h6>
+                                    <div class="h4 mb-0">
+                                        <span class="status-indicator status-online"></span>
+                                        Online
+                                    </div>
+                                    <small class="text-success">99.9% Uptime</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-database text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Database</h6>
+                                    <div class="h4 mb-0">
+                                        <span class="status-indicator status-online"></span>
+                                        Connected
+                                    </div>
+                                    <small class="text-success">3 DB Active</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-memory text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Memory</h6>
+                                    <div class="h4 mb-0">68%</div>
+                                    <small class="text-warning">4.2GB / 8GB</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-hdd text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Storage</h6>
+                                    <div class="h4 mb-0">42%</div>
+                                    <small class="text-success">210GB / 500GB</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Configuration -->
+            <div class="row mb-4">
+                <div class="col-lg-6 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <h6 class="mb-0">Pengaturan Aplikasi</h6>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Nama Aplikasi</label>
+                                    <input type="text" class="form-control" value="KSP Lam Gabe Jaya">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Versi</label>
+                                    <input type="text" class="form-control" value="4.0.0" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Environment</label>
+                                    <select class="form-select">
+                                        <option value="production">Production</option>
+                                        <option value="staging">Staging</option>
+                                        <option value="development">Development</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Debug Mode</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="debugMode">
+                                        <label class="form-check-label" for="debugMode">Enable Debug</label>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="saveAppConfig()">
+                                    <i class="fas fa-save me-1"></i>Simpan Pengaturan
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <h6 class="mb-0">Pengaturan Keamanan</h6>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Session Timeout (menit)</label>
+                                    <input type="number" class="form-control" value="120">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Max Login Attempts</label>
+                                    <input type="number" class="form-control" value="5">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password Length Minimum</label>
+                                    <input type="number" class="form-control" value="8">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Two-Factor Authentication</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="twoFactor">
+                                        <label class="form-check-label" for="twoFactor">Enable 2FA</label>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="saveSecurityConfig()">
+                                    <i class="fas fa-shield-alt me-1"></i>Simpan Keamanan
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Services -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0">
+                    <h6 class="mb-0">Layanan Sistem</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4 mb-3">
+                            <div class="config-card card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="mb-1">Web Server</h6>
+                                            <small class="text-muted">Apache 2.4</small>
+                                        </div>
+                                        <span class="status-indicator status-online"></span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Status:</small> <span class="text-success">Running</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Port:</small> <span>80, 443</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Uptime:</small> <span>15d 8h 32m</span>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-primary" onclick="restartService('webserver')">
+                                            <i class="fas fa-redo"></i> Restart
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="viewLogs('webserver')">
+                                            <i class="fas fa-file-alt"></i> Logs
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-3">
+                            <div class="config-card card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="mb-1">Database Server</h6>
+                                            <small class="text-muted">MySQL 8.0</small>
+                                        </div>
+                                        <span class="status-indicator status-online"></span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Status:</small> <span class="text-success">Running</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Port:</small> <span>3306</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Connections:</small> <span>12/100</span>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-primary" onclick="restartService('database')">
+                                            <i class="fas fa-redo"></i> Restart
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="viewLogs('database')">
+                                            <i class="fas fa-file-alt"></i> Logs
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-3">
+                            <div class="config-card card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="mb-1">Cache Server</h6>
+                                            <small class="text-muted">Redis 6.2</small>
+                                        </div>
+                                        <span class="status-indicator status-warning"></span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Status:</small> <span class="text-warning">Warning</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Port:</small> <span>6379</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">Memory:</small> <span>256MB/512MB</span>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-primary" onclick="restartService('cache')">
+                                            <i class="fas fa-redo"></i> Restart
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="viewLogs('cache')">
+                                            <i class="fas fa-file-alt"></i> Logs
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backup & Maintenance -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <h6 class="mb-0">Backup & Maintenance</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <h6 class="mb-3">Backup Otomatis</h6>
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="autoBackup" checked>
+                                    <label class="form-check-label" for="autoBackup">Enable Auto Backup</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Backup Schedule</label>
+                                <select class="form-select">
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Retention Period (days)</label>
+                                <input type="number" class="form-control" value="30">
+                            </div>
+                            <button class="btn btn-primary" onclick="saveBackupConfig()">
+                                <i class="fas fa-save me-1"></i>Simpan Konfigurasi
+                            </button>
+                        </div>
+                        <div class="col-lg-6 mb-3">
+                            <h6 class="mb-3">Maintenance Mode</h6>
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="maintenanceMode">
+                                    <label class="form-check-label" for="maintenanceMode">Enable Maintenance Mode</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Maintenance Message</label>
+                                <textarea class="form-control" rows="3" placeholder="System is under maintenance...">System is under maintenance. Please try again later.</textarea>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-warning" onclick="enableMaintenance()">
+                                    <i class="fas fa-tools me-1"></i>Enable
+                                </button>
+                                <button class="btn btn-success" onclick="disableMaintenance()">
+                                    <i class="fas fa-power-off me-1"></i>Disable
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // System config functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "/mono-v2/../../login.html";
+        }
+
+        function refreshSystemStatus() {
+            showNotification('System status refreshed', 'success');
+        }
+
+        function saveAppConfig() {
+            showNotification('Application configuration saved', 'success');
+        }
+
+        function saveSecurityConfig() {
+            showNotification('Security configuration saved', 'success');
+        }
+
+        function restartService(service) {
+            showNotification(`Restarting ${service}...`, 'info');
+            setTimeout(() => {
+                showNotification(`${service} restarted successfully`, 'success');
+            }, 2000);
+        }
+
+        function viewLogs(service) {
+            showNotification(`Opening ${service} logs...`, 'info');
+        }
+
+        function saveBackupConfig() {
+            showNotification('Backup configuration saved', 'success');
+        }
+
+        function enableMaintenance() {
+            showNotification('Maintenance mode enabled', 'warning');
+        }
+
+        function disableMaintenance() {
+            showNotification('Maintenance mode disabled', 'success');
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.createElement('div');
+            container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            container.appendChild(toast);
+            document.body.appendChild(container);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => {
+                container.remove();
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle sidebar collapse text visibility
+            document.getElementById('sidebar').addEventListener('transitionend', function() {
+                const isCollapsed = this.classList.contains('collapsed');
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                sidebarTexts.forEach(text => {
+                    text.style.display = isCollapsed ? 'none' : 'inline';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+                <p class="text-muted mb-0">Placeholder konfigurasi global (BASE_PATH, integrasi payment, dsb).</p>
+            </div>
+        </div>
+    </div>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
+</body>
+</body>
+</html>

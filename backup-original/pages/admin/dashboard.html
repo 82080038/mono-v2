@@ -1,0 +1,14 @@
+<?php
+/**
+ * Redirect to Dynamic Dashboard
+ */
+
+require_once __DIR__ . "/../../config/error-config.php";
+
+// Get user role from token or session
+$role = $_GET['role'] ?? $_SESSION['user_role'] ?? 'member';
+
+// Redirect to dynamic dashboard
+header("Location: ../dynamic-dashboard.html");
+exit();
+?>

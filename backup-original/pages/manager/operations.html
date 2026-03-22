@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risiko & Fraud - KSP Lam Gabe Jaya</title>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "/mono-v2/../../login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var headerUserName = document.getElementById("headerUserName");
+            if (headerUserName && userName) {
+                headerUserName.textContent = userName;
+            }
+        });
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/enhanced-ui.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .dashboard-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed ~ .dashboard-main {
+            margin-left: 70px;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="p-3 text-white">
+            <h5 class="mb-0">KSP Lam Gabe Jaya</h5>
+            <small class="text-white-50">Admin Dashboard</small>
+        </div>
+        <nav class="nav flex-column p-3">
+            <a class="nav-link text-white" href="/mono-v2/manager/dashboard.html">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/manager/members.html">
+                <i class="fas fa-users me-2"></i>
+                <span class="sidebar-text">Anggota</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/manager/loans.html">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/manager/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/manager/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/manager/npl.html">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span class="sidebar-text">NPL</span>
+            </a>
+            <a class="nav-link text-white active" href="/mono-v2/manager/risk-fraud.html">
+                <i class="fas fa-shield-alt me-2"></i>
+                <span class="sidebar-text">Risiko & Fraud</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/manager/reports.html">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <div class="mt-auto pt-3 border-top border-white-50">
+                <a class="nav-link text-white" href="/mono-v2/manager/role-access.html">
+                    <i class="fas fa-user-shield me-2"></i>
+                    <span class="sidebar-text">Role & Akses</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/manager/guarantee-management.html">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    <span class="sidebar-text">Penjaminan</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/manager/database-management.html">
+                    <i class="fas fa-database me-2"></i>
+                    <span class="sidebar-text">Database</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link text-white" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h5 class="mb-0" id="pageTitle">Risiko & Fraud</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshRiskData()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Refresh
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span id="headerUserName">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="main-content p-4">
+            <!-- Risk Overview -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-danger bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-exclamation-triangle text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">High Risk</h6>
+                                    <div class="h4 mb-0">12</div>
+                                    <small class="text-danger"><i class="fas fa-arrow-up"></i> 3 baru</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-exclamation-circle text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Medium Risk</h6>
+                                    <div class="h4 mb-0">28</div>
+                                    <small class="text-warning"><i class="fas fa-minus"></i> stabil</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-shield-alt text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Fraud Detection</h6>
+                                    <div class="h4 mb-0">5</div>
+                                    <small class="text-info"><i class="fas fa-eye"></i> dipantau</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Resolved</h6>
+                                    <div class="h4 mb-0">45</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 8%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Analysis Tools -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <h6 class="mb-0">Alat Analisis Risiko</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-danger w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="runRiskAnalysis()">
+                                        <i class="fas fa-chart-line fa-2x mb-2"></i>
+                                        <span>Analisis Risiko</span>
+                                    </button>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="runFraudDetection()">
+                                        <i class="fas fa-search fa-2x mb-2"></i>
+                                        <span>Deteksi Fraud</span>
+                                    </button>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-info w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="generateRiskReport()">
+                                        <i class="fas fa-file-alt fa-2x mb-2"></i>
+                                        <span>Laporan Risiko</span>
+                                    </button>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="viewRiskSettings()">
+                                        <i class="fas fa-cogs fa-2x mb-2"></i>
+                                        <span>Pengaturan</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Alerts Table -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Alert Risiko Terbaru</h6>
+                        <div class="d-flex gap-2">
+                            <select class="form-select form-select-sm" style="width: auto;">
+                                <option value="">Semua Level</option>
+                                <option value="high">High Risk</option>
+                                <option value="medium">Medium Risk</option>
+                                <option value="low">Low Risk</option>
+                            </select>
+                            <button class="btn btn-sm btn-outline-primary" onclick="exportRiskData()">
+                                <i class="fas fa-download me-1"></i>Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tanggal</th>
+                                    <th>Tipe</th>
+                                    <th>Deskripsi</th>
+                                    <th>Level Risiko</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>R001</td>
+                                    <td>21 Jan 2024</td>
+                                    <td><span class="badge bg-danger">Fraud</span></td>
+                                    <td>Transaksi mencurigakan pada akun #1234</td>
+                                    <td><span class="badge bg-danger">High</span></td>
+                                    <td><span class="badge bg-warning">Investigasi</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="viewRiskDetail('R001')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success me-1" onclick="resolveRisk('R001')">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>R002</td>
+                                    <td>20 Jan 2024</td>
+                                    <td><span class="badge bg-warning">NPL</span></td>
+                                    <td>Keterlambatan pembayaran > 90 hari</td>
+                                    <td><span class="badge bg-danger">High</span></td>
+                                    <td><span class="badge bg-info">Monitoring</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="viewRiskDetail('R002')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-warning me-1" onclick="escalateRisk('R002')">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>R003</td>
+                                    <td>19 Jan 2024</td>
+                                    <td><span class="badge bg-info">Kredit</span></td>
+                                    <td>Skor kredit menurun drastis</td>
+                                    <td><span class="badge bg-warning">Medium</span></td>
+                                    <td><span class="badge bg-secondary">Review</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="viewRiskDetail('R003')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info me-1" onclick="monitorRisk('R003')">
+                                            <i class="fas fa-chart-line"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Risk management functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "/mono-v2/../../login.html";
+        }
+
+        function refreshRiskData() {
+            showNotification('Data risiko berhasil diperbarui', 'success');
+        }
+
+        function runRiskAnalysis() {
+            showNotification('Analisis risiko sedang berjalan...', 'info');
+            setTimeout(() => {
+                showNotification('Analisis risiko selesai', 'success');
+            }, 3000);
+        }
+
+        function runFraudDetection() {
+            showNotification('Deteksi fraud sedang berjalan...', 'info');
+            setTimeout(() => {
+                showNotification('Deteksi fraud selesai', 'success');
+            }, 2000);
+        }
+
+        function generateRiskReport() {
+            showNotification('Laporan risiko sedang dibuat...', 'info');
+            setTimeout(() => {
+                showNotification('Laporan risiko berhasil dibuat', 'success');
+            }, 2500);
+        }
+
+        function viewRiskSettings() {
+            showNotification('Membuka pengaturan risiko', 'info');
+        }
+
+        function viewRiskDetail(id) {
+            showNotification(`Melihat detail risiko ${id}`, 'info');
+        }
+
+        function resolveRisk(id) {
+            if (confirm('Apakah Anda yakin ingin menyelesaikan risiko ini?')) {
+                showNotification(`Risiko ${id} berhasil diselesaikan`, 'success');
+            }
+        }
+
+        function escalateRisk(id) {
+            showNotification(`Risiko ${id} dieskalasi`, 'warning');
+        }
+
+        function monitorRisk(id) {
+            showNotification(`Memantau risiko ${id}`, 'info');
+        }
+
+        function exportRiskData() {
+            showNotification('Data risiko diekspor', 'success');
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.createElement('div');
+            container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            container.appendChild(toast);
+            document.body.appendChild(container);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => {
+                container.remove();
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle sidebar collapse text visibility
+            document.getElementById('sidebar').addEventListener('transitionend', function() {
+                const isCollapsed = this.classList.contains('collapsed');
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                sidebarTexts.forEach(text => {
+                    text.style.display = isCollapsed ? 'none' : 'inline';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/manager/settings.html">
+                <i class="fas fa-cog me-2"></i>
+                <span class="sidebar-text">Pengaturan</span>
+            </a>
+        </nav>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="d-flex justify-content-between align-items-center p-3">
+                <div>
+                    <h4 class="mb-0">Risiko & Fraud</h4>
+                    <small class="text-muted">Deteksi dan pencegahan risiko serta fraud</small>
+                </div>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-primary btn-sm me-2" onclick="exportRiskReport()">
+                        <i class="fas fa-download me-1"></i>Export Laporan
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="runRiskAnalysis()">
+                        <i class="fas fa-play me-1"></i>Analisis Risiko
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-4">
+            <!-- Risk Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Risiko Tinggi</h6>
+                                    <h3 id="highRiskCount">0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Risiko Sedang</h6>
+                                    <h3 id="mediumRiskCount">0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-exclamation-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Risiko Rendah</h6>
+                                    <h3 id="lowRiskCount">0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-shield-alt fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Fraud Terdeteksi</h6>
+                                    <h3 id="fraudCount">0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-user-secret fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Analysis Charts -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h5 class="mb-0">Trend Risiko</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="riskTrendChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h5 class="mb-0">Distribusi Risiko</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="riskDistributionChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Alerts -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Alert Risiko Terkini</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="riskAlertsTable">
+                            <thead>
+                                <tr>
+                                    <th>Waktu</th>
+                                    <th>Jenis Risiko</th>
+                                    <th>Anggota/Transaksi</th>
+                                    <th>Level Risiko</th>
+                                    <th>Deskripsi</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Risk alerts will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/assets/js/content-renderer.js"></script>
+    <script src="/assets/js/modal-manager.js"></script>
+    <script>
+        // Sample data for demonstration
+        const sampleRiskAlerts = [
+            {
+                time: '2024-01-31 14:30',
+                type: 'Late Payment',
+                entity: 'Ahmad Wijaya - Loan #LN001',
+                level: 'High',
+                description: 'Pinjaman terlambat 30 hari',
+                status: 'Active'
+            },
+            {
+                time: '2024-01-31 13:15',
+                type: 'Unusual Transaction',
+                entity: 'Siti Nurhaliza - SA002',
+                level: 'Medium',
+                description: 'Transaksi besar di luar jam normal',
+                status: 'Investigating'
+            }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadRiskAlerts();
+            updateSummaryCards();
+            initializeCharts();
+        });
+
+        function loadRiskAlerts() {
+            const tbody = document.querySelector('#riskAlertsTable tbody');
+            tbody.innerHTML = '';
+            
+            sampleRiskAlerts.forEach(alert => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${alert.time}</td>
+                    <td>${alert.type}</td>
+                    <td>${alert.entity}</td>
+                    <td>
+                        <span class="badge bg-${getRiskLevelColor(alert.level)}">
+                            ${alert.level}
+                        </span>
+                    </td>
+                    <td>${alert.description}</td>
+                    <td>
+                        <span class="badge bg-${getStatusColor(alert.status)}">
+                            ${alert.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary" onclick="viewRiskDetail('${alert.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateSummaryCards() {
+            const highRisk = sampleRiskAlerts.filter(r => r.level === 'High').length;
+            const mediumRisk = sampleRiskAlerts.filter(r => r.level === 'Medium').length;
+            const lowRisk = sampleRiskAlerts.filter(r => r.level === 'Low').length;
+            
+            document.getElementById('highRiskCount').textContent = highRisk;
+            document.getElementById('mediumRiskCount').textContent = mediumRisk;
+            document.getElementById('lowRiskCount').textContent = lowRisk;
+            document.getElementById('fraudCount').textContent = '0';
+        }
+
+        function initializeCharts() {
+            // Risk Trend Chart
+            const riskTrendCtx = document.getElementById('riskTrendChart').getContext('2d');
+            new Chart(riskTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Risiko Tinggi',
+                        data: [5, 8, 6, 9, 7, 10],
+                        borderColor: 'rgb(220, 53, 69)',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Risk Distribution Chart
+            const riskDistCtx = document.getElementById('riskDistributionChart').getContext('2d');
+            new Chart(riskDistCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Risiko Tinggi', 'Risiko Sedang', 'Risiko Rendah'],
+                    datasets: [{
+                        data: [10, 20, 32],
+                        backgroundColor: [
+                            'rgb(220, 53, 69)',
+                            'rgb(255, 193, 7)',
+                            'rgb(25, 135, 84)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function getRiskLevelColor(level) {
+            const colors = {
+                'High': 'danger',
+                'Medium': 'warning',
+                'Low': 'success'
+            };
+            return colors[level] || 'secondary';
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'Active': 'danger',
+                'Investigating': 'warning',
+                'Blocked': 'dark',
+                'Resolved': 'success'
+            };
+            return colors[status] || 'secondary';
+        }
+
+        function viewRiskDetail(riskId) {
+            console.log('Viewing risk detail:', riskId);
+        }
+
+        function runRiskAnalysis() {
+            showNotification('Running risk analysis...', 'info');
+            setTimeout(() => {
+                showNotification('Analisis risiko selesai!', 'success');
+            }, 3000);
+        }
+
+        function exportRiskReport() {
+            showNotification('Mengekspor laporan risiko...', 'success');
+        }
+
+        function showNotification(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+
+        // Register service worker only in production
+        if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

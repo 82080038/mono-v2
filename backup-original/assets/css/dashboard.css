@@ -1,0 +1,47 @@
+/**
+ * KSP Lam Gabe Jaya - Dashboard Styles
+ * Additional styles for dashboard pages
+ */
+
+/* Dashboard specific styles */
+.dashboard-wrapper {
+    min-height: 100vh;
+}
+
+/* Statistics cards enhancements */
+.stat-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Chart containers */
+.chart-container {
+    position: relative;
+    height: 300px;
+}
+
+/* Activity feed styles */
+.activity-feed {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    border-left: 3px solid #007bff;
+    padding-left: 15px;
+    margin-bottom: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stat-card {
+        margin-bottom: 15px;
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+}

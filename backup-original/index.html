@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSP Lam Gabe Jaya - Sistem Koperasi</title>
+    <meta name="theme-color" content="#007bff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="KSP Lam Gabe">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="stylesheet" href="assets/css/mobile-pwa.css">
+    <script src="assets/js/pwa-install.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-building me-2"></i>
+                KSP Lam Gabe Jaya
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#beranda">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tentang">Tentang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#layanan">Layanan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html" class="btn btn-outline-light btn-sm ms-2">
+                            <i class="fas fa-sign-in-alt me-1"></i>
+                            Masuk
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="display-4 fw-bold text-white mb-4">
+                            Selamat Datang di KSP Lam Gabe Jaya
+                        </h1>
+                        <p class="lead text-white mb-4">
+                            Koperasi Simpan Pinjam terpercaya dengan layanan keuangan yang 
+                            mudah, aman, dan menguntungkan untuk seluruh anggota.
+                        </p>
+                        <div class="d-flex gap-3">
+                            <a href="login.html" class="btn btn-light btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Masuk ke Sistem
+                            </a>
+                            <button class="btn btn-outline-light btn-lg" onclick="showInfo()">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Informasi Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image text-center">
+                        <i class="fas fa-university text-white" style="font-size: 15rem; opacity: 0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="layanan" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Layanan Kami</h2>
+                <p class="lead text-muted">Berbagai layanan keuangan untuk kebutuhan Anda</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-piggy-bank text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h4 class="card-title">Simpanan</h4>
+                            <p class="card-text">
+                                Simpanan wajib dan sukarela dengan bunga kompetitif 
+                                untuk masa depan yang lebih baik.
+                            </p>
+                            <button class="btn btn-primary" onclick="showServiceDetail('savings')">
+                                <i class="fas fa-arrow-right me-1"></i>
+                                Detail Layanan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-hand-holding-usd text-success" style="font-size: 3rem;"></i>
+                            </div>
+                            <h4 class="card-title">Pinjaman</h4>
+                            <p class="card-text">
+                                Pinjaman dengan bunga rendah dan proses cepat untuk 
+                                kebutuhan modal usaha dan personal.
+                            </p>
+                            <button class="btn btn-success" onclick="showServiceDetail('loans')">
+                                <i class="fas fa-arrow-right me-1"></i>
+                                Detail Layanan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-chart-line text-warning" style="font-size: 3rem;"></i>
+                            </div>
+                            <h4 class="card-title">Investasi</h4>
+                            <p class="card-text">
+                                Peluang investasi yang aman dan menguntungkan 
+                                untuk pertumbuhan kekayaan jangka panjang.
+                            </p>
+                            <button class="btn btn-warning" onclick="showServiceDetail('investment')">
+                                <i class="fas fa-arrow-right me-1"></i>
+                                Detail Layanan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="tentang" class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="display-5 fw-bold mb-4">Tentang KSP Lam Gabe Jaya</h2>
+                    <p class="lead mb-4">
+                        KSP Lam Gabe Jaya adalah koperasi simpan pinjam yang telah 
+                        berdiri sejak tahun 2010 dengan komitmen untuk memberikan 
+                        layanan keuangan terbaik kepada seluruh anggota.
+                    </p>
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-users text-primary me-3" style="font-size: 2rem;"></i>
+                                <div>
+                                    <h5 class="mb-0">1,500+</h5>
+                                    <small class="text-muted">Anggota Aktif</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar-check text-success me-3" style="font-size: 2rem;"></i>
+                                <div>
+                                    <h5 class="mb-0">13+ Tahun</h5>
+                                    <small class="text-muted">Pengalaman</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-handshake text-warning me-3" style="font-size: 2rem;"></i>
+                                <div>
+                                    <h5 class="mb-0">Rp 50 M+</h5>
+                                    <small class="text-muted">Aset Kelolaan</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-award text-danger me-3" style="font-size: 2rem;"></i>
+                                <div>
+                                    <h5 class="mb-0">Terpercaya</h5>
+                                    <small class="text-muted">Sertifikasi Resmi</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-image text-center">
+                        <img src="assets/images/cooperative-building.svg" alt="Kantor KSP Lam Gabe Jaya" 
+                             class="img-fluid rounded shadow-lg" 
+                             onerror="this.src='https://via.placeholder.com/600x400/007bff/ffffff?text=KSP+Lam+Gabe+Jaya'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-5 bg-dark text-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h3 class="mb-3">Hubungi Kami</h3>
+                    <p class="mb-4">
+                        Siap melayani kebutuhan keuangan Anda dengan profesional dan terpercaya.
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-map-marker-alt me-3"></i>
+                                <div>
+                                    <strong>Alamat:</strong><br>
+                                    Jl. Merdeka No. 123, Jakarta Pusat
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-phone me-3"></i>
+                                <div>
+                                    <strong>Telepon:</strong><br>
+                                    (021) 1234-5678
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-envelope me-3"></i>
+                                <div>
+                                    <strong>Email:</strong><br>
+                                    info@ksplamgabejaya.co.id
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-clock me-3"></i>
+                                <div>
+                                    <strong>Jam Operasional:</strong><br>
+                                    Senin - Jumat: 08:00 - 17:00
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card bg-secondary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Butuh Bantuan?</h5>
+                            <p class="card-text">
+                                Tim kami siap membantu Anda untuk setiap kebutuhan 
+                                informasi dan layanan koperasi.
+                            </p>
+                            <button class="btn btn-light w-100" onclick="showContactForm()">
+                                <i class="fas fa-comment-dots me-2"></i>
+                                Hubungi Kami Sekarang
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>KSP Lam Gabe Jaya</h5>
+                    <p class="mb-0">Koperasi Simpan Pinjam Terpercaya Sejak 2010</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        © 2024 KSP Lam Gabe Jaya. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/main-fast.js"></script>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
+</body>
+</html>

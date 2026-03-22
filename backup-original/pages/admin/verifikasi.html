@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Berjenjang - KSP Lam Gabe Jaya</title>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "/mono-v2/../../login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var headerUserName = document.getElementById("headerUserName");
+            if (headerUserName && userName) {
+                headerUserName.textContent = userName;
+            }
+        });
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/enhanced-ui.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .dashboard-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed ~ .dashboard-main {
+            margin-left: 70px;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .verification-card {
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+        .verification-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #667eea;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 2px solid white;
+        }
+        .timeline-item.completed::before {
+            background: #28a745;
+        }
+        .timeline-item.pending::before {
+            background: #ffc107;
+        }
+        .timeline-item.rejected::before {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="p-3 text-white">
+            <h5 class="mb-0">KSP Lam Gabe Jaya</h5>
+            <small class="text-white-50">Admin Dashboard</small>
+        </div>
+        <nav class="nav flex-column p-3">
+            <a class="nav-link text-white" href="/mono-v2/admin/dashboard.html">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/members.html">
+                <i class="fas fa-users me-2"></i>
+                <span class="sidebar-text">Anggota</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/loans.html">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/guarantee-management.html">
+                <i class="fas fa-shield-alt me-2"></i>
+                <span class="sidebar-text">Penjaminan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/reports.html">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <div class="mt-auto pt-3 border-top border-white-50">
+                <a class="nav-link text-white" href="/mono-v2/admin/bi-analytics.html">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    <span class="sidebar-text">BI & Analytics</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/admin/role-access.html">
+                    <i class="fas fa-user-shield me-2"></i>
+                    <span class="sidebar-text">Role & Akses</span>
+                </a>
+                <a class="nav-link text-white active" href="/mono-v2/admin/verifikasi.html">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span class="sidebar-text">Verifikasi</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/admin/audit-log.html">
+                    <i class="fas fa-history me-2"></i>
+                    <span class="sidebar-text">Audit Log</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link text-white" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h5 class="mb-0" id="pageTitle">Verifikasi Berjenjang</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshVerificationData()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Refresh
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span id="headerUserName">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="main-content p-4">
+            <!-- Verification Statistics -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-clipboard-list text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Total Pending</h6>
+                                    <div class="h4 mb-0">24</div>
+                                    <small class="text-warning"><i class="fas fa-clock"></i> Menunggu</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-check-double text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Verified Today</h6>
+                                    <div class="h4 mb-0">18</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 12%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-exclamation-triangle text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Need Review</h6>
+                                    <div class="h4 mb-0">7</div>
+                                    <small class="text-warning"><i class="fas fa-eye"></i> Review</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-danger bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-times-circle text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Rejected</h6>
+                                    <div class="h4 mb-0">3</div>
+                                    <small class="text-danger"><i class="fas fa-arrow-down"></i> 5%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification Queue -->
+            <div class="row mb-4">
+                <div class="col-lg-8 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">Antrian Verifikasi</h6>
+                                <div class="d-flex gap-2">
+                                    <select class="form-select form-select-sm" style="width: auto;" id="verificationType">
+                                        <option value="">Semua Tipe</option>
+                                        <option value="loan">Pinjaman</option>
+                                        <option value="member">Anggota</option>
+                                        <option value="guarantee">Penjaminan</option>
+                                    </select>
+                                    <select class="form-select form-select-sm" style="width: auto;" id="priorityFilter">
+                                        <option value="">Semua Prioritas</option>
+                                        <option value="high">Tinggi</option>
+                                        <option value="medium">Sedang</option>
+                                        <option value="low">Rendah</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tipe</th>
+                                            <th>Pemohon</th>
+                                            <th>Prioritas</th>
+                                            <th>Waktu</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span class="badge bg-primary">VR-001</span></td>
+                                            <td><span class="badge bg-info">Pinjaman</span></td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                                        <i class="fas fa-user text-primary small"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-semibold">Ahmad Wijaya</div>
+                                                        <small class="text-muted">ID: 001</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-danger">Tinggi</span></td>
+                                            <td>2 jam lalu</td>
+                                            <td><span class="badge bg-warning">Pending</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1" onclick="verifyItem('VR-001')">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-info me-1" onclick="reviewItem('VR-001')">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="rejectItem('VR-001')">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="badge bg-primary">VR-002</span></td>
+                                            <td><span class="badge bg-success">Anggota</span></td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                                        <i class="fas fa-user text-success small"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-semibold">Siti Nurhaliza</div>
+                                                        <small class="text-muted">ID: 002</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-warning">Sedang</span></td>
+                                            <td>5 jam lalu</td>
+                                            <td><span class="badge bg-warning">Pending</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1" onclick="verifyItem('VR-002')">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-info me-1" onclick="reviewItem('VR-002')">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="rejectItem('VR-002')">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="badge bg-primary">VR-003</span></td>
+                                            <td><span class="badge bg-warning">Penjaminan</span></td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-2">
+                                                        <i class="fas fa-user text-warning small"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-semibold">Budi Santoso</div>
+                                                        <small class="text-muted">ID: 003</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-success">Rendah</span></td>
+                                            <td>1 hari lalu</td>
+                                            <td><span class="badge bg-info">Review</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1" onclick="verifyItem('VR-003')">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-info me-1" onclick="reviewItem('VR-003')">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="rejectItem('VR-003')">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <h6 class="mb-0">Verification Workflow</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="timeline">
+                                <div class="timeline-item completed">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Submission</h6>
+                                            <small class="text-muted">User submits request</small>
+                                        </div>
+                                        <small class="text-success">✓</small>
+                                    </div>
+                                </div>
+                                <div class="timeline-item completed">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Initial Check</h6>
+                                            <small class="text-muted">Basic validation</small>
+                                        </div>
+                                        <small class="text-success">✓</small>
+                                    </div>
+                                </div>
+                                <div class="timeline-item pending">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Document Review</h6>
+                                            <small class="text-muted">Staff verification</small>
+                                        </div>
+                                        <small class="text-warning">⏳</small>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Manager Approval</h6>
+                                            <small class="text-muted">Final decision</small>
+                                        </div>
+                                        <small class="text-muted">-</small>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Completion</h6>
+                                            <small class="text-muted">Process completed</small>
+                                        </div>
+                                        <small class="text-muted">-</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Verifications -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Verifikasi Terbaru</h6>
+                        <button class="btn btn-outline-primary btn-sm" onclick="viewAllVerifications()">
+                            <i class="fas fa-eye me-1"></i>Lihat Semua
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4 mb-3">
+                            <div class="verification-card card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="mb-1">Pinjaman Produktif</h6>
+                                            <small class="text-muted">VR-001</small>
+                                        </div>
+                                        <span class="badge bg-success">Approved</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <small class="text-muted">Pemohon</small>
+                                            <strong>Ahmad Wijaya</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <small class="text-muted">Jumlah</small>
+                                            <strong>Rp 15.000.000</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small class="text-muted">Diverifikasi oleh</small>
+                                            <strong>Admin</strong>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-primary flex-fill" onclick="viewDetails('VR-001')">
+                                            <i class="fas fa-eye"></i> Detail
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success flex-fill" onclick="downloadCertificate('VR-001')">
+                                            <i class="fas fa-download"></i> Sertifikat
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-3">
+                            <div class="verification-card card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="mb-1">Pendaftaran Anggota</h6>
+                                            <small class="text-muted">VR-002</small>
+                                        </div>
+                                        <span class="badge bg-danger">Rejected</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <small class="text-muted">Pemohon</small>
+                                            <strong>Siti Nurhaliza</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <small class="text-muted">Tipe</small>
+                                            <strong>Anggota Baru</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small class="text-muted">Alasan</small>
+                                            <strong>Dokumen tidak lengkap</strong>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-primary flex-fill" onclick="viewDetails('VR-002')">
+                                            <i class="fas fa-eye"></i> Detail
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-warning flex-fill" onclick="resubmit('VR-002')">
+                                            <i class="fas fa-redo"></i> Ajukan Ulang
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-3">
+                            <div class="verification-card card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="mb-1">Penjaminan Pinjaman</h6>
+                                            <small class="text-muted">VR-003</small>
+                                        </div>
+                                        <span class="badge bg-warning">Review</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <small class="text-muted">Pemohon</small>
+                                            <strong>Budi Santoso</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <small class="text-muted">Nilai</small>
+                                            <strong>Rp 20.000.000</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small class="text-muted">Status</small>
+                                            <strong>Dalam review</strong>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-primary flex-fill" onclick="viewDetails('VR-003')">
+                                            <i class="fas fa-eye"></i> Detail
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info flex-fill" onclick="trackProgress('VR-003')">
+                                            <i class="fas fa-chart-line"></i> Track
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Verification functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "/mono-v2/../../login.html";
+        }
+
+        function refreshVerificationData() {
+            showNotification('Data verifikasi berhasil diperbarui', 'success');
+        }
+
+        function verifyItem(itemId) {
+            showNotification(`Memverifikasi ${itemId}...`, 'info');
+            setTimeout(() => {
+                showNotification(`${itemId} berhasil diverifikasi`, 'success');
+            }, 2000);
+        }
+
+        function reviewItem(itemId) {
+            showNotification(`Melihat detail ${itemId}`, 'info');
+        }
+
+        function rejectItem(itemId) {
+            showNotification(`Menolak ${itemId}...`, 'warning');
+            setTimeout(() => {
+                showNotification(`${itemId} ditolak`, 'warning');
+            }, 2000);
+        }
+
+        function viewAllVerifications() {
+            showNotification('Menampilkan semua verifikasi', 'info');
+        }
+
+        function viewDetails(itemId) {
+            showNotification(`Melihat detail verifikasi ${itemId}`, 'info');
+        }
+
+        function downloadCertificate(itemId) {
+            showNotification(`Mengunduh sertifikat ${itemId}`, 'success');
+        }
+
+        function resubmit(itemId) {
+            showNotification(`Mengajukan ulang ${itemId}`, 'info');
+        }
+
+        function trackProgress(itemId) {
+            showNotification(`Melacak progress ${itemId}`, 'info');
+        }
+
+        // Filter functionality
+        document.getElementById('verificationType').addEventListener('change', function(e) {
+            const filterValue = e.target.value;
+            showNotification(`Filter tipe: ${filterValue}`, 'info');
+        });
+
+        document.getElementById('priorityFilter').addEventListener('change', function(e) {
+            const filterValue = e.target.value;
+            showNotification(`Filter prioritas: ${filterValue}`, 'info');
+        });
+
+        // Show notification
+        function showNotification(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.createElement('div');
+            container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            container.appendChild(toast);
+            document.body.appendChild(container);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => {
+                container.remove();
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle sidebar collapse text visibility
+            document.getElementById('sidebar').addEventListener('transitionend', function() {
+                const isCollapsed = this.classList.contains('collapsed');
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                sidebarTexts.forEach(text => {
+                    text.style.display = isCollapsed ? 'none' : 'inline';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+                <p class="text-muted mb-0">Placeholder alur Survei → Approve → Cair.</p>
+            </div>
+        </div>
+    </div>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
+</body>
+</body>
+</html>
