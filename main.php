@@ -732,6 +732,147 @@ function getDashboardData($role, $userId) {
         let currentUser = <?php echo json_encode($user); ?>;
         let userRole = <?php echo json_encode($userRole); ?>;
         
+        // Check session timeout
+        function checkSessionTimeout() {
+            const sessionTimeout = 30 * 60 * 1000; // 30 minutes in milliseconds
+            const loginTime = <?php echo time() * 1000; ?>;
+            const currentTime = Date.now();
+            
+            if (currentTime - loginTime > sessionTimeout) {
+                showNotification('Session expired. Please login again.', 'warning');
+                setTimeout(() => {
+                    logout();
+                }, 3000);
+            }
+        }
+        
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            // Create notification container if it doesn't exist
+            let notificationContainer = document.getElementById('notification-container');
+            if (!notificationContainer) {
+                notificationContainer = document.createElement('div');
+                notificationContainer.id = 'notification-container';
+                notificationContainer.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 9999;
+                    max-width: 350px;
+                `;
+                document.body.appendChild(notificationContainer);
+            }
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            const notificationId = 'notification-' + Date.now();
+            notification.id = notificationId;
+            
+            // Set notification styles based on type
+            const typeStyles = {
+                success: {
+                    bg: '#28a745',
+                    border: '#1e7e34',
+                    icon: 'fa-check-circle'
+                },
+                error: {
+                    bg: '#dc3545',
+                    border: '#bd2130',
+                    icon: 'fa-exclamation-circle'
+                },
+                warning: {
+                    bg: '#ffc107',
+                    border: '#e0a800',
+                    icon: 'fa-exclamation-triangle'
+                },
+                info: {
+                    bg: '#17a2b8',
+                    border: '#117a8b',
+                    icon: 'fa-info-circle'
+                }
+            };
+            
+            const style = typeStyles[type] || typeStyles.info;
+            
+            notification.style.cssText = `
+                background-color: ${style.bg};
+                border: 1px solid ${style.border};
+                color: white;
+                padding: 12px 16px;
+                margin-bottom: 10px;
+                border-radius: 6px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+                animation: slideInRight 0.3s ease-out;
+                cursor: pointer;
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas ${style.icon} me-2"></i>
+                <span>${message}</span>
+                <button class="ms-auto btn btn-sm btn-link text-white p-0" style="opacity: 0.8;">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Add CSS animation if not already added
+            if (!document.getElementById('notification-styles')) {
+                const styleSheet = document.createElement('style');
+                styleSheet.id = 'notification-styles';
+                styleSheet.textContent = `
+                    @keyframes slideInRight {
+                        from {
+                            transform: translateX(100%);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                    }
+                    @keyframes slideOutRight {
+                        from {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                        to {
+                            transform: translateX(100%);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(styleSheet);
+            }
+            
+            // Add click handler to close notification
+            notification.addEventListener('click', function() {
+                removeNotification(notificationId);
+            });
+            
+            // Add to container
+            notificationContainer.appendChild(notification);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                removeNotification(notificationId);
+            }, 5000);
+        }
+        
+        // Remove notification function
+        function removeNotification(notificationId) {
+            const notification = document.getElementById(notificationId);
+            if (notification) {
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }
+        }
+        
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
             loadDashboardWidgets();
