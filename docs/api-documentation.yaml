@@ -1,0 +1,885 @@
+openapi: 3.0.3
+info:
+  title: KSP Lam Gabe Jaya API
+  description: API untuk sistem Koperasi Simpan Pinjam KSP Lam Gabe Jaya
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@ksp-lamgabejaya.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost/mono-v2/api
+    description: Development server
+  - url: https://api.ksp-lamgabejaya.com/api
+    description: Production server
+
+security:
+  - sessionAuth: []
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+      description: Session cookie untuk autentikasi
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Status respons
+        message:
+          type: string
+          description: Pesan respons
+        data:
+          type: object
+          description: Data respons
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp respons
+        status_code:
+          type: integer
+          description: HTTP status code
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          description: Error message
+        error_code:
+          type: string
+          description: Error code
+        timestamp:
+          type: string
+          format: date-time
+        status_code:
+          type: integer
+
+    TransactionData:
+      type: object
+      properties:
+        transaction_code:
+          type: string
+          example: "DEP202403240001"
+        member_name:
+          type: string
+          example: "Budi Santoso"
+        account_type:
+          type: string
+          example: "simpanan"
+        amount:
+          type: number
+          format: float
+          example: 1000000
+        new_balance:
+          type: number
+          format: float
+          example: 5000000
+        payment_method:
+          type: string
+          example: "cash"
+        timestamp:
+          type: string
+          format: date-time
+        teller:
+          type: string
+          example: "Admin User"
+
+    MemberData:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        member_number:
+          type: string
+          example: "MBR20240324001"
+        full_name:
+          type: string
+          example: "Budi Santoso"
+        phone:
+          type: string
+          example: "08123456789"
+        email:
+          type: string
+          example: "budi@example.com"
+        status:
+          type: string
+          example: "active"
+
+    AccountData:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        account_number:
+          type: string
+          example: "SP0010001"
+        account_type:
+          type: string
+          example: "simpanan"
+        account_name:
+          type: string
+          example: "Simpanan Pokok"
+        balance:
+          type: number
+          format: float
+          example: 5000000
+        status:
+          type: string
+          example: "active"
+
+    LoanData:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        loan_number:
+          type: string
+          example: "LN20240324001"
+        member_name:
+          type: string
+          example: "Budi Santoso"
+        loan_amount:
+          type: number
+          format: float
+          example: 10000000
+        status:
+          type: string
+          example: "active"
+        application_date:
+          type: string
+          format: date
+          example: "2024-03-24"
+
+    DashboardStats:
+      type: object
+      properties:
+        total_members:
+          type: integer
+          example: 125
+        total_deposits:
+          type: number
+          format: float
+          example: 250000000
+        total_loans:
+          type: number
+          format: float
+          example: 180000000
+        total_users:
+          type: integer
+          example: 15
+        today_transactions:
+          type: integer
+          example: 45
+        monthly_revenue:
+          type: number
+          format: float
+          example: 45000000
+
+paths:
+  /business-logic-enhanced.php:
+    post:
+      tags:
+        - Transaction Processing
+      summary: Process deposit transaction
+      description: Memproses transaksi setoran simpanan
+      operationId: processDeposit
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - action
+                - member_id
+                - amount
+                - account_type
+                - payment_method
+              properties:
+                action:
+                  type: string
+                  enum: [process_deposit]
+                  example: "process_deposit"
+                member_id:
+                  type: integer
+                  minimum: 1
+                  description: ID anggota
+                  example: 1
+                amount:
+                  type: number
+                  format: float
+                  minimum: 1000
+                  maximum: 100000000
+                  description: Jumlah setoran (minimal 1000)
+                  example: 1000000
+                account_type:
+                  type: string
+                  minLength: 3
+                  description: Jenis simpanan
+                  example: "simpanan"
+                payment_method:
+                  type: string
+                  minLength: 2
+                  description: Metode pembayaran
+                  enum: [cash, transfer, bank_deposit, digital_payment]
+                  example: "cash"
+                description:
+                  type: string
+                  maxLength: 500
+                  description: Catatan transaksi
+                  example: "Setoran bulanan Maret"
+      responses:
+        '200':
+          description: Transaksi berhasil diproses
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/TransactionData'
+        '400':
+          description: Validasi gagal atau data tidak valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Tidak terautentikasi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Tidak memiliki izin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error server internal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - Member Services
+      summary: Search members
+      description: Mencari anggota berdasarkan nama, nomor anggota, atau telepon
+      operationId: searchMembers
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [search_member]
+          example: "search_member"
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 2
+            maxLength: 100
+          description: Kata kunci pencarian
+          example: "Budi"
+      responses:
+        '200':
+          description: Daftar anggota yang ditemukan
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MemberData'
+                      count:
+                        type: integer
+                        example: 5
+                      search_term:
+                        type: string
+                        example: "Budi"
+        '400':
+          description: Parameter pencarian tidak valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Tidak terautentikasi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /process_withdrawal:
+    post:
+      tags:
+        - Transaction Processing
+      summary: Process withdrawal transaction
+      description: Memproses transaksi penarikan simpanan
+      operationId: processWithdrawal
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - action
+                - member_id
+                - amount
+                - account_type
+                - payment_method
+              properties:
+                action:
+                  type: string
+                  enum: [process_withdrawal]
+                  example: "process_withdrawal"
+                member_id:
+                  type: integer
+                  minimum: 1
+                  example: 1
+                amount:
+                  type: number
+                  format: float
+                  minimum: 1000
+                  maximum: 100000000
+                  example: 500000
+                account_type:
+                  type: string
+                  minLength: 3
+                  example: "simpanan"
+                payment_method:
+                  type: string
+                  minLength: 2
+                  enum: [cash, transfer, bank_deposit, digital_payment]
+                  example: "cash"
+                description:
+                  type: string
+                  maxLength: 500
+                  example: "Penarikan untuk keperluan darurat"
+      responses:
+        '200':
+          description: Transaksi berhasil diproses
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/TransactionData'
+        '400':
+          description: Validasi gagal atau saldo tidak mencukupi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /process_loan_payment:
+    post:
+      tags:
+        - Transaction Processing
+      summary: Process loan payment
+      description: Memproses pembayaran angsuran pinjaman
+      operationId: processLoanPayment
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - action
+                - loan_id
+                - amount
+                - payment_method
+              properties:
+                action:
+                  type: string
+                  enum: [process_loan_payment]
+                  example: "process_loan_payment"
+                loan_id:
+                  type: integer
+                  minimum: 1
+                  example: 1
+                amount:
+                  type: number
+                  format: float
+                  minimum: 1000
+                  example: 1500000
+                payment_method:
+                  type: string
+                  minLength: 2
+                  enum: [cash, transfer, bank_deposit, digital_payment]
+                  example: "cash"
+      responses:
+        '200':
+          description: Pembayaran berhasil diproses
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          transaction_code:
+                            type: string
+                            example: "PAY202403240001"
+                          member_name:
+                            type: string
+                            example: "Budi Santoso"
+                          loan_number:
+                            type: string
+                            example: "LN20240324001"
+                          amount:
+                            type: number
+                            format: float
+                            example: 1500000
+                          principal:
+                            type: number
+                            format: float
+                            example: 1200000
+                          interest:
+                            type: number
+                            format: float
+                            example: 300000
+                          remaining_balance:
+                            type: number
+                            format: float
+                            example: 8500000
+                          payment_method:
+                            type: string
+                            example: "cash"
+                          timestamp:
+                            type: string
+                            format: date-time
+                          teller:
+                            type: string
+                            example: "Admin User"
+
+  /get_today_transactions:
+    get:
+      tags:
+        - Transaction Processing
+      summary: Get today's transactions
+      description: Mendapatkan daftar transaksi hari ini untuk teller yang sedang login
+      operationId: getTodayTransactions
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [get_today_transactions]
+          example: "get_today_transactions"
+      responses:
+        '200':
+          description: Daftar transaksi hari ini
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            transaction_code:
+                              type: string
+                              example: "DEP202403240001"
+                            member_name:
+                              type: string
+                              example: "Budi Santoso"
+                            account_type:
+                              type: string
+                              example: "simpanan"
+                            transaction_type:
+                              type: string
+                              enum: [credit, debit]
+                              example: "credit"
+                            amount:
+                              type: number
+                              format: float
+                              example: 1000000
+                            payment_method:
+                              type: string
+                              example: "cash"
+                            created_at:
+                              type: string
+                              format: date-time
+                              example: "2024-03-24T10:30:00Z"
+                            status:
+                              type: string
+                              example: "completed"
+                      count:
+                        type: integer
+                        example: 15
+
+  /get_today_summary:
+    get:
+      tags:
+        - Transaction Processing
+      summary: Get today's summary
+      description: Mendapatkan ringkasan transaksi hari ini
+      operationId: getTodaySummary
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [get_today_summary]
+          example: "get_today_summary"
+      responses:
+        '200':
+          description: Ringkasan transaksi hari ini
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          total_transactions:
+                            type: integer
+                            example: 15
+                          total_deposits:
+                            type: number
+                            format: float
+                            example: 25000000
+                          total_withdrawals:
+                            type: number
+                            format: float
+                            example: 8000000
+                          total_amount:
+                            type: number
+                            format: float
+                            example: 33000000
+
+  /get_pending_approvals:
+    get:
+      tags:
+        - Approval Workflow
+      summary: Get pending approvals
+      description: Mendapatkan daftar persetujuan yang pending (hanya admin dan bos)
+      operationId: getPendingApprovals
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [get_pending_approvals]
+          example: "get_pending_approvals"
+      responses:
+        '200':
+          description: Daftar persetujuan pending
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          members:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                  example: 1
+                                member_number:
+                                  type: string
+                                  example: "MBR20240324001"
+                                full_name:
+                                  type: string
+                                  example: "Budi Santoso"
+                                phone:
+                                  type: string
+                                  example: "08123456789"
+                                submitted_date:
+                                  type: string
+                                  format: date-time
+                                  example: "2024-03-24T09:00:00Z"
+                          loans:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/LoanData'
+                          transactions:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                  example: 1
+                                transaction_code:
+                                  type: string
+                                  example: "DEP202403240001"
+                                amount:
+                                  type: number
+                                  format: float
+                                  example: 5000000
+                                submitted_date:
+                                  type: string
+                                  format: date-time
+                                  example: "2024-03-24T10:00:00Z"
+
+  /approve_member:
+    post:
+      tags:
+        - Approval Workflow
+      summary: Approve member registration
+      description: Menyetujui pendaftaran anggota baru (hanya admin dan bos)
+      operationId: approveMember
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - action
+                - member_id
+              properties:
+                action:
+                  type: string
+                  enum: [approve_member]
+                  example: "approve_member"
+                member_id:
+                  type: integer
+                  minimum: 1
+                  description: ID anggota yang akan disetujui
+                  example: 1
+                notes:
+                  type: string
+                  maxLength: 500
+                  description: Catatan persetujuan
+                  example: "Data lengkap, dokumen valid"
+      responses:
+        '200':
+          description: Anggota berhasil disetujui
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          member_number:
+                            type: string
+                            example: "MBR20240324001"
+                          full_name:
+                            type: string
+                            example: "Budi Santoso"
+
+  /get_executive_dashboard:
+    get:
+      tags:
+        - Reporting System
+      summary: Get executive dashboard
+      description: Mendapatkan data dashboard executive (hanya bos)
+      operationId: getExecutiveDashboard
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [get_executive_dashboard]
+          example: "get_executive_dashboard"
+      responses:
+        '200':
+          description: Data dashboard executive
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          overview:
+                            $ref: '#/components/schemas/DashboardStats'
+                          financial:
+                            type: object
+                            properties:
+                              monthly_trends:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    month:
+                                      type: string
+                                      example: "2024-03"
+                                    deposits:
+                                      type: number
+                                      format: float
+                                      example: 25000000
+                                    withdrawals:
+                                      type: number
+                                      format: float
+                                      example: 8000000
+                                    revenue:
+                                      type: number
+                                      format: float
+                                      example: 500000
+                          members:
+                            type: object
+                            properties:
+                              growth:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    month:
+                                      type: string
+                                      example: "2024-03"
+                                    new_members:
+                                      type: integer
+                                      example: 8
+                                    active_members:
+                                      type: integer
+                                      example: 125
+                          loans:
+                            type: object
+                            properties:
+                              status_distribution:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    status:
+                                      type: string
+                                      example: "active"
+                                    count:
+                                      type: integer
+                                      example: 45
+                                    total_amount:
+                                      type: number
+                                      format: float
+                                      example: 180000000
+                                    average_amount:
+                                      type: number
+                                      format: float
+                                      example: 4000000
+                          risk:
+                            type: object
+                            properties:
+                              npl_ratio:
+                                type: number
+                                format: float
+                                example: 2.5
+                              liquidity_ratio:
+                                type: number
+                                format: float
+                                example: 85.5
+                              capital_adequacy:
+                                type: number
+                                format: float
+                                example: 15.2
+
+  /get_user_profile:
+    get:
+      tags:
+        - User Management
+      summary: Get current user profile
+      description: Mendapatkan profil user yang sedang login
+      operationId: getUserProfile
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [get_user_profile]
+          example: "get_user_profile"
+      responses:
+        '200':
+          description: Profil user berhasil diambil
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          name:
+                            type: string
+                            example: "Admin User"
+                          username:
+                            type: string
+                            example: "admin"
+                          role:
+                            type: string
+                            enum: [bos, admin, teller, collector, nasabah]
+                            example: "admin"
+                          email:
+                            type: string
+                            example: "admin@ksp-lamgabejaya.com"
+
+tags:
+  - name: Transaction Processing
+    description: Endpoints untuk memproses transaksi
+  - name: Approval Workflow
+    description: Endpoints untuk workflow persetujuan
+  - name: Reporting System
+    description: Endpoints untuk sistem laporan
+  - name: Member Services
+    description: Endpoints untuk layanan anggota
+  - name: User Management
+    description: Endpoints untuk manajemen user

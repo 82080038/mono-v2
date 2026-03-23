@@ -1,370 +1,488 @@
 <?php
 /**
  * KSP Lam Gabe Jaya - Application Constants
- * 100% English PHP Constants and Variables
+ * Centralized configuration constants for the entire application
  */
 
-// Application Configuration
+// Prevent direct access (but allow from main application files and API)
+if (!defined('IN_INDEX_PHP') && !defined('IN_LOGIN_PHP') && !defined('IN_MAIN_PHP') && !defined('ALLOW_DIRECT_ACCESS')) {
+    die('Direct access not allowed');
+}
+
+// Prevent constant redefinition
+if (defined('APP_NAME')) {
+    return;
+}
+
+// ========================================
+// APPLICATION CONSTANTS
+// ========================================
+
+// Application Info
 define('APP_NAME', 'KSP Lam Gabe Jaya');
-define('APP_VERSION', '2.0.0');
-define('APP_ENVIRONMENT', 'production');
-define('APP_DEBUG', false);
-define('APP_URL', 'http://localhost/mono-v2');
-define('APP_TIMEZONE', 'Asia/Jakarta');
+define('APP_VERSION', '4.0');
+define('APP_DESCRIPTION', 'Koperasi Simpan Pinjam Digital Terpadu');
+define('APP_AUTHOR', 'KSP Lam Gabe Jaya Development Team');
+define('APP_COPYRIGHT', '© 2024 KSP Lam Gabe Jaya. All rights reserved.');
 
-// Security Configuration
-define('JWT_SECRET', 'your-super-secret-jwt-key-change-in-production');
-define('JWT_ALGORITHM', 'HS256');
-define('TOKEN_EXPIRY', 3600); // 1 hour in seconds
-define('REFRESH_TOKEN_EXPIRY', 604800); // 7 days in seconds
-define('SESSION_LIFETIME', 3600); // 1 hour
-define('MAX_LOGIN_ATTEMPTS', 3);
-define('LOGIN_LOCKOUT_TIME', 900); // 15 minutes
+// Application Paths
+define('APP_ROOT', __DIR__ . '/..');
+define('APP_CONFIG', __DIR__);
+define('APP_ASSETS', APP_ROOT . '/assets');
+define('APP_PAGES', APP_ROOT . '/pages');
+define('APP_API', APP_ROOT . '/api');
+define('APP_UPLOADS', APP_ROOT . '/uploads');
+define('APP_BACKUPS', APP_ROOT . '/backups');
+define('APP_LOGS', APP_ROOT . '/logs');
+define('APP_CACHE', APP_ROOT . '/cache');
+define('APP_TEMP', APP_ROOT . '/temp');
 
-// Database Configuration
+// URL Constants
+define('BASE_URL', (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . ($_SERVER['HTTP_HOST'] ?? 'localhost'));
+define('APP_URL', BASE_URL . str_replace('/index.php', '', $_SERVER['PHP_SELF'] ?? '/mono-v2/'));
+define('ASSETS_URL', APP_URL . '/assets');
+define('API_URL', APP_URL . '/api');
+define('UPLOADS_URL', APP_URL . '/uploads');
+
+// ========================================
+// DATABASE CONSTANTS
+// ========================================
+
+// Primary Database (Koperasi)
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'ksp_lamgabejaya_v2');
+define('DB_PORT', '3306');
+define('DB_NAME', 'gabe');
 define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_PASS', 'root');
+define('DB_PASSWORD', 'root');
 define('DB_CHARSET', 'utf8mb4');
 define('DB_COLLATION', 'utf8mb4_unicode_ci');
 
-// File Upload Configuration
+// Multi-Database Configuration
+define('DB_ORANG_HOST', 'localhost');
+define('DB_ORANG_NAME', 'orang');
+define('DB_ORANG_USER', 'root');
+define('DB_ORANG_PASSWORD', 'root');
+
+define('DB_ALAMAT_HOST', 'localhost');
+define('DB_ALAMAT_NAME', 'alamat_db');
+define('DB_ALAMAT_USER', 'root');
+define('DB_ALAMAT_PASSWORD', 'root');
+
+// Database Connection Settings
+define('DB_SOCKET', '/opt/lampp/var/mysql/mysql.sock');
+define('DB_PERSISTENT', true);
+define('DB_EMULATE_PREPARES', false);
+define('DB_FETCH_MODE', PDO::FETCH_ASSOC);
+define('DB_ERROR_MODE', PDO::ERRMODE_EXCEPTION);
+
+// ========================================
+// AUTHENTICATION CONSTANTS
+// ========================================
+
+// JWT Settings
+define('JWT_ALGORITHM', 'HS256');
+define('JWT_SECRET_KEY', 'ksp-lamgabejaya-secret-key-2024');
+define('JWT_EXPIRY', 3600); // 1 hour in seconds
+define('JWT_REFRESH_EXPIRY', 604800); // 7 days in seconds
+
+// Session Settings
+define('SESSION_NAME', 'KSP_SESSION');
+define('SESSION_LIFETIME', 3600); // 1 hour
+define('SESSION_PATH', '/');
+define('SESSION_DOMAIN', '');
+define('SESSION_SECURE', false); // Set to true for HTTPS
+define('SESSION_HTTPONLY', true);
+define('SESSION_SAMESITE', 'Lax');
+
+// Password Settings
+define('PASSWORD_MIN_LENGTH', 8);
+define('PASSWORD_MAX_LENGTH', 128);
+define('PASSWORD_REQUIRE_UPPERCASE', true);
+define('PASSWORD_REQUIRE_LOWERCASE', true);
+define('PASSWORD_REQUIRE_NUMBER', true);
+define('PASSWORD_REQUIRE_SPECIAL', false);
+
+// Rate Limiting
+define('LOGIN_MAX_ATTEMPTS', 5);
+define('LOGIN_LOCKOUT_TIME', 900); // 15 minutes in seconds
+define('RATE_LIMIT_WINDOW', 3600); // 1 hour
+
+// ========================================
+// USER ROLES & PERMISSIONS
+// ========================================
+
+// Note: Role data now stored in role_master table
+// This section kept for backward compatibility
+// Role hierarchy retrieved from database dynamically
+
+// Permission Levels
+define('PERMISSION_READ', 'read');
+define('PERMISSION_WRITE', 'write');
+define('PERMISSION_ADMIN', 'admin');
+
+// Role Helper Functions
+function getRoleData($roleName = null) {
+    static $roles = null;
+    
+    if ($roles === null) {
+        try {
+            if (!empty(DB_SOCKET)) {
+                $dsn = 'mysql:unix_socket=' . DB_SOCKET . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
+            } else {
+                $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
+            }
+            $pdo = new PDO(
+                $dsn,
+                DB_USER,
+                DB_PASS,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false
+                ]
+            );
+            
+            $stmt = $pdo->prepare("SELECT * FROM role_master WHERE is_active = TRUE ORDER BY role_level");
+            $stmt->execute();
+            $roles = $stmt->fetchAll();
+            
+        } catch (PDOException $e) {
+            error_log("Error loading roles: " . $e->getMessage());
+            $roles = [];
+        }
+    }
+    
+    if ($roleName) {
+        foreach ($roles as $role) {
+            if ($role['role_name'] === $roleName) {
+                return $role;
+            }
+        }
+        return null;
+    }
+    
+    return $roles;
+}
+
+function getRoleName($roleLevel) {
+    $roles = getRoleData();
+    foreach ($roles as $role) {
+        if ($role['role_level'] === $roleLevel) {
+            return $role['role_display_name'];
+        }
+    }
+    return 'Unknown';
+}
+
+function hasPermission($userRole, $requiredPermission) {
+    $roleData = getRoleData($userRole);
+    if (!$roleData) {
+        return false;
+    }
+    
+    $permissions = json_decode($roleData['permissions'], true);
+    return isset($permissions[$requiredPermission]) && $permissions[$requiredPermission] === true;
+}
+
+// ========================================
+// BUSINESS CONSTANTS
+// ========================================
+
+// Loan Settings
+define('LOAN_MIN_AMOUNT', 100000);
+define('LOAN_MAX_AMOUNT', 50000000);
+define('LOAN_DEFAULT_INTEREST_RATE', 2.5); // Percentage per month
+define('LOAN_MIN_TERM', 1); // Minimum term in months
+define('LOAN_MAX_TERM', 36); // Maximum term in months
+define('LOAN_LATE_FEE_RATE', 0.5); // Percentage per month
+
+// Savings Settings
+define('SAVINGS_MIN_DEPOSIT', 10000);
+define('SAVINGS_MIN_WITHDRAWAL', 10000);
+define('SAVINGS_DEFAULT_INTEREST_RATE', 0.5); // Percentage per month
+
+// Transaction Settings
+define('TRANSACTION_FEE_AMOUNT', 2500);
+define('TRANSACTION_MIN_AMOUNT', 1000);
+define('TRANSACTION_MAX_AMOUNT', 10000000);
+
+// ========================================
+// SYSTEM CONSTANTS
+// ========================================
+
+// File Upload Settings
 define('UPLOAD_MAX_SIZE', 5242880); // 5MB in bytes
-define('UPLOAD_ALLOWED_TYPES', ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx']);
-define('UPLOAD_PATH', __DIR__ . '/../uploads/');
-define('UPLOAD_URL', APP_URL . '/uploads/');
+define('UPLOAD_ALLOWED_TYPES', ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx']);
+define('UPLOAD_PATH_IMAGES', APP_UPLOADS . '/images');
+define('UPLOAD_PATH_DOCUMENTS', APP_UPLOADS . '/documents');
+define('UPLOAD_PATH_AVATARS', APP_UPLOADS . '/avatars');
 
-// Email Configuration
-define('MAIL_HOST', 'smtp.example.com');
-define('MAIL_PORT', 587);
-define('MAIL_USERNAME', 'noreply@ksplamgabejaya.co.id');
-define('MAIL_PASSWORD', 'your-mail-password');
-define('MAIL_ENCRYPTION', 'tls');
-define('MAIL_FROM_NAME', APP_NAME);
+// Pagination Settings
+define('PAGINATION_DEFAULT_LIMIT', 20);
+define('PAGINATION_MAX_LIMIT', 100);
+define('PAGINATION_OFFSET', 0);
 
-// Business Logic Constants
-define('LOAN_INTEREST_RATE', 1.00); // 1% per month
-define('LOAN_MAX_AMOUNT_MULTIPLIER', 10); // Max 10x savings
-define('LOAN_MAX_TERM_MONTHS', 12);
-define('MANDATORY_SAVINGS_AMOUNT', 10000); // Rp 10,000 per day
-define('SAVINGS_INTEREST_RATE', 0.50); // 0.5% per month
-define('LATE_PAYMENT_PENALTY_RATE', 0.10); // 10% penalty
+// Cache Settings
+define('CACHE_ENABLED', true);
+define('CACHE_LIFETIME', 3600); // 1 hour
+define('CACHE_PATH', APP_CACHE);
 
-// Pagination Configuration
-define('DEFAULT_PAGE_SIZE', 20);
-define('MAX_PAGE_SIZE', 100);
+// Backup Settings
+define('BACKUP_ENABLED', true);
+define('BACKUP_SCHEDULE', 'daily');
+define('BACKUP_RETENTION_DAYS', 30);
+define('BACKUP_PATH', APP_BACKUPS);
 
-// Date/Time Formats
-define('DATE_FORMAT', 'Y-m-d');
-define('TIME_FORMAT', 'H:i:s');
-define('DATETIME_FORMAT', 'Y-m-d H:i:s');
-define('DISPLAY_DATE_FORMAT', 'd F Y');
-define('DISPLAY_DATETIME_FORMAT', 'd F Y H:i:s');
+// Logging Settings
+define('LOG_ENABLED', true);
+define('LOG_LEVEL', 'INFO'); // DEBUG, INFO, WARNING, ERROR
+define('LOG_PATH', APP_LOGS);
+define('LOG_MAX_SIZE', 10485760); // 10MB
+define('LOG_FILES', 5);
 
-// Currency Configuration
-define('CURRENCY_CODE', 'IDR');
-define('CURRENCY_SYMBOL', 'Rp');
-define('CURRENCY_DECIMAL_PLACES', 0);
+// ========================================
+// PWA & MOBILE CONSTANTS
+// ========================================
 
-// Status Options
-define('USER_ROLES', ['super_admin', 'admin', 'mantri', 'member']);
-define('LOAN_STATUSES', ['pending', 'approved', 'rejected', 'disbursed', 'completed', 'defaulted']);
-define('TRANSACTION_TYPES', ['deposit', 'withdrawal', 'loan_payment', 'loan_disbursement', 'interest_payment']);
-define('TRANSACTION_STATUSES', ['pending', 'completed', 'failed', 'cancelled']);
-define('SAVINGS_TYPES', ['mandatory', 'voluntary', 'fixed_deposit']);
+// PWA Settings
+define('PWA_NAME', APP_NAME);
+define('PWA_SHORT_NAME', 'KSP');
+define('PWA_THEME_COLOR', '#007bff');
+define('PWA_BACKGROUND_COLOR', '#ffffff');
+define('PWA_DISPLAY', 'standalone');
+define('PWA_ORIENTATION', 'portrait');
 
-// API Configuration
+// Mobile Settings
+define('MOBILE_BREAKPOINT', 768); // pixels
+define('GPS_TRACKING_ENABLED', true);
+define('OFFLINE_MODE_ENABLED', true);
+define('PUSH_NOTIFICATIONS_ENABLED', true);
+
+// ========================================
+// EXTERNAL INTEGRATION CONSTANTS
+// ========================================
+
+// WhatsApp API
+define('WHATSAPP_ENABLED', false);
+define('WHATSAPP_API_URL', 'https://api.whatsapp.com/v1');
+define('WHATSAPP_TOKEN', '');
+
+// Email Settings
+define('EMAIL_ENABLED', true);
+define('EMAIL_FROM', 'noreply@ksplamgabejaya.co.id');
+define('EMAIL_FROM_NAME', APP_NAME);
+define('EMAIL_SMTP_HOST', 'localhost');
+define('EMAIL_SMTP_PORT', 587);
+define('EMAIL_SMTP_USERNAME', '');
+define('EMAIL_SMTP_PASSWORD', '');
+define('EMAIL_SMTP_ENCRYPTION', 'tls');
+
+// SMS Gateway
+define('SMS_ENABLED', false);
+define('SMS_GATEWAY_URL', '');
+define('SMS_API_KEY', '');
+define('SMS_SENDER', 'KSP');
+
+// Payment Gateway
+define('PAYMENT_ENABLED', false);
+define('PAYMENT_GATEWAY_URL', '');
+define('PAYMENT_API_KEY', '');
+define('PAYMENT_MERCHANT_ID', '');
+
+// ========================================
+// DEVELOPMENT & DEBUG CONSTANTS
+// ========================================
+
+// Environment
+define('ENVIRONMENT', 'development'); // development, staging, production
+define('DEBUG_MODE', true);
+define('SHOW_ERRORS', true);
+define('LOG_ERRORS', true);
+
+// API Settings
 define('API_VERSION', 'v1');
 define('API_RATE_LIMIT', 100); // requests per hour
 define('API_TIMEOUT', 30); // seconds
 
-// Cache Configuration
-define('CACHE_DRIVER', 'file');
-define('CACHE_PREFIX', 'ksp_');
-define('CACHE_DEFAULT_TTL', 3600); // 1 hour
+// Development Settings
+define('DEV_DEMO_MODE', true);
+define('DEV_FAKE_DATA', true);
+define('DEV_LOG_QUERIES', false);
 
-// Logging Configuration
-define('LOG_LEVEL', 'error');
-define('LOG_PATH', __DIR__ . '/../logs/');
-define('LOG_MAX_FILES', 30);
+// ========================================
+// SECURITY CONSTANTS
+// ========================================
 
-// Validation Rules
-define('VALIDATION_RULES', [
-    'name' => [
-        'required' => true,
-        'min_length' => 3,
-        'max_length' => 255,
-        'pattern' => '/^[a-zA-Z\s\-\.,]+$/'
-    ],
-    'email' => [
-        'required' => true,
-        'max_length' => 255,
-        'pattern' => '/^[^\s@]+@[^\s@]+\.[^\s@]+$/'
-    ],
-    'phone' => [
-        'required' => true,
-        'min_length' => 10,
-        'max_length' => 15,
-        'pattern' => '/^[0-9\-\+\(\)]+$/'
-    ],
-    'password' => [
-        'required' => true,
-        'min_length' => 6,
-        'max_length' => 255,
-        'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/'
-    ],
-    'amount' => [
-        'required' => true,
-        'min' => 0,
-        'max' => 999999999.99,
-        'pattern' => '/^\d+(\.\d{1,2})?$/'
-    ],
-    'id_number' => [
-        'required' => true,
-        'min_length' => 16,
-        'max_length' => 16,
-        'pattern' => '/^[0-9]+$/'
-    ]
-]);
+// Security Headers
+define('SECURITY_XSS_PROTECTION', '1; mode=block');
+define('SECURITY_CONTENT_TYPE_OPTIONS', 'nosniff');
+define('SECURITY_FRAME_OPTIONS', 'DENY');
+define('SECURITY_REFERRER_POLICY', 'strict-origin-when-cross-origin');
 
-// Error Messages (Indonesian)
-define('ERROR_MESSAGES', [
-    'general' => 'Terjadi kesalahan. Silakan coba lagi.',
-    'validation' => 'Input tidak valid. Silakan periksa kembali.',
-    'unauthorized' => 'Anda tidak memiliki akses ke halaman ini.',
-    'forbidden' => 'Akses ditolak.',
-    'not_found' => 'Data tidak ditemukan.',
-    'server_error' => 'Terjadi kesalahan server.',
-    'database_error' => 'Terjadi kesalahan database.',
-    'file_upload_error' => 'Gagal mengunggah file.',
-    'invalid_file_type' => 'Tipe file tidak diizinkan.',
-    'file_too_large' => 'Ukuran file terlalu besar.',
-    'email_already_exists' => 'Email sudah terdaftar.',
-    'invalid_credentials' => 'Email atau kata sandi salah.',
-    'account_locked' => 'Akun terkunci. Silakan coba lagi dalam 15 menit.',
-    'insufficient_balance' => 'Saldo tidak mencukupi.',
-    'loan_already_approved' => 'Pinjaman sudah disetujui.',
-    'loan_not_found' => 'Pinjaman tidak ditemukan.',
-    'member_not_found' => 'Anggota tidak ditemukan.',
-    'transaction_failed' => 'Transaksi gagal.',
-    'duplicate_transaction' => 'Transaksi duplikat terdeteksi.',
-    'network_error' => 'Terjadi kesalahan jaringan.',
-    'timeout' => 'Request timeout. Silakan coba lagi.',
-    'maintenance' => 'Sistem sedang dalam pemeliharaan.'
-]);
+// Encryption
+define('ENCRYPTION_METHOD', 'AES-256-CBC');
+define('ENCRYPTION_KEY', 'ksp-lamgabejaya-encryption-key-2024');
+define('ENCRYPTION_IV', 'ksp-lamgabejaya-iv-2024');
 
-// Success Messages (Indonesian)
-define('SUCCESS_MESSAGES', [
-    'login' => 'Login berhasil.',
-    'logout' => 'Logout berhasil.',
-    'register' => 'Registrasi berhasil.',
-    'profile_updated' => 'Profil berhasil diperbarui.',
-    'password_changed' => 'Kata sandi berhasil diubah.',
-    'password_reset_sent' => 'Link reset kata sandi telah dikirim.',
-    'member_created' => 'Anggota berhasil ditambahkan.',
-    'member_updated' => 'Data anggota berhasil diperbarui.',
-    'member_deleted' => 'Anggota berhasil dihapus.',
-    'loan_created' => 'Pengajuan pinjaman berhasil dibuat.',
-    'loan_approved' => 'Pinjaman berhasil disetujui.',
-    'loan_rejected' => 'Pinjaman berhasil ditolak.',
-    'loan_disbursed' => 'Pinjaman berhasil dicairkan.',
-    'savings_created' => 'Rekening simpanan berhasil dibuat.',
-    'savings_updated' => 'Data simpanan berhasil diperbarui.',
-    'deposit_successful' => 'Setoran berhasil.',
-    'withdrawal_successful' => 'Penarikan berhasil.',
-    'payment_successful' => 'Pembayaran berhasil.',
-    'transaction_completed' => 'Transaksi berhasil.',
-    'data_exported' => 'Data berhasil diekspor.',
-    'data_imported' => 'Data berhasil diimpor.',
-    'settings_updated' => 'Pengaturan berhasil diperbarui.',
-    'email_sent' => 'Email berhasil dikirim.',
-    'file_uploaded' => 'File berhasil diunggah.',
-    'backup_created' => 'Backup berhasil dibuat.',
-    'backup_restored' => 'Backup berhasil dipulihkan.'
-]);
+// CSRF Protection
+define('CSRF_ENABLED', true);
+define('CSRF_TOKEN_NAME', 'csrf_token');
+define('CSRF_TOKEN_EXPIRY', 3600); // 1 hour
 
-// Notification Messages (Indonesian)
-define('NOTIFICATION_MESSAGES', [
-    'new_loan_application' => 'Ada pengajuan pinjaman baru yang menunggu persetujuan.',
-    'loan_approved' => 'Pinjaman Anda telah disetujui.',
-    'loan_rejected' => 'Pinjaman Anda ditolak.',
-    'loan_disbursed' => 'Pinjaman telah dicairkan.',
-    'payment_due' => 'Pembayaran pinjaman Anda jatuh tempo.',
-    'payment_overdue' => 'Pembayaran pinjaman Anda terlambat.',
-    'low_balance' => 'Saldo rekening Anda rendah.',
-    'new_member' => 'Anggota baru telah terdaftar.',
-    'system_maintenance' => 'Sistem akan melakukan pemeliharaan.',
-    'security_alert' => 'Aktivitas mencurigakan terdeteksi pada akun Anda.'
-]);
+// ========================================
+// BUSINESS LOGIC CONSTANTS
+// ========================================
 
-// System Limits
-define('SYSTEM_LIMITS', [
-    'max_members_per_page' => 50,
-    'max_loans_per_page' => 50,
-    'max_transactions_per_page' => 100,
-    'max_file_size' => 5242880, // 5MB
-    'max_upload_files' => 10,
-    'session_timeout' => 3600, // 1 hour
-    'password_min_length' => 6,
-    'password_max_length' => 255,
-    'name_min_length' => 3,
-    'name_max_length' => 255,
-    'phone_min_length' => 10,
-    'phone_max_length' => 15,
-    'id_number_length' => 16,
-    'loan_min_amount' => 100000,
-    'loan_max_amount' => 100000000,
-    'deposit_min_amount' => 10000,
-    'withdrawal_min_amount' => 10000
-]);
+// Member Status
+define('MEMBER_STATUS_ACTIVE', 'active');
+define('MEMBER_STATUS_INACTIVE', 'inactive');
+define('MEMBER_STATUS_SUSPENDED', 'suspended');
+define('MEMBER_STATUS_CLOSED', 'closed');
 
-// Feature Flags
-define('FEATURE_FLAGS', [
-    'enable_sms_notifications' => false,
-    'enable_email_notifications' => true,
-    'enable_file_uploads' => true,
-    'enable_data_export' => true,
-    'enable_data_import' => false,
-    'enable_backup_restore' => true,
-    'enable_audit_logs' => true,
-    'enable_two_factor_auth' => false,
-    'enable_api_access' => true,
-    'enable_mobile_app' => false
-]);
+// Loan Status
+define('LOAN_STATUS_PENDING', 'pending');
+define('LOAN_STATUS_APPROVED', 'approved');
+define('LOAN_STATUS_ACTIVE', 'active');
+define('LOAN_STATUS_COMPLETED', 'completed');
+define('LOAN_STATUS_DEFAULTED', 'defaulted');
+define('LOAN_STATUS_REJECTED', 'rejected');
 
-// API Endpoints
-define('API_ENDPOINTS', [
-    'base' => APP_URL . '/api/' . API_VERSION,
-    'auth' => '/auth',
-    'users' => '/users',
-    'members' => '/members',
-    'loans' => '/loans',
-    'savings' => '/savings',
-    'transactions' => '/transactions',
-    'reports' => '/reports',
-    'notifications' => '/notifications',
-    'settings' => '/settings'
-]);
+// Transaction Types
+define('TRANSACTION_TYPE_DEPOSIT', 'deposit');
+define('TRANSACTION_TYPE_WITHDRAWAL', 'withdrawal');
+define('TRANSACTION_TYPE_LOAN_PAYMENT', 'loan_payment');
+define('TRANSACTION_TYPE_LOAN_DISBURSEMENT', 'loan_disbursement');
+define('TRANSACTION_TYPE_FEE', 'fee');
+define('TRANSACTION_TYPE_TRANSFER', 'transfer');
 
-// Database Tables
-define('DB_TABLES', [
-    'users' => 'users',
-    'members' => 'members',
-    'loans' => 'loans',
-    'savings' => 'savings',
-    'transactions' => 'transactions',
-    'loan_payments' => 'loan_payments',
-    'savings_deposits' => 'savings_deposits',
-    'notifications' => 'notifications',
-    'audit_logs' => 'audit_logs',
-    'settings' => 'settings',
-    'login_attempts' => 'login_attempts',
-    'password_resets' => 'password_resets',
-    'migrations' => 'migrations'
-]);
+// Guarantee Types
+define('GUARANTEE_TYPE_PERSONAL', 'personal');
+define('GUARANTEE_TYPE_COLLATERAL', 'collateral');
+define('GUARANTEE_TYPE_INSURANCE', 'insurance');
 
-// Report Types
-define('REPORT_TYPES', [
-    'daily' => 'Harian',
-    'weekly' => 'Mingguan',
-    'monthly' => 'Bulanan',
-    'yearly' => 'Tahunan',
-    'custom' => 'Kustom'
-]);
+// Risk Levels
+define('RISK_LEVEL_LOW', 'low');
+define('RISK_LEVEL_MEDIUM', 'medium');
+define('RISK_LEVEL_HIGH', 'high');
+define('RISK_LEVEL_VERY_HIGH', 'very_high');
 
-// Export Formats
-define('EXPORT_FORMATS', [
-    'pdf' => 'PDF',
-    'excel' => 'Excel',
-    'csv' => 'CSV',
-    'json' => 'JSON'
-]);
+// ========================================
+// HELPER FUNCTIONS
+// ========================================
 
-// Time Periods
-define('TIME_PERIODS', [
-    'today' => 'Hari Ini',
-    'yesterday' => 'Kemarin',
-    'this_week' => 'Minggu Ini',
-    'last_week' => 'Minggu Lalu',
-    'this_month' => 'Bulan Ini',
-    'last_month' => 'Bulan Lalu',
-    'this_year' => 'Tahun Ini',
-    'last_year' => 'Tahun Lalu',
-    'custom' => 'Kustom'
-]);
-
-// Set timezone
-date_default_timezone_set(APP_TIMEZONE);
-
-// Set error reporting based on environment
-if (APP_DEBUG) {
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-} else {
-    error_reporting(E_ERROR | E_WARNING | E_PARSE);
-    ini_set('display_errors', 0);
+/**
+ * Format currency
+ */
+function formatCurrency($amount, $currency = 'IDR') {
+    if ($currency === 'IDR') {
+        return 'Rp ' . number_format($amount, 0, ',', '.');
+    }
+    return number_format($amount, 2);
 }
 
-// Set session configuration
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', APP_ENVIRONMENT === 'production');
-ini_set('session.use_strict_mode', 1);
-ini_set('session.cookie_samesite', 'Strict');
+/**
+ * Format date
+ */
+function formatDate($date, $format = 'd M Y') {
+    return date($format, strtotime($date));
+}
 
-// Set upload configuration
-ini_set('upload_max_filesize', '5M');
-ini_set('post_max_size', '6M');
-ini_set('max_execution_time', 300);
+/**
+ * Generate unique ID
+ */
+function generateUniqueId($prefix = '') {
+    return $prefix . uniqid() . '-' . time();
+}
 
-// Set memory limit
-ini_set('memory_limit', '256M');
+/**
+ * Check if environment is production
+ */
+function isProduction() {
+    return ENVIRONMENT === 'production';
+}
 
-// Log configuration
-ini_set('log_errors', 1);
-ini_set('error_log', LOG_PATH . 'error.log');
+/**
+ * Check if environment is development
+ */
+function isDevelopment() {
+    return ENVIRONMENT === 'development';
+}
 
-// Return constants array for easy access
-return [
-    'app' => [
-        'name' => APP_NAME,
-        'version' => APP_VERSION,
-        'environment' => APP_ENVIRONMENT,
-        'debug' => APP_DEBUG,
-        'url' => APP_URL,
-        'timezone' => APP_TIMEZONE
-    ],
-    'security' => [
-        'jwt_secret' => JWT_SECRET,
-        'jwt_algorithm' => JWT_ALGORITHM,
-        'token_expiry' => TOKEN_EXPIRY,
-        'refresh_token_expiry' => REFRESH_TOKEN_EXPIRY,
-        'session_lifetime' => SESSION_LIFETIME,
-        'max_login_attempts' => MAX_LOGIN_ATTEMPTS,
-        'login_lockout_time' => LOGIN_LOCKOUT_TIME
-    ],
-    'database' => [
-        'host' => DB_HOST,
-        'name' => DB_NAME,
-        'user' => DB_USER,
-        'password' => DB_PASS,
-        'charset' => DB_CHARSET,
-        'collation' => DB_COLLATION
-    ],
-    'business' => [
-        'loan_interest_rate' => LOAN_INTEREST_RATE,
-        'loan_max_amount_multiplier' => LOAN_MAX_AMOUNT_MULTIPLIER,
-        'loan_max_term_months' => LOAN_MAX_TERM_MONTHS,
-        'mandatory_savings_amount' => MANDATORY_SAVINGS_AMOUNT,
-        'savings_interest_rate' => SAVINGS_INTEREST_RATE,
-        'late_payment_penalty_rate' => LATE_PAYMENT_PENALTY_RATE
-    ],
-    'limits' => SYSTEM_LIMITS,
-    'features' => FEATURE_FLAGS,
-    'messages' => [
-        'errors' => ERROR_MESSAGES,
-        'success' => SUCCESS_MESSAGES,
-        'notifications' => NOTIFICATION_MESSAGES
-    ]
-];
+/**
+ * Get current timestamp
+ */
+function getCurrentTimestamp() {
+    return date('Y-m-d H:i:s');
+}
+
+/**
+ * Calculate age from birth date
+ */
+function calculateAge($birthDate) {
+    $birthDate = new DateTime($birthDate);
+    $today = new DateTime();
+    return $birthDate->diff($today)->y;
+}
+
+/**
+ * Validate email format
+ */
+function isValidEmail($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+/**
+ * Sanitize input
+ */
+function sanitizeInput($input) {
+    return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * Generate random password
+ */
+function generateRandomPassword($length = 12) {
+    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return substr(str_shuffle($chars), 0, $length);
+}
+
+/**
+ * Get file size in human readable format
+ */
+function formatFileSize($bytes) {
+    $units = ['B', 'KB', 'MB', 'GB'];
+    $bytes = max($bytes, 0);
+    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+    $pow = min($pow, count($units) - 1);
+    $bytes /= pow(1024, $pow);
+    return round($bytes, 2) . ' ' . $units[$pow];
+}
+
+// ========================================
+// AUTO-LOADER CONFIGURATION
+// ========================================
+
+// Set default timezone
+date_default_timezone_set('Asia/Jakarta');
+
+// Set error reporting based on environment
+if (isProduction()) {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+} else {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+}
+
+// Set default charset
+mb_internal_encoding('UTF-8');
+
+// Set locale for currency/date formatting
+setlocale(LC_ALL, 'id_ID.UTF-8', 'id_ID');
+
+// ========================================
+// END OF CONSTANTS
+// ========================================
+
 ?>

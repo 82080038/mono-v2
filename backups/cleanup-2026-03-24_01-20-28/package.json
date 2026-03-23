@@ -1,0 +1,28 @@
+{
+  "name": "ksp-lamgabejaya-tests",
+  "version": "1.0.0",
+  "description": "Comprehensive Puppeteer tests for KSP Lam Gabe Jaya",
+  "main": "test-runner.js",
+  "scripts": {
+    "test": "node test-runner.js",
+    "test:headless": "node test-runner.js --headless",
+    "test:visual": "node test-runner.js --visual",
+    "install-deps": "npm install puppeteer"
+  },
+  "dependencies": {
+    "puppeteer": "^24.40.0",
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {
+    "chalk": "^4.1.2"
+  },
+  "keywords": [
+    "puppeteer",
+    "testing",
+    "automation",
+    "ksp",
+    "cooperative"
+  ],
+  "author": "KSP Lam Gabe Jaya Development Team",
+  "license": "MIT"
+}

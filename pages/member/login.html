@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Login - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+    <style>
+        .login-page {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            overflow: hidden;
+        }
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .login-header h2 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+        .login-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        .login-body {
+            padding: 2.5rem;
+        }
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+        .form-floating > label {
+            color: #6c757d;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            padding: 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .btn-login:disabled {
+            opacity: 0.6;
+            transform: none;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .password-toggle:hover {
+            color: #667eea;
+        }
+        .quick-login-btn {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .quick-login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .quick-login-btn:active {
+            transform: translateY(0);
+        }
+        #quickLoginSection {
+            animation: slideInUp 0.5s ease;
+        }
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #764ba2;
+        }
+        .role-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .loading-spinner {
+            display: none;
+        }
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+    </style>
+<link rel="manifest" href="/manifest.json">
+    </head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Login Header -->
+            <div class="login-header">
+                <div class="mb-3">
+                    <i class="fas fa-university fa-2x"></i>
+                </div>
+                <h2>Masuk ke Sistem</h2>
+                <p>KSP Lam Gabe Jaya - Anggota</p>
+                <span class="role-badge">Anggota</span>
+            </div>
+            
+            <!-- Login Body -->
+            <div class="login-body">
+                <!-- Alert Container -->
+                <div id="alertContainer"></div>
+                
+                <!-- Login Form -->
+                <form id="loginForm" novalidate>
+                    <!-- Email/Username Field -->
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="username" name="username" 
+                               placeholder="Username atau Email" required>
+                        <label for="username">
+                            <i class="fas fa-user me-2"></i>Username atau Email
+                        </label>
+                    </div>
+                    
+                    <!-- Password Field -->
+                    <div class="form-floating position-relative">
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Kata Sandi" required>
+                        <label for="password">
+                            <i class="fas fa-lock me-2"></i>Kata Sandi
+                        </label>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye" id="passwordIcon"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Remember Me -->
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">
+                            Ingat saya
+                        </label>
+                    </div>
+                    
+                    <!-- Login Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-login" id="loginBtn">
+                            <span id="loginBtnText">Masuk</span>
+                            <span class="loading-spinner">
+                                <i class="fas fa-spinner fa-spin me-2"></i>Loading...
+                            </span>
+                        </button>
+                    </div>
+                    
+                    <!-- Quick Login (Development Mode) -->
+                    <div class="card mt-4 border-info" id="quickLoginSection">
+                        <div class="card-header bg-info text-white py-2">
+                            <h6 class="mb-0">
+                                <i class="fas fa-rocket me-2"></i>
+                                Quick Login (Development Mode)
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text small text-muted mb-3">
+                                Login cepat untuk development testing:
+                            </p>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-success btn-sm w-100 quick-login-btn" 
+                                            data-role="staff" data-username="staff" data-password="staff123">
+                                        <i class="fas fa-user-tie me-1"></i>
+                                        Staff
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-info btn-sm w-100 quick-login-btn" 
+                                            data-role="member" data-username="member" data-password="member123">
+                                        <i class="fas fa-user me-1"></i>
+                                        Member
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="alert alert-warning mt-3 mb-0 small" role="alert">
+                                <i class="fas fa-info-circle me-1"></i>
+                                <strong>Development Only:</strong> Fitur ini hanya untuk testing.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Forgot Password -->
+                    <div class="text-center mt-3">
+                        <a href="#" class="text-decoration-none" onclick="showForgotPassword()">
+                            <i class="fas fa-question-circle me-1"></i>Lupa kata sandi?
+                        </a>
+                    </div>
+                    
+                    <!-- Back Link -->
+                    <div class="text-center">
+                        <a href="../../index.html" class="back-link">
+                            <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Configuration -->
+    <script src="../../assets/js/config.js"></script>
+    <!-- Authentication -->
+    <script src="../../assets/js/auth-fixed.js"></script>
+    <!-- Indonesian Translator -->
+    <script src="../../assets/js/indonesian-translator.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Password toggle
+            const togglePassword = document.getElementById("togglePassword");
+            const passwordInput = document.getElementById("password");
+            const passwordIcon = document.getElementById("passwordIcon");
+            
+            togglePassword.addEventListener("click", function() {
+                const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+                passwordInput.setAttribute("type", type);
+                passwordIcon.classList.toggle("fa-eye");
+                passwordIcon.classList.toggle("fa-eye-slash");
+            });
+            
+            // Form validation
+            const form = document.getElementById("loginForm");
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                if (form.checkValidity()) {
+                    // Show loading state
+                    const loginBtn = document.getElementById("loginBtn");
+                    const loginBtnText = document.getElementById("loginBtnText");
+                    const loadingSpinner = loginBtn.querySelector(".loading-spinner");
+                    
+                    loginBtn.disabled = true;
+                    loginBtnText.style.display = "none";
+                    loadingSpinner.style.display = "inline";
+                    
+                    // Perform login
+                    performLogin();
+                }
+                
+                form.classList.add("was-validated");
+            });
+            
+            // Clear validation on input
+            const inputs = form.querySelectorAll("input");
+            inputs.forEach(input => {
+                input.addEventListener("input", function() {
+                    if (this.value) {
+                        this.classList.remove("is-invalid");
+                    }
+                });
+            });
+        });
+        
+        function performLogin() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const rememberMe = document.getElementById("rememberMe").checked;
+            
+            // Call existing login function
+            if (typeof window.simulateLoginAPI === "function") {
+                window.simulateLoginAPI(username, password, rememberMe);
+            } else {
+                // Fallback login
+                console.log("Login fallback for:", username);
+                showAlert("Login functionality is being prepared...", "info");
+            }
+        }
+        
+        function showAlert(message, type = "danger") {
+            const alertContainer = document.getElementById("alertContainer");
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-${type === "success" ? "check-circle" : type === "danger" ? "exclamation-triangle" : "info-circle"} me-2"></i>
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            alertContainer.innerHTML = alertHtml;
+            
+            // Auto dismiss after 5 seconds
+            setTimeout(() => {
+                const alert = alertContainer.querySelector(".alert");
+                if (alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }
+            }, 5000);
+        }
+        
+        function showForgotPassword() {
+            showAlert("Fitur reset password akan segera tersedia", "info");
+        }
+        
+        // Quick Login Functionality
+        function quickLogin(role, username, password) {
+            console.log(`Quick login: ${role} - ${username}`);
+            
+            // Show loading state
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loadingSpinner = loginBtn.querySelector('.loading-spinner');
+            
+            loginBtn.disabled = true;
+            loginBtnText.style.display = 'none';
+            loadingSpinner.style.display = 'inline';
+            
+            // Fill form fields
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            
+            // Simulate login process
+            setTimeout(() => {
+                const response = {
+                    success: true,
+                    token: 'quick-login-token-' + Date.now(),
+                    user: { 
+                        name: username.charAt(0).toUpperCase() + username.slice(1), 
+                        username: username, 
+                        role: role,
+                        id: 1
+                    },
+                    message: 'Quick login successful'
+                };
+                
+                handleLoginSuccess(response, role);
+                
+                // Show success message
+                showAlert(`Login berhasil sebagai ${role}!`, 'success');
+                
+            }, 1000);
+        }
+        
+        // Quick Login Button Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const quickLoginBtns = document.querySelectorAll('.quick-login-btn');
+            
+            quickLoginBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const role = this.getAttribute('data-role');
+                    const username = this.getAttribute('data-username');
+                    const password = this.getAttribute('data-password');
+                    
+                    quickLogin(role, username, password);
+                });
+            });
+            
+            // Add hover effects to quick login buttons
+            quickLoginBtns.forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+        
+        // Reset form state on error
+        window.addEventListener("loginError", function() {
+            const loginBtn = document.getElementById("loginBtn");
+            const loginBtnText = document.getElementById("loginBtnText");
+            const loadingSpinner = loginBtn.querySelector(".loading-spinner");
+            
+            loginBtn.disabled = false;
+            loginBtnText.style.display = "inline";
+            loadingSpinner.style.display = "none";
+        });
+    </script>
+
+<script>
+function handleLoginSuccess(response, role) {
+    if (response.success) {
+        // Store auth data
+        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('userRole', role);
+        localStorage.setItem('userName', response.user.name || response.user.username);
+        
+        // Redirect to dashboard
+        window.location.href = 'dashboard.html';
+    } else {
+        showNotification(response.message || 'Login failed', 'danger');
+    }
+}
+
+function simulateLoginAPI(username, password, role) {
+    // Simulate API response
+    setTimeout(() => {
+        const response = {
+            success: true,
+            token: 'mock-token-' + Date.now(),
+            user: { name: username, username: username, role: role }
+        };
+        
+        handleLoginSuccess(response, role);
+    }, 1000);
+}
+
+// Override form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = 'member';
+            
+            simulateLoginAPI(username, password, role);
+        });
+    }
+});
+</script>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
+</body>
+</html>

@@ -1,66 +1,249 @@
-[19-Mar-2026 05:12:27 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:12:32 Asia/Jakarta] Login error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'ksp_lamgabejaya_v2.login_attempts' doesn't exist
-[19-Mar-2026 05:12:32 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:13:59 Asia/Jakarta] Login error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'attempts' in 'SELECT'
-[19-Mar-2026 05:13:59 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:14:07 Asia/Jakarta] Login error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'lock_until' in 'SELECT'
-[19-Mar-2026 05:14:07 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:14:15 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:16:38 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:16:41 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:17:22 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:41:53 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:41:58 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:42:03 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:43:11 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:43:17 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:43:21 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:43:25 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:43:29 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:43:33 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:43:37 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:43:42 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:43:53 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:43:57 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:45:12 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:45:18 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 05:45:35 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:07:26 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:09:18 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:10:37 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:10:39 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:10:42 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:10:44 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:10:47 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:10:50 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:10:53 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:10:56 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:13:18 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:19:50 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:21:03 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:23:27 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:34:27 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:42:11 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:42:23 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:44:03 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:53:31 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 06:54:00 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:03:16 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:03:48 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:04:14 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:04:54 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:07:08 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:08:41 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:08:53 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:09:09 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:09:22 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:09:51 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:10:09 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:10:22 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:10:29 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:11:18 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:11:40 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:22:54 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:23:17 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:23:23 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
-[19-Mar-2026 07:25:40 Asia/Jakarta] Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port) :-(
+[2026-03-22 09:53:54] Fatal Error: Cannot redeclare hasPermission() (previously declared in /opt/lampp/htdocs/mono-v2/config/constants.php:420) in /opt/lampp/htdocs/mono-v2/api/auth.php on line 695
+[2026-03-22 09:53:54] Fatal Error: Cannot redeclare hasPermission() (previously declared in /opt/lampp/htdocs/mono-v2/config/constants.php:420) in /opt/lampp/htdocs/mono-v2/api/auth.php on line 695
+[2026-03-22 09:54:33] Fatal Error: Cannot redeclare hasPermission() (previously declared in /opt/lampp/htdocs/mono-v2/config/constants.php:408) in /opt/lampp/htdocs/mono-v2/api/auth.php on line 695
+[2026-03-22 09:54:33] Fatal Error: Cannot redeclare hasPermission() (previously declared in /opt/lampp/htdocs/mono-v2/config/constants.php:408) in /opt/lampp/htdocs/mono-v2/api/auth.php on line 695
+[2026-03-22 09:55:21] Fatal Error: Cannot redeclare hasPermission() (previously declared in /opt/lampp/htdocs/mono-v2/config/constants.php:408) in /opt/lampp/htdocs/mono-v2/api/auth.php on line 695
+[2026-03-22 10:13:25] ERROR: Authentication failed for test: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gabe.login_attempts' doesn't exist
+[2026-03-22 10:16:02] ERROR: Authentication failed for admin: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'created_at' in 'where clause'
+[2026-03-22 10:16:54] Uncaught Exception: Undefined constant "LOGIN_ATTEMPT_TIMEOUT" in /opt/lampp/htdocs/mono-v2/api/auth.php on line 492
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/api/auth.php(60): AuthSystem->checkRateLimit('admin')
+#1 /opt/lampp/htdocs/mono-v2/api/auth.php(713): AuthSystem->authenticate('admin', 'password')
+#2 {main}
+[2026-03-22 10:16:55] Uncaught Exception: Undefined constant "LOGIN_ATTEMPT_TIMEOUT" in /opt/lampp/htdocs/mono-v2/api/auth.php on line 492
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/api/auth.php(60): AuthSystem->checkRateLimit('admin')
+#1 /opt/lampp/htdocs/mono-v2/api/auth.php(713): AuthSystem->authenticate('admin', 'admin')
+#2 {main}
+[2026-03-22 10:24:13] Uncaught Exception: Undefined constant "LOGIN_ATTEMPT_TIMEOUT" in /opt/lampp/htdocs/mono-v2/api/auth.php on line 492
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/api/auth.php(60): AuthSystem->checkRateLimit('admin')
+#1 /opt/lampp/htdocs/mono-v2/api/auth.php(713): AuthSystem->authenticate('admin', 'admin')
+#2 {main}
+[2026-03-22 10:24:47] ERROR: Authentication failed for admin: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'deleted_at' in 'where clause'
+[2026-03-22 10:25:59] ERROR: Authentication failed for admin: Username atau password salah
+[2026-03-22 10:25:59] ERROR: Authentication failed for member001: Username atau password salah
+[2026-03-22 10:26:14] ERROR: Authentication failed for admin: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login_at' in 'field list'
+[2026-03-22 10:26:51] INFO: User authenticated: admin
+[2026-03-22 10:27:22] ERROR: Authentication failed for bos: Username atau password salah
+[2026-03-22 10:27:53] ERROR: Authentication failed for bos: Username atau password salah
+[2026-03-22 10:28:07] ERROR: Authentication failed for bos: Username atau password salah
+[2026-03-22 10:28:51] INFO: User authenticated: admin
+[2026-03-22 10:28:51] INFO: User authenticated: manager
+[2026-03-22 10:28:52] INFO: User authenticated: staff
+[2026-03-22 10:29:01] INFO: User authenticated: member001
+[2026-03-22 10:29:01] ERROR: Authentication failed for wrong: Username atau password salah
+[2026-03-22 10:30:42] INFO: User authenticated: admin
+[2026-03-22 10:30:43] INFO: User authenticated: manager
+[2026-03-22 10:30:43] INFO: User authenticated: staff
+[2026-03-22 10:30:43] INFO: User authenticated: member001
+[2026-03-22 10:32:26] INFO: User authenticated: admin
+[2026-03-22 10:32:27] Warning: Constant APP_ROOT already defined in /opt/lampp/htdocs/mono-v2/api/auth.php on line 11
+[2026-03-22 10:32:27] Warning: Undefined variable $dashboardLayout in /opt/lampp/htdocs/mono-v2/main.php on line 117
+[2026-03-22 10:32:27] Warning: Undefined variable $dashboardLayout in /opt/lampp/htdocs/mono-v2/main.php on line 158
+[2026-03-22 10:32:27] INFO: User authenticated: manager
+[2026-03-22 10:32:27] INFO: User authenticated: staff
+[2026-03-22 10:32:27] INFO: User authenticated: member001
+[2026-03-22 10:32:27] Warning: Constant APP_ROOT already defined in /opt/lampp/htdocs/mono-v2/api/auth.php on line 11
+[2026-03-22 10:32:27] Warning: Undefined variable $dashboardLayout in /opt/lampp/htdocs/mono-v2/main.php on line 117
+[2026-03-22 10:32:27] Warning: Undefined variable $dashboardLayout in /opt/lampp/htdocs/mono-v2/main.php on line 158
+[2026-03-22 10:37:31] INFO: User authenticated: admin
+[2026-03-22 10:37:31] INFO: User authenticated: admin
+[2026-03-22 10:44:18] Uncaught Exception: Cannot access private property APIRouter::$endpoint in /opt/lampp/htdocs/mono-v2/api/index.php on line 220
+Stack trace:
+#0 {main}
+[2026-03-22 10:44:18] INFO: User authenticated: admin
+[2026-03-22 10:45:03] Warning: Constant APP_ROOT already defined in /opt/lampp/htdocs/mono-v2/api/auth.php on line 11
+[2026-03-22 10:46:20] Warning: Constant APP_NAME already defined in /opt/lampp/htdocs/mono-v2/core/Config/constants.php on line 13
+[2026-03-22 10:46:20] Warning: Constant APP_VERSION already defined in /opt/lampp/htdocs/mono-v2/core/Config/constants.php on line 14
+[2026-03-22 10:46:20] Uncaught Exception: Undefined constant "APP_MODE" in /opt/lampp/htdocs/mono-v2/core/Config/constants.php on line 15
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/api/auth.php(14): require_once()
+#1 /opt/lampp/htdocs/mono-v2/index.php(40): require_once('/opt/lampp/htdo...')
+#2 /opt/lampp/htdocs/mono-v2/index.php(49): loadEssentialFiles()
+#3 {main}
+[2026-03-22 10:46:37] Warning: Constant APP_NAME already defined in /opt/lampp/htdocs/mono-v2/core/Config/constants.php on line 13
+[2026-03-22 10:46:37] Warning: Constant APP_VERSION already defined in /opt/lampp/htdocs/mono-v2/core/Config/constants.php on line 14
+[2026-03-22 10:46:37] Uncaught Exception: Undefined constant "APP_MODE" in /opt/lampp/htdocs/mono-v2/core/Config/constants.php on line 15
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/api/auth.php(14): require_once()
+#1 /opt/lampp/htdocs/mono-v2/index.php(40): require_once('/opt/lampp/htdo...')
+#2 /opt/lampp/htdocs/mono-v2/index.php(49): loadEssentialFiles()
+#3 {main}
+[2026-03-22 10:46:55] Warning: require_once(/opt/lampp/htdocs/mono-v2/config/../core/Config/error-config.php): Failed to open stream: No such file or directory in /opt/lampp/htdocs/mono-v2/api/auth.php on line 15
+[2026-03-22 10:46:55] Uncaught Exception: Failed opening required '/opt/lampp/htdocs/mono-v2/config/../core/Config/error-config.php' (include_path='.:/opt/lampp/lib/php') in /opt/lampp/htdocs/mono-v2/api/auth.php on line 15
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/index.php(40): require_once()
+#1 /opt/lampp/htdocs/mono-v2/index.php(49): loadEssentialFiles()
+#2 {main}
+[2026-03-22 10:46:55] Uncaught Exception: Cannot access private property APIRouter::$endpoint in /opt/lampp/htdocs/mono-v2/api/index.php on line 220
+Stack trace:
+#0 {main}
+[2026-03-22 10:47:14] Uncaught Exception: Cannot access private property APIRouter::$endpoint in /opt/lampp/htdocs/mono-v2/api/index.php on line 220
+Stack trace:
+#0 {main}
+[2026-03-22 10:55:18] Uncaught Exception: Cannot access private property APIRouter::$endpoint in /opt/lampp/htdocs/mono-v2/api/index.php on line 220
+Stack trace:
+#0 {main}
+[2026-03-24 01:32:46] Fatal Error: Cannot declare class DatabaseException, because the name is already in use in /opt/lampp/htdocs/mono-v2/core/Database.php on line 365
+[2026-03-24 01:32:47] Fatal Error: Cannot declare class DatabaseException, because the name is already in use in /opt/lampp/htdocs/mono-v2/core/Database.php on line 365
+[2026-03-24 01:32:47] Fatal Error: Cannot declare class DatabaseException, because the name is already in use in /opt/lampp/htdocs/mono-v2/core/Database.php on line 365
+[2026-03-24 01:35:04] Uncaught Exception: Call to private Database::__construct() from scope UserManager in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 12
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/main.php(48): UserManager->__construct()
+#1 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#2 {main}
+[2026-03-24 01:35:12] Uncaught Exception: Call to private Database::__construct() from scope UserManager in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 12
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/main.php(48): UserManager->__construct()
+#1 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#2 {main}
+[2026-03-24 01:35:24] Uncaught Exception: Call to private Database::__construct() from scope UserManager in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 12
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/main.php(48): UserManager->__construct()
+#1 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#2 {main}
+[2026-03-24 01:35:25] Uncaught Exception: Call to private Database::__construct() from scope UserManager in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 12
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/main.php(48): UserManager->__construct()
+#1 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#2 {main}
+[2026-03-24 01:35:26] Uncaught Exception: Call to private Database::__construct() from scope UserManager in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 12
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/main.php(48): UserManager->__construct()
+#1 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#2 {main}
+[2026-03-24 01:37:43] Uncaught Exception: Call to private Database::__construct() from scope UserManager in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 12
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/main.php(48): UserManager->__construct()
+#1 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#2 {main}
+[2026-03-24 01:37:47] Uncaught Exception: Call to private Database::__construct() from scope UserManager in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 12
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/main.php(48): UserManager->__construct()
+#1 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#2 {main}
+[2026-03-24 01:37:57] Uncaught Exception: Call to private Database::__construct() from scope DashboardManager in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 312
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('bos')
+#1 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('bos')
+#2 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#3 {main}
+[2026-03-24 01:38:14] Uncaught Exception: Call to private Database::__construct() from scope DashboardManager in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 312
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('bos')
+#1 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('bos')
+#2 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#3 {main}
+[2026-03-24 01:38:29] Uncaught Exception: Query execution failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gabe.deposits' doesn't exist in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT SUM(amou...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(318): Database->fetchOne('SELECT SUM(amou...')
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('bos')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('bos')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 01:39:39] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'amount' in 'field list' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT SUM(amou...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(319): Database->fetchOne('SELECT SUM(amou...')
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('bos')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('bos')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 01:40:05] Uncaught Exception: Call to undefined method UserManager::getRecentActivities() in /opt/lampp/htdocs/mono-v2/main.php on line 67
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/index.php(60): include()
+#1 {main}
+[2026-03-24 01:48:38] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'teller_id' in 'where clause' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT COUNT(*)...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(333): Database->fetchOne('SELECT COUNT(*)...', Array)
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('teller')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('teller')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 01:50:53] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'teller_id' in 'where clause' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT COUNT(*)...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(333): Database->fetchOne('SELECT COUNT(*)...', Array)
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('teller')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('teller')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 01:52:07] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'teller_id' in 'where clause' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT COUNT(*)...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(333): Database->fetchOne('SELECT COUNT(*)...', Array)
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('teller')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('teller')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 01:54:09] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'teller_id' in 'where clause' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT COUNT(*)...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(333): Database->fetchOne('SELECT COUNT(*)...', Array)
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('teller')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('teller')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 01:56:51] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'teller_id' in 'where clause' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT COUNT(*)...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(333): Database->fetchOne('SELECT COUNT(*)...', Array)
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('teller')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('teller')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 01:57:14] Warning: Undefined array key "member_id" in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 341
+[2026-03-24 01:57:14] Warning: Trying to access array offset on value of type null in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 341
+[2026-03-24 01:57:14] Warning: Undefined array key "member_id" in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 342
+[2026-03-24 01:57:14] Warning: Undefined array key "member_id" in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 343
+[2026-03-24 01:57:14] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'member_id' in 'where clause' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT COUNT(*)...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(343): Database->fetchOne('SELECT COUNT(*)...', Array)
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('nasabah')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('nasabah')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 01:59:29] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'teller_id' in 'where clause' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT COUNT(*)...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(333): Database->fetchOne('SELECT COUNT(*)...', Array)
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('teller')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('teller')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 01:59:52] Warning: Undefined array key "member_id" in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 341
+[2026-03-24 01:59:52] Warning: Trying to access array offset on value of type null in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 341
+[2026-03-24 01:59:52] Warning: Undefined array key "member_id" in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 342
+[2026-03-24 01:59:52] Warning: Undefined array key "member_id" in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 343
+[2026-03-24 01:59:52] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'member_id' in 'where clause' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT COUNT(*)...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(343): Database->fetchOne('SELECT COUNT(*)...', Array)
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('nasabah')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('nasabah')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 02:16:17] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'teller_id' in 'where clause' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT COUNT(*)...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(333): Database->fetchOne('SELECT COUNT(*)...', Array)
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('teller')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('teller')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}
+[2026-03-24 02:21:41] Warning: Undefined array key "member_id" in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 341
+[2026-03-24 02:21:41] Warning: Trying to access array offset on value of type null in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 341
+[2026-03-24 02:21:41] Warning: Undefined array key "member_id" in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 342
+[2026-03-24 02:21:41] Warning: Undefined array key "member_id" in /opt/lampp/htdocs/mono-v2/core/UserManager.php on line 343
+[2026-03-24 02:21:41] Uncaught Exception: Query execution failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'member_id' in 'where clause' in /opt/lampp/htdocs/mono-v2/core/Database.php on line 90
+Stack trace:
+#0 /opt/lampp/htdocs/mono-v2/core/Database.php(101): Database->query('SELECT COUNT(*)...', Array)
+#1 /opt/lampp/htdocs/mono-v2/core/UserManager.php(343): Database->fetchOne('SELECT COUNT(*)...', Array)
+#2 /opt/lampp/htdocs/mono-v2/core/UserManager.php(222): DashboardManager->getOverviewStats('collector')
+#3 /opt/lampp/htdocs/mono-v2/main.php(60): DashboardManager->getDashboardWidgets('collector')
+#4 /opt/lampp/htdocs/mono-v2/index.php(60): include('/opt/lampp/htdo...')
+#5 {main}

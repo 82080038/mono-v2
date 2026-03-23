@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - KSP Lam Gabe Jaya</title>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "/mono-v2/../../login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var headerUserName = document.getElementById("headerUserName");
+            if (headerUserName && userName) {
+                headerUserName.textContent = userName;
+            }
+        });
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/enhanced-ui.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .dashboard-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed ~ .dashboard-main {
+            margin-left: 70px;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="p-3 text-white">
+            <h5 class="mb-0">KSP Lam Gabe Jaya</h5>
+            <small class="text-white-50">Admin Dashboard</small>
+        </div>
+        <nav class="nav flex-column p-3">
+            <a class="nav-link text-white" href="/mono-v2/admin/dashboard.html">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/members.html">
+                <i class="fas fa-users me-2"></i>
+                <span class="sidebar-text">Anggota</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/loans.html">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/guarantee-management.html">
+                <i class="fas fa-shield-alt me-2"></i>
+                <span class="sidebar-text">Penjaminan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/reports.html">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <div class="mt-auto pt-3 border-top border-white-50">
+                <a class="nav-link text-white" href="/mono-v2/admin/role-access.html">
+                    <i class="fas fa-user-shield me-2"></i>
+                    <span class="sidebar-text">Role & Akses</span>
+                </a>
+                <a class="nav-link text-white active" href="/mono-v2/admin/users.html">
+                    <i class="fas fa-users-cog me-2"></i>
+                    <span class="sidebar-text">User Management</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/admin/database-management.html">
+                    <i class="fas fa-database me-2"></i>
+                    <span class="sidebar-text">Database</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link text-white" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h5 class="mb-0" id="pageTitle">User Management</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshUserData()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Refresh
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span id="headerUserName">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="main-content p-4">
+            <!-- User Statistics -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-users text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Total Users</h6>
+                                    <div class="h4 mb-0">156</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 12%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-user-check text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Active Users</h6>
+                                    <div class="h4 mb-0">142</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 8%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-user-clock text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Inactive Users</h6>
+                                    <div class="h4 mb-0">14</div>
+                                    <small class="text-warning"><i class="fas fa-minus"></i> stabil</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-user-plus text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">New Users</h6>
+                                    <div class="h4 mb-0">8</div>
+                                    <small class="text-info"><i class="fas fa-arrow-up"></i> 3</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Actions -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <h6 class="mb-0">User Management Actions</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="addNewUser()">
+                                        <i class="fas fa-user-plus fa-2x mb-2"></i>
+                                        <span>Add User</span>
+                                    </button>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="importUsers()">
+                                        <i class="fas fa-file-import fa-2x mb-2"></i>
+                                        <span>Import Users</span>
+                                    </button>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="exportUsers()">
+                                        <i class="fas fa-file-export fa-2x mb-2"></i>
+                                        <span>Export Users</span>
+                                    </button>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-info w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="bulkActions()">
+                                        <i class="fas fa-tasks fa-2x mb-2"></i>
+                                        <span>Bulk Actions</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">User List</h6>
+                        <div class="d-flex gap-2">
+                            <select class="form-select form-select-sm" style="width: auto;" id="roleFilter">
+                                <option value="">All Roles</option>
+                                <option value="admin">Admin</option>
+                                <option value="staff">Staff</option>
+                                <option value="member">Member</option>
+                            </select>
+                            <select class="form-select form-select-sm" style="width: auto;" id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                            <input type="text" class="form-control form-control-sm" placeholder="Cari user..." id="searchUser" style="width: 200px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Last Login</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>001</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-danger bg-opacity-10 rounded-circle p-2 me-2">
+                                                <i class="fas fa-user-shield text-danger small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">Administrator</div>
+                                                <small class="text-muted">admin@ksp.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>admin@ksp.com</td>
+                                    <td><span class="badge bg-danger">Admin</span></td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>2024-01-21 14:30</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editUser('001')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-warning me-1" onclick="resetPassword('001')">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deactivateUser('001')">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>002</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                                <i class="fas fa-user-tie text-success small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">Ahmad Staff</div>
+                                                <small class="text-muted">ahmad@ksp.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>ahmad@ksp.com</td>
+                                    <td><span class="badge bg-success">Staff</span></td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>2024-01-21 13:15</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editUser('002')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-warning me-1" onclick="resetPassword('002')">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deactivateUser('002')">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>003</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
+                                                <i class="fas fa-user text-info small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">Siti Member</div>
+                                                <small class="text-muted">siti@ksp.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>siti@ksp.com</td>
+                                    <td><span class="badge bg-info">Member</span></td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>2024-01-21 12:45</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editUser('003')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-warning me-1" onclick="resetPassword('003')">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deactivateUser('003')">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // User management functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "/mono-v2/../../login.html";
+        }
+
+        function refreshUserData() {
+            showNotification('Data user berhasil diperbarui', 'success');
+        }
+
+        function addNewUser() {
+            showNotification('Form tambah user akan segera tersedia', 'info');
+        }
+
+        function importUsers() {
+            showNotification('Fitur import user akan segera tersedia', 'info');
+        }
+
+        function exportUsers() {
+            showNotification('Data user diekspor', 'success');
+        }
+
+        function bulkActions() {
+            showNotification('Bulk actions akan segera tersedia', 'info');
+        }
+
+        function editUser(userId) {
+            showNotification(`Mengedit user ${userId}`, 'info');
+        }
+
+        function resetPassword(userId) {
+            if (confirm('Apakah Anda yakin ingin reset password user ini?')) {
+                showNotification(`Password user ${userId} berhasil direset`, 'success');
+            }
+        }
+
+        function deactivateUser(userId) {
+            if (confirm('Apakah Anda yakin ingin menonaktifkan user ini?')) {
+                showNotification(`User ${userId} dinonaktifkan`, 'warning');
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchUser').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Filter functionality
+        document.getElementById('roleFilter').addEventListener('change', function(e) {
+            const filterValue = e.target.value;
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                if (filterValue === '') {
+                    row.style.display = '';
+                } else {
+                    const badges = row.querySelectorAll('.badge');
+                    let hasRole = false;
+                    badges.forEach(badge => {
+                        if (badge.textContent.toLowerCase().includes(filterValue.toLowerCase())) {
+                            hasRole = true;
+                        }
+                    });
+                    row.style.display = hasRole ? '' : 'none';
+                }
+            });
+        });
+
+        document.getElementById('statusFilter').addEventListener('change', function(e) {
+            const filterValue = e.target.value;
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                if (filterValue === '') {
+                    row.style.display = '';
+                } else {
+                    const badges = row.querySelectorAll('.badge');
+                    let hasStatus = false;
+                    badges.forEach(badge => {
+                        if (badge.textContent.toLowerCase().includes(filterValue.toLowerCase())) {
+                            hasStatus = true;
+                        }
+                    });
+                    row.style.display = hasStatus ? '' : 'none';
+                }
+            });
+        });
+
+        // Show notification
+        function showNotification(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.createElement('div');
+            container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            container.appendChild(toast);
+            document.body.appendChild(container);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => {
+                container.remove();
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle sidebar collapse text visibility
+            document.getElementById('sidebar').addEventListener('transitionend', function() {
+                const isCollapsed = this.classList.contains('collapsed');
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                sidebarTexts.forEach(text => {
+                    text.style.display = isCollapsed ? 'none' : 'inline';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+            });
+    });
+}
+</script>
+</body>
+</body>
+</html>

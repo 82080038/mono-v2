@@ -1,0 +1,42 @@
+{
+  "summary": {
+    "totalFixes": 6,
+    "fixesByType": {
+      "added_charset": 2,
+      "added_jquery": 4
+    },
+    "timestamp": "2026-03-21T14:22:51.875Z"
+  },
+  "fixes": [
+    {
+      "type": "added_charset",
+      "file": "/opt/lampp/htdocs/mono-v2/node_modules/tslib/tslib.es6.html",
+      "success": true
+    },
+    {
+      "type": "added_charset",
+      "file": "/opt/lampp/htdocs/mono-v2/node_modules/tslib/tslib.html",
+      "success": true
+    },
+    {
+      "type": "added_jquery",
+      "file": "/opt/lampp/htdocs/mono-v2/index.html",
+      "success": true
+    },
+    {
+      "type": "added_jquery",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/members.html",
+      "success": true
+    },
+    {
+      "type": "added_jquery",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/loans.html",
+      "success": true
+    },
+    {
+      "type": "added_jquery",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/reports.html",
+      "success": true
+    }
+  ]
+}

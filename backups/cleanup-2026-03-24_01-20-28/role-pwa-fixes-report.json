@@ -1,0 +1,689 @@
+{
+  "summary": {
+    "totalFixes": 134,
+    "fixesByType": {
+      "fixed_authentication": 3,
+      "fixed_dashboard_header": 3,
+      "fixed_staff_permissions": 1,
+      "fixed_member_permissions": 1,
+      "fixed_navigation": 3,
+      "created_manifest": 1,
+      "added_manifest_link": 60,
+      "created_service_worker": 1,
+      "added_service_worker": 61
+    },
+    "timestamp": "2026-03-21T14:37:37.473Z"
+  },
+  "fixes": [
+    {
+      "type": "fixed_authentication",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/login.html",
+      "success": true
+    },
+    {
+      "type": "fixed_authentication",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/login.html",
+      "success": true
+    },
+    {
+      "type": "fixed_authentication",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/login.html",
+      "success": true
+    },
+    {
+      "type": "fixed_dashboard_header",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "fixed_dashboard_header",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "fixed_dashboard_header",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "fixed_staff_permissions",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "fixed_member_permissions",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "fixed_navigation",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "fixed_navigation",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "fixed_navigation",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "created_manifest",
+      "file": "/opt/lampp/htdocs/mono-v2/manifest.json",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/bootstrap-jquery-implementation-report.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/browser-test-report.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/login.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/node_modules/tslib/tslib.es6.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/node_modules/tslib/tslib.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/audit-log.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/bi-analytics.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/capacity.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/database-management.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/guarantee-management.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/laporan-shu.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/laporan-umum.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/live-tracking.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/loan-management.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/loans.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/login.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/member-registration.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/members.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/npl.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/reports.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/risk-fraud.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/role-access-enhanced-final.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/role-access.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/savings-management.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/savings.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/settings.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/system-config.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/users.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/verifikasi.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/ajukan-pinjaman.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/buku-kas.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/login.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/my-loans.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/my-profile.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/my-savings.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/pembayaran.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/pinjaman-saya.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/poin-reward.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/riwayat.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/simpanan-saya.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/transaction-history.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/cetak-struk.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/gps-log.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/gps.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/loans.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/login.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/members.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/offline-sync.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/reports.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/route.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/savings.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/setoran-qr.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/target-harian.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/transactions.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/transaksi-harian.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/role-pwa-test-report.html",
+      "success": true
+    },
+    {
+      "type": "added_manifest_link",
+      "file": "/opt/lampp/htdocs/mono-v2/splash-screen.html",
+      "success": true
+    },
+    {
+      "type": "created_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/sw.js",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/bootstrap-jquery-implementation-report.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/browser-test-report.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/index.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/login.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/node_modules/tslib/tslib.es6.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/node_modules/tslib/tslib.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/audit-log.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/bi-analytics.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/capacity.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/database-management.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/guarantee-management.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/laporan-shu.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/laporan-umum.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/live-tracking.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/loan-management.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/loans.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/login.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/member-registration.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/members.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/npl.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/reports.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/risk-fraud.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/role-access-enhanced-final.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/role-access.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/savings-management.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/savings.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/settings.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/system-config.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/users.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/admin/verifikasi.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/ajukan-pinjaman.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/buku-kas.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/login.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/my-loans.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/my-profile.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/my-savings.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/pembayaran.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/pinjaman-saya.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/poin-reward.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/riwayat.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/simpanan-saya.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/member/transaction-history.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/cetak-struk.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/dashboard.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/gps-log.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/gps.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/loans.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/login.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/members.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/offline-sync.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/reports.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/route.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/savings.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/setoran-qr.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/target-harian.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/transactions.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/pages/staff/transaksi-harian.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/role-pwa-test-report.html",
+      "success": true
+    },
+    {
+      "type": "added_service_worker",
+      "file": "/opt/lampp/htdocs/mono-v2/splash-screen.html",
+      "success": true
+    }
+  ]
+}

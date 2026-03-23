@@ -1,0 +1,40 @@
+{
+  "name": "ksp-system-tests",
+  "version": "1.0.0",
+  "description": "Comprehensive testing suite for KSP Lam Gabe Jaya system",
+  "main": "comprehensive-system-test.js",
+  "scripts": {
+    "test": "node comprehensive-system-test.js",
+    "test:headless": "node comprehensive-system-test.js --headless",
+    "test:visual": "node comprehensive-system-test.js --visual",
+    "install-deps": "npm install puppeteer",
+    "setup": "npm install && mkdir -p test-screenshots test-reports"
+  },
+  "keywords": [
+    "ksp",
+    "testing",
+    "puppeteer",
+    "automation",
+    "e2e"
+  ],
+  "author": "KSP Development Team",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "eslint": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ksp-lamgabejaya/testing-suite.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ksp-lamgabejaya/testing-suite/issues"
+  },
+  "homepage": "https://github.com/ksp-lamgabejaya/testing-suite#readme"
+}

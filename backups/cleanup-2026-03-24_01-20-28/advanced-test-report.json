@@ -1,0 +1,947 @@
+{
+  "summary": {
+    "totalTests": 8,
+    "successfulTests": 0,
+    "testsWithIssues": 8,
+    "totalErrors": 48,
+    "totalFixes": 0,
+    "totalScreenshots": 8,
+    "timestamp": "2026-03-21T14:27:38.600Z"
+  },
+  "results": [
+    {
+      "test": "Login Page",
+      "url": "http://localhost/mono-v2/login.html",
+      "success": false,
+      "loadTime": 2010,
+      "issues": [
+        "Missing charset meta tag"
+      ],
+      "elements": {
+        "hasTitle": true,
+        "hasBody": true,
+        "hasHead": true,
+        "hasMeta": false,
+        "title": "Masuk - KSP Lam Gabe Jaya",
+        "bodyClasses": "login-page",
+        "lang": "id",
+        "hasNavigation": false,
+        "hasHeader": false,
+        "hasMain": false,
+        "hasFooter": false,
+        "hasForms": 1,
+        "hasButtons": 4,
+        "hasCards": 0,
+        "hasModals": 0,
+        "hasTables": 0,
+        "hasAlerts": 0,
+        "hasLoginForm": true,
+        "hasUsernameInput": true,
+        "hasPasswordInput": true,
+        "hasLoginButton": true,
+        "hasValidation": true
+      },
+      "javascript": {
+        "jquery": true,
+        "jqueryVersion": "3.6.0",
+        "bootstrap": true,
+        "bootstrapVersion": "5.x",
+        "fontawesome": true,
+        "customScripts": [
+          "https://code.jquery.com/jquery-3.6.0.min.js",
+          "http://localhost/mono-v2/assets/js/config.js",
+          "http://localhost/mono-v2/assets/js/auth-fixed.js",
+          "http://localhost/mono-v2/assets/js/indonesian-translator.js"
+        ]
+      },
+      "performance": {
+        "domContentLoaded": 21,
+        "loadComplete": 0.8000000007450581,
+        "totalLoadTime": 1389.7000000001863,
+        "resourceCount": 9
+      },
+      "timestamp": "2026-03-21T14:27:19.156Z"
+    },
+    {
+      "test": "Home Page",
+      "url": "http://localhost/mono-v2/index.html",
+      "success": false,
+      "loadTime": 2007,
+      "issues": [
+        "Missing charset meta tag"
+      ],
+      "elements": {
+        "hasTitle": true,
+        "hasBody": true,
+        "hasHead": true,
+        "hasMeta": false,
+        "title": "KSP Lam Gabe Jaya - Sistem Koperasi",
+        "bodyClasses": "",
+        "lang": "id",
+        "hasNavigation": true,
+        "hasHeader": false,
+        "hasMain": false,
+        "hasFooter": true,
+        "hasForms": 0,
+        "hasButtons": 7,
+        "hasCards": 4,
+        "hasModals": 0,
+        "hasTables": 0,
+        "hasAlerts": 0
+      },
+      "javascript": {
+        "jquery": true,
+        "jqueryVersion": "3.6.0",
+        "bootstrap": true,
+        "bootstrapVersion": "5.x",
+        "fontawesome": true,
+        "customScripts": [
+          "http://localhost/assets/js/pwa-install.js",
+          "https://code.jquery.com/jquery-3.6.0.min.js",
+          "http://localhost/mono-v2/assets/js/config.js",
+          "http://localhost/mono-v2/assets/js/main-fast.js"
+        ]
+      },
+      "performance": {
+        "domContentLoaded": 10.700000000186265,
+        "loadComplete": 0.40000000037252903,
+        "totalLoadTime": 528.5,
+        "resourceCount": 15
+      },
+      "timestamp": "2026-03-21T14:27:22.341Z"
+    },
+    {
+      "test": "Admin Dashboard",
+      "url": "http://localhost/mono-v2/pages/admin/dashboard.html",
+      "success": false,
+      "loadTime": 1139,
+      "issues": [
+        "Missing charset meta tag",
+        "Missing dashboard header",
+        "Missing dashboard sidebar"
+      ],
+      "elements": {
+        "hasTitle": true,
+        "hasBody": true,
+        "hasHead": true,
+        "hasMeta": false,
+        "title": "Admin Login - KSP Lam Gabe Jaya",
+        "bodyClasses": "login-page",
+        "lang": "id",
+        "hasNavigation": false,
+        "hasHeader": false,
+        "hasMain": false,
+        "hasFooter": false,
+        "hasForms": 1,
+        "hasButtons": 2,
+        "hasCards": 0,
+        "hasModals": 0,
+        "hasTables": 0,
+        "hasAlerts": 0,
+        "hasDashboardHeader": false,
+        "hasDashboardSidebar": false,
+        "hasStatCards": 0,
+        "hasProgressBars": 0,
+        "hasCharts": 0
+      },
+      "javascript": {
+        "jquery": true,
+        "jqueryVersion": "3.6.0",
+        "bootstrap": true,
+        "bootstrapVersion": "5.x",
+        "fontawesome": true,
+        "customScripts": [
+          "https://code.jquery.com/jquery-3.6.0.min.js",
+          "http://localhost/mono-v2/assets/js/config.js",
+          "http://localhost/mono-v2/assets/js/auth-fixed.js",
+          "http://localhost/mono-v2/assets/js/indonesian-translator.js"
+        ]
+      },
+      "performance": {
+        "domContentLoaded": 16.800000000745058,
+        "loadComplete": 0.5,
+        "totalLoadTime": 159.20000000018626,
+        "resourceCount": 9
+      },
+      "timestamp": "2026-03-21T14:27:25.211Z"
+    },
+    {
+      "test": "Staff Dashboard",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard.html",
+      "success": false,
+      "loadTime": 1152,
+      "issues": [
+        "Missing charset meta tag",
+        "Missing dashboard header",
+        "Missing dashboard sidebar"
+      ],
+      "elements": {
+        "hasTitle": true,
+        "hasBody": true,
+        "hasHead": true,
+        "hasMeta": false,
+        "title": "Staff Login - KSP Lam Gabe Jaya",
+        "bodyClasses": "login-page",
+        "lang": "id",
+        "hasNavigation": false,
+        "hasHeader": false,
+        "hasMain": false,
+        "hasFooter": false,
+        "hasForms": 1,
+        "hasButtons": 2,
+        "hasCards": 0,
+        "hasModals": 0,
+        "hasTables": 0,
+        "hasAlerts": 0,
+        "hasDashboardHeader": false,
+        "hasDashboardSidebar": false,
+        "hasStatCards": 0,
+        "hasProgressBars": 0,
+        "hasCharts": 0
+      },
+      "javascript": {
+        "jquery": true,
+        "jqueryVersion": "3.6.0",
+        "bootstrap": true,
+        "bootstrapVersion": "5.x",
+        "fontawesome": true,
+        "customScripts": [
+          "https://code.jquery.com/jquery-3.6.0.min.js",
+          "http://localhost/mono-v2/assets/js/config.js",
+          "http://localhost/mono-v2/assets/js/auth-fixed.js",
+          "http://localhost/mono-v2/assets/js/indonesian-translator.js"
+        ]
+      },
+      "performance": {
+        "domContentLoaded": 7.2999999998137355,
+        "loadComplete": 0.40000000037252903,
+        "totalLoadTime": 166.09999999962747,
+        "resourceCount": 9
+      },
+      "timestamp": "2026-03-21T14:27:27.152Z"
+    },
+    {
+      "test": "Member Dashboard",
+      "url": "http://localhost/mono-v2/pages/member/dashboard.html",
+      "success": false,
+      "loadTime": 699,
+      "issues": [
+        "Missing charset meta tag",
+        "Missing dashboard header",
+        "Missing dashboard sidebar"
+      ],
+      "elements": {
+        "hasTitle": true,
+        "hasBody": true,
+        "hasHead": true,
+        "hasMeta": false,
+        "title": "Member Login - KSP Lam Gabe Jaya",
+        "bodyClasses": "login-page",
+        "lang": "id",
+        "hasNavigation": false,
+        "hasHeader": false,
+        "hasMain": false,
+        "hasFooter": false,
+        "hasForms": 1,
+        "hasButtons": 2,
+        "hasCards": 0,
+        "hasModals": 0,
+        "hasTables": 0,
+        "hasAlerts": 0,
+        "hasDashboardHeader": false,
+        "hasDashboardSidebar": false,
+        "hasStatCards": 0,
+        "hasProgressBars": 0,
+        "hasCharts": 0
+      },
+      "javascript": {
+        "jquery": true,
+        "jqueryVersion": "3.6.0",
+        "bootstrap": true,
+        "bootstrapVersion": "5.x",
+        "fontawesome": true,
+        "customScripts": [
+          "https://code.jquery.com/jquery-3.6.0.min.js",
+          "http://localhost/mono-v2/assets/js/config.js",
+          "http://localhost/mono-v2/assets/js/auth-fixed.js",
+          "http://localhost/mono-v2/assets/js/indonesian-translator.js"
+        ]
+      },
+      "performance": {
+        "domContentLoaded": 4.1000000005587935,
+        "loadComplete": 0.2999999998137355,
+        "totalLoadTime": 72.79999999981374,
+        "resourceCount": 9
+      },
+      "timestamp": "2026-03-21T14:27:30.203Z"
+    },
+    {
+      "test": "Members Page",
+      "url": "http://localhost/mono-v2/pages/admin/members.html",
+      "success": false,
+      "loadTime": 1140,
+      "issues": [
+        "Missing charset meta tag"
+      ],
+      "elements": {
+        "hasTitle": true,
+        "hasBody": true,
+        "hasHead": true,
+        "hasMeta": false,
+        "title": "Member Management - KSP Lam Gabe Jaya",
+        "bodyClasses": "",
+        "lang": "id",
+        "hasNavigation": false,
+        "hasHeader": false,
+        "hasMain": false,
+        "hasFooter": false,
+        "hasForms": 0,
+        "hasButtons": 2,
+        "hasCards": 0,
+        "hasModals": 0,
+        "hasTables": 0,
+        "hasAlerts": 0
+      },
+      "javascript": {
+        "jquery": true,
+        "jqueryVersion": "3.6.0",
+        "bootstrap": true,
+        "bootstrapVersion": "5.x",
+        "fontawesome": true,
+        "customScripts": [
+          "https://code.jquery.com/jquery-3.6.0.min.js"
+        ]
+      },
+      "performance": {
+        "domContentLoaded": 1.300000000745058,
+        "loadComplete": 0.39999999944120646,
+        "totalLoadTime": 122.69999999925494,
+        "resourceCount": 5
+      },
+      "timestamp": "2026-03-21T14:27:33.703Z"
+    },
+    {
+      "test": "Loans Page",
+      "url": "http://localhost/mono-v2/pages/admin/loans.html",
+      "success": false,
+      "loadTime": 2005,
+      "issues": [
+        "Missing charset meta tag"
+      ],
+      "elements": {
+        "hasTitle": true,
+        "hasBody": true,
+        "hasHead": true,
+        "hasMeta": false,
+        "title": "Loan Management - KSP Lam Gabe Jaya",
+        "bodyClasses": "",
+        "lang": "id",
+        "hasNavigation": false,
+        "hasHeader": false,
+        "hasMain": false,
+        "hasFooter": false,
+        "hasForms": 0,
+        "hasButtons": 2,
+        "hasCards": 0,
+        "hasModals": 0,
+        "hasTables": 0,
+        "hasAlerts": 0
+      },
+      "javascript": {
+        "jquery": true,
+        "jqueryVersion": "3.6.0",
+        "bootstrap": true,
+        "bootstrapVersion": "5.x",
+        "fontawesome": true,
+        "customScripts": [
+          "https://code.jquery.com/jquery-3.6.0.min.js"
+        ]
+      },
+      "performance": {
+        "domContentLoaded": 0.6999999992549419,
+        "loadComplete": 0.5,
+        "totalLoadTime": 621.2999999998137,
+        "resourceCount": 5
+      },
+      "timestamp": "2026-03-21T14:27:34.994Z"
+    },
+    {
+      "test": "Reports Page",
+      "url": "http://localhost/mono-v2/pages/admin/reports.html",
+      "success": false,
+      "loadTime": 1074,
+      "issues": [
+        "Missing charset meta tag"
+      ],
+      "elements": {
+        "hasTitle": true,
+        "hasBody": true,
+        "hasHead": true,
+        "hasMeta": false,
+        "title": "Reports - KSP Lam Gabe Jaya",
+        "bodyClasses": "",
+        "lang": "id",
+        "hasNavigation": false,
+        "hasHeader": false,
+        "hasMain": false,
+        "hasFooter": false,
+        "hasForms": 0,
+        "hasButtons": 2,
+        "hasCards": 0,
+        "hasModals": 0,
+        "hasTables": 0,
+        "hasAlerts": 0
+      },
+      "javascript": {
+        "jquery": true,
+        "jqueryVersion": "3.6.0",
+        "bootstrap": true,
+        "bootstrapVersion": "5.x",
+        "fontawesome": true,
+        "customScripts": [
+          "https://code.jquery.com/jquery-3.6.0.min.js"
+        ]
+      },
+      "performance": {
+        "domContentLoaded": 0.5,
+        "loadComplete": 0.40000000037252903,
+        "totalLoadTime": 81.5,
+        "resourceCount": 5
+      },
+      "timestamp": "2026-03-21T14:27:37.153Z"
+    }
+  ],
+  "errors": [
+    {
+      "type": "console",
+      "level": "log",
+      "message": "APP_CONFIG: [object Object]",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 130,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:20.475Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Detected BASE_PATH: /mono-v2",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 131,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:20.475Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Sample URLs: [object Object]",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 132,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:20.476Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Fixed authentication system initialized",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/auth-fixed.js",
+        "lineNumber": 43,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:20.526Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Event listeners bound",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/auth-fixed.js",
+        "lineNumber": 66,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:20.528Z"
+    },
+    {
+      "type": "console",
+      "level": "verbose",
+      "message": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o",
+      "location": {
+        "url": "http://localhost/mono-v2/login.html"
+      },
+      "timestamp": "2026-03-21T14:27:20.593Z"
+    },
+    {
+      "type": "console",
+      "level": "error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/assets/css/mobile-pwa.css"
+      },
+      "timestamp": "2026-03-21T14:27:22.596Z"
+    },
+    {
+      "type": "request_failed",
+      "url": "http://localhost/assets/css/mobile-pwa.css",
+      "failure": {
+        "errorText": "net::ERR_ABORTED"
+      },
+      "timestamp": "2026-03-21T14:27:22.597Z"
+    },
+    {
+      "type": "console",
+      "level": "error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/assets/js/pwa-install.js"
+      },
+      "timestamp": "2026-03-21T14:27:22.600Z"
+    },
+    {
+      "type": "request_failed",
+      "url": "http://localhost/assets/js/pwa-install.js",
+      "failure": {
+        "errorText": "net::ERR_ABORTED"
+      },
+      "timestamp": "2026-03-21T14:27:22.600Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "APP_CONFIG: [object Object]",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 130,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:22.739Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Detected BASE_PATH: /mono-v2",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 131,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:22.740Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Sample URLs: [object Object]",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 132,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:22.740Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "KSP Lam Gabe Jaya v2.0 - Fast Loading",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/main-fast.js",
+        "lineNumber": 7,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:22.747Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Page: home",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/main-fast.js",
+        "lineNumber": 14,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:22.747Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Auth status: Not logged in",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/main-fast.js",
+        "lineNumber": 18,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:22.748Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Application ready",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/main-fast.js",
+        "lineNumber": 28,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:22.748Z"
+    },
+    {
+      "type": "console",
+      "level": "error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.webmanifest"
+      },
+      "timestamp": "2026-03-21T14:27:23.046Z"
+    },
+    {
+      "type": "console",
+      "level": "error",
+      "message": "Manifest fetch from http://localhost/manifest.webmanifest failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/index.html"
+      },
+      "timestamp": "2026-03-21T14:27:23.053Z"
+    },
+    {
+      "type": "console",
+      "level": "error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/manifest.webmanifest"
+      },
+      "timestamp": "2026-03-21T14:27:23.087Z"
+    },
+    {
+      "type": "console",
+      "level": "error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/icons/icon-32x32.png"
+      },
+      "timestamp": "2026-03-21T14:27:23.088Z"
+    },
+    {
+      "type": "console",
+      "level": "error",
+      "message": "Manifest fetch from http://localhost/manifest.webmanifest failed, code 404",
+      "location": {
+        "url": "http://localhost/mono-v2/index.html"
+      },
+      "timestamp": "2026-03-21T14:27:23.089Z"
+    },
+    {
+      "type": "console",
+      "level": "warn",
+      "message": "<meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">",
+      "location": {
+        "url": "http://localhost/mono-v2/index.html"
+      },
+      "timestamp": "2026-03-21T14:27:23.092Z"
+    },
+    {
+      "type": "console",
+      "level": "error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost/icons/icon-16x16.png"
+      },
+      "timestamp": "2026-03-21T14:27:23.113Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "APP_CONFIG: [object Object]",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 130,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:25.469Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Detected BASE_PATH: /mono-v2",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 131,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:25.470Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Sample URLs: [object Object]",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 132,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:25.470Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Fixed authentication system initialized",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/auth-fixed.js",
+        "lineNumber": 43,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:25.471Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Event listeners bound",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/auth-fixed.js",
+        "lineNumber": 66,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:25.471Z"
+    },
+    {
+      "type": "console",
+      "level": "verbose",
+      "message": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/admin/login.html"
+      },
+      "timestamp": "2026-03-21T14:27:25.486Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "APP_CONFIG: [object Object]",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 130,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:27.407Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Detected BASE_PATH: /mono-v2",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 131,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:27.407Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Sample URLs: [object Object]",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 132,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:27.408Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Fixed authentication system initialized",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/auth-fixed.js",
+        "lineNumber": 43,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:27.426Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Event listeners bound",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/auth-fixed.js",
+        "lineNumber": 66,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:27.427Z"
+    },
+    {
+      "type": "console",
+      "level": "verbose",
+      "message": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/staff/login.html"
+      },
+      "timestamp": "2026-03-21T14:27:27.445Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "APP_CONFIG: [object Object]",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 130,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:30.356Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Detected BASE_PATH: /mono-v2",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 131,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:30.357Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Sample URLs: [object Object]",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/config.js",
+        "lineNumber": 132,
+        "columnNumber": 16
+      },
+      "timestamp": "2026-03-21T14:27:30.358Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Fixed authentication system initialized",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/auth-fixed.js",
+        "lineNumber": 43,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:30.362Z"
+    },
+    {
+      "type": "console",
+      "level": "log",
+      "message": "Event listeners bound",
+      "location": {
+        "url": "http://localhost/mono-v2/assets/js/auth-fixed.js",
+        "lineNumber": 66,
+        "columnNumber": 12
+      },
+      "timestamp": "2026-03-21T14:27:30.362Z"
+    },
+    {
+      "type": "console",
+      "level": "verbose",
+      "message": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o",
+      "location": {
+        "url": "http://localhost/mono-v2/pages/member/login.html"
+      },
+      "timestamp": "2026-03-21T14:27:30.367Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:27:33.906Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:27:33.907Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:27:35.603Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:27:35.603Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:27:37.273Z"
+    },
+    {
+      "type": "page_error",
+      "message": "Invalid or unexpected token",
+      "stack": "SyntaxError: Invalid or unexpected token",
+      "timestamp": "2026-03-21T14:27:37.274Z"
+    }
+  ],
+  "fixes": [],
+  "screenshots": [
+    {
+      "filename": "Login_Page_2026-03-21T14-27-21-199Z.png",
+      "description": "Login Page - HAS_ISSUES",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Login_Page_2026-03-21T14-27-21-199Z.png",
+      "timestamp": "2026-03-21T14:27:22.340Z"
+    },
+    {
+      "filename": "Home_Page_2026-03-21T14-27-24-362Z.png",
+      "description": "Home Page - HAS_ISSUES",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Home_Page_2026-03-21T14-27-24-362Z.png",
+      "timestamp": "2026-03-21T14:27:25.210Z"
+    },
+    {
+      "filename": "Admin_Dashboard_2026-03-21T14-27-26-367Z.png",
+      "description": "Admin Dashboard - HAS_ISSUES",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Admin_Dashboard_2026-03-21T14-27-26-367Z.png",
+      "timestamp": "2026-03-21T14:27:27.151Z"
+    },
+    {
+      "filename": "Staff_Dashboard_2026-03-21T14-27-28-315Z.png",
+      "description": "Staff Dashboard - HAS_ISSUES",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Staff_Dashboard_2026-03-21T14-27-28-315Z.png",
+      "timestamp": "2026-03-21T14:27:30.202Z"
+    },
+    {
+      "filename": "Member_Dashboard_2026-03-21T14-27-30-922Z.png",
+      "description": "Member Dashboard - HAS_ISSUES",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Member_Dashboard_2026-03-21T14-27-30-922Z.png",
+      "timestamp": "2026-03-21T14:27:33.699Z"
+    },
+    {
+      "filename": "Members_Page_2026-03-21T14-27-34-852Z.png",
+      "description": "Members Page - HAS_ISSUES",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Members_Page_2026-03-21T14-27-34-852Z.png",
+      "timestamp": "2026-03-21T14:27:34.993Z"
+    },
+    {
+      "filename": "Loans_Page_2026-03-21T14-27-37-007Z.png",
+      "description": "Loans Page - HAS_ISSUES",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Loans_Page_2026-03-21T14-27-37-007Z.png",
+      "timestamp": "2026-03-21T14:27:37.153Z"
+    },
+    {
+      "filename": "Reports_Page_2026-03-21T14-27-38-237Z.png",
+      "description": "Reports Page - HAS_ISSUES",
+      "filepath": "/opt/lampp/htdocs/mono-v2/screenshots/Reports_Page_2026-03-21T14-27-38-237Z.png",
+      "timestamp": "2026-03-21T14:27:38.516Z"
+    }
+  ],
+  "recommendations": [
+    {
+      "issue": "Missing dashboard header",
+      "count": 3,
+      "recommendation": "Add consistent dashboard header to all dashboard pages",
+      "priority": "medium"
+    },
+    {
+      "issue": "Missing dashboard sidebar",
+      "count": 3,
+      "recommendation": "Add navigation sidebar to all dashboard pages",
+      "priority": "medium"
+    }
+  ]
+}

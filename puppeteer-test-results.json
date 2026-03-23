@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-03-23T18:40:55.251Z",
+  "summary": {
+    "total": 10,
+    "passed": 4,
+    "failed": 3,
+    "skipped": 3,
+    "successRate": "40.0"
+  },
+  "results": [
+    {
+      "test": "Login Page",
+      "url": "http://localhost/mono-v2/login.php",
+      "title": "Login - KSP Lam Gabe Jaya",
+      "elements": {
+        "form": true,
+        "username": true,
+        "password": true,
+        "submit": true
+      },
+      "css": true,
+      "errors": [],
+      "status": "PASS"
+    },
+    {
+      "test": "Login - Bos",
+      "username": "bos",
+      "redirectedTo": "http://localhost/mono-v2/index.php?page=dashboard",
+      "isDashboard": true,
+      "sessionData": {
+        "hasSession": true,
+        "bodyClass": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "test": "Dashboard",
+      "content": {
+        "title": "Dashboard - KSP Lam Gabe Jaya",
+        "bodyText": "KSP Lam Gabe Jaya\n Refresh\nBO\n Dashboard\n Laporan Keuangan\n Data Nasabah\n Pinjaman\n Simpanan\n Pengaturan\nSelamat Datang, Bos KSP!\n\nDashboard Bos - 24 March 2026\n\nOverview\n150\nTotal Anggota\n+12%\n45\nPin",
+        "hasMainContent": true
+      },
+      "navigation": true,
+      "userInfo": false,
+      "status": "PASS"
+    },
+    {
+      "test": "Logout",
+      "status": "SKIP",
+      "reason": "Logout link not found"
+    },
+    {
+      "test": "Login - Admin",
+      "status": "FAIL",
+      "error": "No element found for selector: #username"
+    },
+    {
+      "test": "Logout",
+      "status": "SKIP",
+      "reason": "Logout link not found"
+    },
+    {
+      "test": "Login - Teller",
+      "status": "FAIL",
+      "error": "No element found for selector: #username"
+    },
+    {
+      "test": "Logout",
+      "status": "SKIP",
+      "reason": "Logout link not found"
+    },
+    {
+      "test": "API - Auth Login",
+      "endpoint": "http://localhost/mono-v2/api/auth.php",
+      "status": "PASS",
+      "httpStatus": 200,
+      "response": "{\"success\":true,\"message\":\"Login successful\",\"user\":{\"id\":2,\"username\":\"admin\",\"email\":\"admin@ksplam"
+    },
+    {
+      "test": "API - Auth Check Session",
+      "endpoint": "http://localhost/mono-v2/api/auth.php",
+      "status": "FAIL",
+      "httpStatus": 400,
+      "response": "{\"success\":false,\"message\":\"Invalid action\"}"
+    }
+  ]
+}

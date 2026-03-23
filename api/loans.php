@@ -1,998 +1,429 @@
 <?php
 /**
- * Phase 1 API - Loan Management
- * KSP Lam Gabe Jaya v2.0
+ * KSP Lam Gabe Jaya - Loans API
+ * Handle loan management operations
  */
 
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+require_once __DIR__ . '/BaseAPI.php';
 
-// Handle preflight requests
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit(0);
-}
-
-require_once '../config/Config.php';
-
-try {
-    $db = Config::getDatabase();
-    $action = $_GET['action'] ?? '';
+class LoansAPI extends BaseAPI {
     
-    switch ($action) {
-        case 'get_loan_types':
-            getLoanTypes($db);
-            break;
-            
-        case 'get_loans':
-            getLoans($db);
-            break;
-            
-        case 'get_loan':
-            getLoan($db);
-            break;
-            
-        case 'apply_loan':
-            applyLoan($db);
-            break;
-            
-        case 'approve_loan':
-            approveLoan($db);
-            break;
-            
-        case 'disburse_loan':
-            disburseLoan($db);
-            break;
-            
-        case 'get_loan_installments':
-            getLoanInstallments($db);
-            break;
-            
-        case 'make_payment':
-            makePayment($db);
-            break;
-            
-        case 'get_loan_portfolio':
-            getLoanPortfolio($db);
-            break;
-            
-        case 'calculate_credit_score':
-            calculateCreditScore($db);
-            break;
-            
-        case 'get_collateral':
-            getCollateral($db);
-            break;
-            
-        case 'add_collateral':
-            addCollateral($db);
-            break;
-            
-        default:
-            sendResponse(false, 'Invalid action', null, 400);
-    }
-    
-} catch (Exception $e) {
-    sendResponse(false, 'Server error: ' . $e->getMessage(), null, 500);
-}
-
-/**
- * Get loan types
- */
-function getLoanTypes($db) {
-    $stmt = $db->prepare("SELECT * FROM loan_types WHERE is_active = 1 ORDER BY name");
-    $stmt->execute();
-    $loanTypes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    sendResponse(true, 'Loan types retrieved', $loanTypes);
-}
-
-/**
- * Get loans list
- */
-function getLoans($db) {
-    $page = max(1, intval($_GET['page'] ?? 1));
-    $limit = max(1, min(100, intval($_GET['limit'] ?? 20)));
-    $offset = ($page - 1) * $limit;
-    
-    $search = $_GET['search'] ?? '';
-    $status = $_GET['status'] ?? '';
-    $loanType = $_GET['loan_type_id'] ?? '';
-    $memberId = $_GET['member_id'] ?? '';
-    
-    $where = [];
-    $params = [];
-    
-    if (!empty($search)) {
-        $where[] = "(l.loan_number LIKE ? OR m.full_name LIKE ?)";
-        $params[] = "%$search%";
-        $params[] = "%$search%";
-    }
-    
-    if (!empty($status)) {
-        $where[] = "l.status = ?";
-        $params[] = $status;
-    }
-    
-    if (!empty($loanType)) {
-        $where[] = "l.loan_type_id = ?";
-        $params[] = $loanType;
-    }
-    
-    if (!empty($memberId)) {
-        $where[] = "l.member_id = ?";
-        $params[] = $memberId;
-    }
-    
-    $whereClause = !empty($where) ? 'WHERE ' . implode(' AND ', $where) : '';
-    
-    // Get total count
-    $countSql = "SELECT COUNT(*) as total FROM loans l LEFT JOIN members m ON l.member_id = m.id $whereClause";
-    $stmt = $db->prepare($countSql);
-    $stmt->execute($params);
-    $total = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-    
-    // Get loans
-    $sql = "
-        SELECT l.*, lt.name as loan_type_name, m.full_name, m.member_number,
-               DATEDIFF(CURRENT_DATE, l.next_payment_date) as days_overdue,
-               CASE 
-                   WHEN l.status = 'Active' AND DATEDIFF(CURRENT_DATE, l.next_payment_date) > 0 THEN 'Late'
-                   WHEN l.status = 'Active' AND DATEDIFF(CURRENT_DATE, l.next_payment_date) <= 0 THEN 'Current'
-                   ELSE l.status
-               END as payment_status
-        FROM loans l
-        LEFT JOIN loan_types lt ON l.loan_type_id = lt.id
-        LEFT JOIN members m ON l.member_id = m.id
-        $whereClause
-        ORDER BY l.application_date DESC
-        LIMIT ? OFFSET ?
-    ";
-    
-    $stmt = $db->prepare($sql);
-    $params[] = $limit;
-    $params[] = $offset;
-    $stmt->execute($params);
-    $loans = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    sendResponse(true, 'Loans retrieved', [
-        'data' => $loans,
-        'pagination' => [
-            'page' => $page,
-            'limit' => $limit,
-            'total' => $total,
-            'pages' => ceil($total / $limit)
-        ]
-    ]);
-}
-
-/**
- * Get loan details
- */
-function getLoan($db) {
-    $loanId = intval($_GET['id'] ?? 0);
-    
-    if ($loanId <= 0) {
-        sendResponse(false, 'Invalid loan ID', null, 400);
-        return;
-    }
-    
-    $stmt = $db->prepare("
-        SELECT l.*, lt.name as loan_type_name, m.full_name, m.member_number
-        FROM loans l
-        LEFT JOIN loan_types lt ON l.loan_type_id = lt.id
-        LEFT JOIN members m ON l.member_id = m.id
-        WHERE l.id = ?
-    ");
-    $stmt->execute([$loanId]);
-    $loan = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if (!$loan) {
-        sendResponse(false, 'Loan not found', null, 404);
-        return;
-    }
-    
-    // Get installments
-    $stmt = $db->prepare("
-        SELECT * FROM loan_installments 
-        WHERE loan_id = ?
-        ORDER BY installment_number ASC
-    ");
-    $stmt->execute([$loanId]);
-    $installments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Get payments
-    $stmt = $db->prepare("
-        SELECT * FROM loan_payments 
-        WHERE loan_id = ?
-        ORDER BY payment_date DESC
-    ");
-    $stmt->execute([$loanId]);
-    $payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Get collateral
-    $stmt = $db->prepare("
-        SELECT * FROM collateral 
-        WHERE loan_id = ? AND status = 'Active'
-    ");
-    $stmt->execute([$loanId]);
-    $collateral = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    $loan['installments'] = $installments;
-    $loan['payments'] = $payments;
-    $loan['collateral'] = $collateral;
-    
-    sendResponse(true, 'Loan details retrieved', $loan);
-}
-
-/**
- * Apply for loan
- */
-function applyLoan($db) {
-    $data = json_decode(file_get_contents('php://input'), true);
-    
-    // Validate required fields
-    $required = ['member_id', 'loan_type_id', 'amount', 'term_months', 'purpose'];
-    foreach ($required as $field) {
-        if (empty($data[$field])) {
-            sendResponse(false, "Field '$field' is required", null, 400);
-            return;
+    protected function processRequest() {
+        switch ($this->method) {
+            case 'GET':
+                $this->handleGet();
+                break;
+            case 'POST':
+                $this->handlePost();
+                break;
+            case 'PUT':
+                $this->handlePut();
+                break;
+            default:
+                $this->sendError('Method not allowed', 405);
         }
     }
     
-    try {
-        $db->beginTransaction();
+    /**
+     * GET /api/loans.php - Get loans list or single loan
+     */
+    private function handleGet() {
+        $this->requireAuth();
         
-        // Check member exists and is active
-        $stmt = $db->prepare("SELECT * FROM members WHERE id = ? AND status = 'Active'");
-        $stmt->execute([$data['member_id']]);
-        $member = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (isset($this->params['id'])) {
+            $this->getLoan($this->params['id']);
+        } else {
+            $this->getLoans();
+        }
+    }
+    
+    /**
+     * Get loans list with pagination and filtering
+     */
+    private function getLoans() {
+        $pagination = $this->getPaginationParams();
+        $search = $this->sanitize($this->params['search'] ?? '');
+        $status = $this->sanitize($this->params['status'] ?? '');
+        $member_id = $this->params['member_id'] ?? null;
+        
+        // Build query
+        $sql = "SELECT l.*, m.full_name as member_name, m.member_number,
+                       u.username as approved_by_name,
+                       (SELECT SUM(amount) FROM loan_payments WHERE loan_id = l.id) as total_paid,
+                       (l.loan_amount - COALESCE((SELECT SUM(amount) FROM loan_payments WHERE loan_id = l.id), 0)) as remaining_balance
+                FROM loans l 
+                LEFT JOIN members m ON l.member_id = m.id 
+                LEFT JOIN users u ON l.approved_by = u.id 
+                WHERE 1=1";
+        $params = [];
+        
+        if ($search) {
+            $sql .= " AND (l.loan_number LIKE :search OR l.purpose LIKE :search OR m.full_name LIKE :search)";
+            $params['search'] = "%$search%";
+        }
+        
+        if ($status) {
+            $sql .= " AND l.status = :status";
+            $params['status'] = $status;
+        }
+        
+        if ($member_id) {
+            $sql .= " AND l.member_id = :member_id";
+            $params['member_id'] = $member_id;
+        }
+        
+        // Get total count
+        $countSql = str_replace("l.*, m.full_name as member_name, m.member_number, u.username as approved_by_name, (SELECT SUM(amount) FROM loan_payments WHERE loan_id = l.id) as total_paid, (l.loan_amount - COALESCE((SELECT SUM(amount) FROM loan_payments WHERE loan_id = l.id), 0)) as remaining_balance", "COUNT(*)", $sql);
+        $stmt = $this->db->prepare($countSql);
+        $stmt->execute($params);
+        $total = $stmt->fetchColumn();
+        
+        // Get paginated results
+        $sql .= " ORDER BY l.application_date DESC, l.created_at DESC LIMIT :limit OFFSET :offset";
+        $stmt = $this->db->prepare($sql);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
+        $stmt->bindValue(':limit', $pagination['limit'], PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $pagination['offset'], PDO::PARAM_INT);
+        $stmt->execute();
+        $loans = $stmt->fetchAll();
+        
+        // Format data
+        foreach ($loans as &$loan) {
+            $loan['loan_amount'] = floatval($loan['loan_amount']);
+            $loan['interest_rate'] = floatval($loan['interest_rate']);
+            $loan['total_paid'] = floatval($loan['total_paid']);
+            $loan['remaining_balance'] = floatval($loan['remaining_balance']);
+            $loan['application_date'] = date('Y-m-d', strtotime($loan['application_date']));
+            $loan['approval_date'] = $loan['approval_date'] ? date('Y-m-d', strtotime($loan['approval_date'])) : null;
+            $loan['disbursement_date'] = $loan['disbursement_date'] ? date('Y-m-d', strtotime($loan['disbursement_date'])) : null;
+            $loan['due_date'] = $loan['due_date'] ? date('Y-m-d', strtotime($loan['due_date'])) : null;
+        }
+        
+        $response = $this->buildPaginationResponse($loans, $total, $pagination);
+        $this->sendSuccess('Loans retrieved successfully', $response);
+    }
+    
+    /**
+     * Get single loan with payment history
+     */
+    private function getLoan($id) {
+        $stmt = $this->db->prepare("
+            SELECT l.*, m.full_name as member_name, m.member_number,
+                   u.username as approved_by_name
+            FROM loans l 
+            LEFT JOIN members m ON l.member_id = m.id 
+            LEFT JOIN users u ON l.approved_by = u.id 
+            WHERE l.id = :id
+        ");
+        $stmt->execute(['id' => $id]);
+        $loan = $stmt->fetch();
+        
+        if (!$loan) {
+            $this->sendError('Loan not found', 404);
+        }
+        
+        // Get payment history
+        $stmt = $this->db->prepare("
+            SELECT * FROM loan_payments 
+            WHERE loan_id = :id 
+            ORDER BY payment_date DESC, created_at DESC
+        ");
+        $stmt->execute(['id' => $id]);
+        $payments = $stmt->fetchAll();
+        
+        // Calculate totals
+        $totalPaid = 0;
+        foreach ($payments as $payment) {
+            $totalPaid += floatval($payment['amount']);
+            $payment['amount'] = floatval($payment['amount']);
+            $payment['principal_amount'] = floatval($payment['principal_amount']);
+            $payment['interest_amount'] = floatval($payment['interest_amount']);
+            $payment['payment_date'] = date('Y-m-d', strtotime($payment['payment_date']));
+        }
+        
+        // Format loan data
+        $loan['loan_amount'] = floatval($loan['loan_amount']);
+        $loan['interest_rate'] = floatval($loan['interest_rate']);
+        $loan['total_paid'] = $totalPaid;
+        $loan['remaining_balance'] = $loan['loan_amount'] - $totalPaid;
+        $loan['application_date'] = date('Y-m-d', strtotime($loan['application_date']));
+        $loan['approval_date'] = $loan['approval_date'] ? date('Y-m-d', strtotime($loan['approval_date'])) : null;
+        $loan['disbursement_date'] = $loan['disbursement_date'] ? date('Y-m-d', strtotime($loan['disbursement_date'])) : null;
+        $loan['due_date'] = $loan['due_date'] ? date('Y-m-d', strtotime($loan['due_date'])) : null;
+        
+        $loan['payments'] = $payments;
+        
+        $this->sendSuccess('Loan retrieved successfully', $loan);
+    }
+    
+    /**
+     * POST /api/loans.php - Create new loan application
+     */
+    private function handlePost() {
+        $this->requireAuth();
+        
+        $this->validateRequired(['member_id', 'loan_amount', 'interest_rate', 'loan_term', 'purpose']);
+        
+        $data = [
+            'member_id' => intval($this->params['member_id']),
+            'loan_amount' => floatval($this->params['loan_amount']),
+            'interest_rate' => floatval($this->params['interest_rate']),
+            'loan_term' => intval($this->params['loan_term']),
+            'purpose' => $this->sanitize($this->params['purpose']),
+            'collateral' => $this->sanitize($this->params['collateral'] ?? ''),
+            'application_date' => $this->params['application_date'] ?? date('Y-m-d')
+        ];
+        
+        // Validate member exists and is active
+        $stmt = $this->db->prepare("SELECT id, status FROM members WHERE id = :member_id");
+        $stmt->execute(['member_id' => $data['member_id']]);
+        $member = $stmt->fetch();
         
         if (!$member) {
-            sendResponse(false, 'Member not found or inactive', null, 400);
-            return;
+            $this->sendError('Member not found', 404);
         }
         
-        // Get loan type
-        $stmt = $db->prepare("SELECT * FROM loan_types WHERE id = ? AND is_active = 1");
-        $stmt->execute([$data['loan_type_id']]);
-        $loanType = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if (!$loanType) {
-            sendResponse(false, 'Loan type not found or inactive', null, 400);
-            return;
+        if ($member['status'] !== 'active') {
+            $this->sendError('Cannot create loan for inactive member');
         }
         
         // Validate loan amount
-        $amount = floatval($data['amount']);
-        $termMonths = intval($data['term_months']);
-        
-        if ($amount < $loanType['minimum_amount'] || $amount > $loanType['maximum_amount']) {
-            sendResponse(false, 'Loan amount outside allowed range', null, 400);
-            return;
+        if ($data['loan_amount'] <= 0) {
+            $this->sendError('Loan amount must be greater than 0');
         }
         
-        if ($termMonths < $loanType['minimum_term_months'] || $termMonths > $loanType['maximum_term_months']) {
-            sendResponse(false, 'Loan term outside allowed range', null, 400);
-            return;
+        // Validate interest rate
+        if ($data['interest_rate'] < 0 || $data['interest_rate'] > 100) {
+            $this->sendError('Interest rate must be between 0 and 100');
         }
         
-        // Check existing loans
-        $stmt = $db->prepare("
-            SELECT COUNT(*) as active_loans 
-            FROM loans 
-            WHERE member_id = ? AND status IN ('Active', 'Late', 'Default')
+        // Validate loan term
+        if ($data['loan_term'] <= 0 || $data['loan_term'] > 60) {
+            $this->sendError('Loan term must be between 1 and 60 months');
+        }
+        
+        // Validate date
+        if (!$this->validateDate($data['application_date'])) {
+            $this->sendError('Invalid application date format');
+        }
+        
+        // Check for existing active loans
+        $stmt = $this->db->prepare("
+            SELECT COUNT(*) as count FROM loans 
+            WHERE member_id = :member_id AND status IN ('pending', 'active')
         ");
-        $stmt->execute([$data['member_id']]);
-        $activeLoans = $stmt->fetch(PDO::FETCH_ASSOC)['active_loans'];
+        $stmt->execute(['member_id' => $data['member_id']]);
+        $activeLoans = $stmt->fetchColumn();
         
-        $stmt = $db->prepare("SELECT max_concurrent_loans FROM member_types WHERE id = ?");
-        $stmt->execute([$member['member_type_id']]);
-        $maxConcurrentLoans = $stmt->fetch(PDO::FETCH_ASSOC)['max_concurrent_loans'];
-        
-        if ($activeLoans >= $maxConcurrentLoans) {
-            sendResponse(false, 'Maximum concurrent loans reached', null, 400);
-            return;
+        if ($activeLoans > 0) {
+            $this->sendError('Member already has an active loan');
         }
-        
-        // Calculate loan details
-        $interestRate = $loanType['interest_rate'];
-        $adminFeeRate = $loanType['admin_fee_rate'];
-        $calculationMethod = $loanType['calculation_method'];
-        
-        $loanCalculations = calculateLoan($amount, $interestRate, $adminFeeRate, $termMonths, $calculationMethod);
         
         // Generate loan number
-        $loanNumber = generateLoanNumber($db);
+        $data['loan_number'] = $this->generateLoanNumber();
         
         // Insert loan application
-        $stmt = $db->prepare("
-            INSERT INTO loans (
-                loan_number, member_id, loan_type_id, application_date, amount,
-                interest_rate, admin_fee, term_months, calculation_method,
-                monthly_installment, total_interest, total_payment,
-                outstanding_balance, purpose, status, created_by
-            ) VALUES (?, ?, ?, CURRENT_DATE, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Applied', ?)
+        $stmt = $this->db->prepare("
+            INSERT INTO loans (member_id, loan_number, loan_amount, interest_rate, loan_term, purpose, collateral, status, application_date)
+            VALUES (:member_id, :loan_number, :loan_amount, :interest_rate, :loan_term, :purpose, :collateral, 'pending', :application_date)
         ");
         
         $stmt->execute([
-            $loanNumber,
-            $data['member_id'],
-            $data['loan_type_id'],
-            $amount,
-            $interestRate,
-            $loanCalculations['admin_fee'],
-            $termMonths,
-            $calculationMethod,
-            $loanCalculations['monthly_installment'],
-            $loanCalculations['total_interest'],
-            $loanCalculations['total_payment'],
-            $loanCalculations['total_payment'], // outstanding balance initially equals total payment
-            $data['purpose'],
-            1 // created_by
+            'member_id' => $data['member_id'],
+            'loan_number' => $data['loan_number'],
+            'loan_amount' => $data['loan_amount'],
+            'interest_rate' => $data['interest_rate'],
+            'loan_term' => $data['loan_term'],
+            'purpose' => $data['purpose'],
+            'collateral' => $data['collateral'],
+            'application_date' => $data['application_date']
         ]);
         
-        $loanId = $db->lastInsertId();
+        $loanId = $this->db->lastInsertId();
         
-        // Calculate credit score
-        $creditScore = calculateMemberCreditScore($db, $data['member_id'], $loanId);
-        
-        // Create installments schedule
-        createInstallmentSchedule($db, $loanId, $loanCalculations);
-        
-        $db->commit();
-        
-        sendResponse(true, 'Loan application submitted successfully', [
+        $this->logActivity('CREATE_LOAN', [
             'loan_id' => $loanId,
-            'loan_number' => $loanNumber,
-            'credit_score' => $creditScore,
-            'loan_details' => $loanCalculations
+            'loan_number' => $data['loan_number'],
+            'member_id' => $data['member_id'],
+            'amount' => $data['loan_amount']
         ]);
         
-    } catch (Exception $e) {
-        $db->rollBack();
-        sendResponse(false, 'Loan application failed: ' . $e->getMessage(), null, 500);
-    }
-}
-
-/**
- * Approve loan
- */
-function approveLoan($db) {
-    $data = json_decode(file_get_contents('php://input'), true);
-    
-    $loanId = intval($data['loan_id'] ?? 0);
-    $approved = $data['approved'] ?? false;
-    $reason = $data['reason'] ?? '';
-    
-    if ($loanId <= 0) {
-        sendResponse(false, 'Invalid loan ID', null, 400);
-        return;
+        $data['id'] = $loanId;
+        $this->sendSuccess('Loan application created successfully', $data, 201);
     }
     
-    try {
-        $db->beginTransaction();
+    /**
+     * PUT /api/loans.php - Update loan (approve/reject/approve terms)
+     */
+    private function handlePut() {
+        $this->requireAuth();
         
-        // Get loan details
-        $stmt = $db->prepare("SELECT * FROM loans WHERE id = ? AND status = 'Applied'");
-        $stmt->execute([$loanId]);
-        $loan = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!isset($this->params['id'])) {
+            $this->sendError('Loan ID required');
+        }
+        
+        $id = $this->params['id'];
+        
+        // Check if loan exists
+        $stmt = $this->db->prepare("SELECT id, status, loan_amount FROM loans WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        $loan = $stmt->fetch();
         
         if (!$loan) {
-            sendResponse(false, 'Loan not found or not in Applied status', null, 404);
-            return;
+            $this->sendError('Loan not found', 404);
         }
         
-        if ($approved) {
-            // Approve loan
-            $stmt = $db->prepare("
-                UPDATE loans 
-                SET status = 'Approved', approval_date = CURRENT_DATE, 
-                    approved_by = ?, notes = ?
-                WHERE id = ?
-            ");
-            $stmt->execute([1, $reason, $loanId]);
-            
-            sendResponse(true, 'Loan approved successfully');
-        } else {
-            // Reject loan
-            $stmt = $db->prepare("
-                UPDATE loans 
-                SET status = 'Rejected', rejection_reason = ?, approved_by = ?
-                WHERE id = ?
-            ");
-            $stmt->execute([$reason, 1, $loanId]);
-            
-            sendResponse(true, 'Loan rejected');
+        $action = $this->sanitize($this->params['action'] ?? '');
+        
+        switch ($action) {
+            case 'approve':
+                $this->approveLoan($id);
+                break;
+            case 'reject':
+                $this->rejectLoan($id);
+                break;
+            case 'disburse':
+                $this->disburseLoan($id);
+                break;
+            default:
+                $this->sendError('Invalid action. Use: approve, reject, or disburse');
         }
-        
-        $db->commit();
-        
-    } catch (Exception $e) {
-        $db->rollBack();
-        sendResponse(false, 'Loan approval failed: ' . $e->getMessage(), null, 500);
-    }
-}
-
-/**
- * Disburse loan
- */
-function disburseLoan($db) {
-    $data = json_decode(file_get_contents('php://input'), true);
-    
-    $loanId = intval($data['loan_id'] ?? 0);
-    $disbursementMethod = $data['disbursement_method'] ?? 'Bank Transfer';
-    
-    if ($loanId <= 0) {
-        sendResponse(false, 'Invalid loan ID', null, 400);
-        return;
     }
     
-    try {
-        $db->beginTransaction();
+    /**
+     * Approve loan
+     */
+    private function approveLoan($id) {
+        $this->requireRole('manager');
         
-        // Get loan details
-        $stmt = $db->prepare("SELECT * FROM loans WHERE id = ? AND status = 'Approved'");
-        $stmt->execute([$loanId]);
-        $loan = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if (!$loan) {
-            sendResponse(false, 'Loan not found or not approved', null, 404);
-            return;
-        }
-        
-        // Update loan status
-        $maturityDate = date('Y-m-d', strtotime("+$loan[term_months] months"));
-        $nextPaymentDate = date('Y-m-d', strtotime('+1 month'));
-        
-        $stmt = $db->prepare("
+        $stmt = $this->db->prepare("
             UPDATE loans 
-            SET status = 'Disbursed', disbursement_date = CURRENT_DATE, 
-                next_payment_date = ?, maturity_date = ?
-            WHERE id = ?
+            SET status = 'approved', approval_date = CURDATE(), approved_by = :user_id,
+                due_date = DATE_ADD(CURDATE(), INTERVAL loan_term MONTH)
+            WHERE id = :id AND status = 'pending'
         ");
-        $stmt->execute([$nextPaymentDate, $maturityDate, $loanId]);
-        
-        // Create loan payment record for disbursement
-        $stmt = $db->prepare("
-            INSERT INTO loan_payments (
-                loan_id, payment_amount, principal_portion, interest_portion,
-                payment_date, payment_method, reference_number, teller_id
-            ) VALUES (?, 0, 0, 0, CURRENT_TIMESTAMP, ?, ?, ?)
-        ");
-        
-        $referenceNumber = 'DSP' . date('YmdHis') . str_pad($loanId, 4, '0', STR_PAD_LEFT);
         
         $stmt->execute([
-            $loanId,
-            $disbursementMethod,
-            $referenceNumber,
-            1 // teller_id
+            'id' => $id,
+            'user_id' => $this->user['id']
         ]);
         
-        $db->commit();
-        
-        sendResponse(true, 'Loan disbursed successfully', [
-            'disbursement_date' => date('Y-m-d'),
-            'reference_number' => $referenceNumber
-        ]);
-        
-    } catch (Exception $e) {
-        $db->rollBack();
-        sendResponse(false, 'Loan disbursement failed: ' . $e->getMessage(), null, 500);
-    }
-}
-
-/**
- * Get loan installments
- */
-function getLoanInstallments($db) {
-    $loanId = intval($_GET['loan_id'] ?? 0);
-    
-    if ($loanId <= 0) {
-        sendResponse(false, 'Invalid loan ID', null, 400);
-        return;
-    }
-    
-    $stmt = $db->prepare("
-        SELECT * FROM loan_installments 
-        WHERE loan_id = ?
-        ORDER BY installment_number ASC
-    ");
-    $stmt->execute([$loanId]);
-    $installments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    sendResponse(true, 'Loan installments retrieved', $installments);
-}
-
-/**
- * Make loan payment
- */
-function makePayment($db) {
-    $data = json_decode(file_get_contents('php://input'), true);
-    
-    // Validate required fields
-    $required = ['loan_id', 'payment_amount'];
-    foreach ($required as $field) {
-        if (empty($data[$field])) {
-            sendResponse(false, "Field '$field' is required", null, 400);
-            return;
+        if ($stmt->rowCount() === 0) {
+            $this->sendError('Loan not found or not in pending status');
         }
+        
+        $this->logActivity('APPROVE_LOAN', ['loan_id' => $id]);
+        
+        $this->sendSuccess('Loan approved successfully');
     }
     
-    $loanId = intval($data['loan_id']);
-    $paymentAmount = floatval($data['payment_amount']);
-    
-    if ($paymentAmount <= 0) {
-        sendResponse(false, 'Payment amount must be greater than 0', null, 400);
-        return;
+    /**
+     * Reject loan
+     */
+    private function rejectLoan($id) {
+        $this->requireRole('manager');
+        
+        $stmt = $this->db->prepare("
+            UPDATE loans SET status = 'rejected' 
+            WHERE id = :id AND status = 'pending'
+        ");
+        
+        $stmt->execute(['id' => $id]);
+        
+        if ($stmt->rowCount() === 0) {
+            $this->sendError('Loan not found or not in pending status');
+        }
+        
+        $this->logActivity('REJECT_LOAN', ['loan_id' => $id]);
+        
+        $this->sendSuccess('Loan rejected successfully');
     }
     
-    try {
-        $db->beginTransaction();
+    /**
+     * Disburse loan
+     */
+    private function disburseLoan($id) {
+        $this->requireRole('staff');
         
         // Get loan details
-        $stmt = $db->prepare("SELECT * FROM loans WHERE id = ? AND status IN ('Active', 'Late')");
-        $stmt->execute([$loanId]);
-        $loan = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $this->db->prepare("
+            SELECT id, member_id, loan_amount, status 
+            FROM loans WHERE id = :id
+        ");
+        $stmt->execute(['id' => $id]);
+        $loan = $stmt->fetch();
         
-        if (!$loan) {
-            sendResponse(false, 'Loan not found or not active', null, 404);
-            return;
+        if (!$loan || $loan['status'] !== 'approved') {
+            $this->sendError('Loan not found or not approved');
         }
         
-        // Get outstanding installments
-        $stmt = $db->prepare("
-            SELECT * FROM loan_installments 
-            WHERE loan_id = ? AND status = 'Pending'
-            ORDER BY due_date ASC
-        ");
-        $stmt->execute([$loanId]);
-        $installments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        if (empty($installments)) {
-            sendResponse(false, 'No outstanding installments found', null, 400);
-            return;
-        }
-        
-        // Process payment
-        $remainingAmount = $paymentAmount;
-        $totalPrincipal = 0;
-        $totalInterest = 0;
-        $totalLateFee = 0;
-        
-        foreach ($installments as $installment) {
-            if ($remainingAmount <= 0) break;
-            
-            $installmentAmount = $installment['total_amount'];
-            $lateFee = $installment['late_fee'];
-            $totalDue = $installmentAmount + $lateFee;
-            
-            if ($remainingAmount >= $totalDue) {
-                // Full payment
-                $principalPaid = $installment['principal_amount'];
-                $interestPaid = $installment['interest_amount'];
-                $lateFeePaid = $lateFee;
-                
-                // Update installment
-                $stmt = $db->prepare("
-                    UPDATE loan_installments 
-                    SET paid_amount = total_amount, paid_date = CURRENT_DATE, 
-                        status = 'Paid', payment_method = ?, receipt_number = ?
-                    WHERE id = ?
-                ");
-                
-                $receiptNumber = 'PAY' . date('YmdHis') . str_pad($installment['id'], 4, '0', STR_PAD_LEFT);
-                
-                $stmt->execute([
-                    $data['payment_method'] ?? 'Cash',
-                    $receiptNumber,
-                    $installment['id']
-                ]);
-                
-                $remainingAmount -= $totalDue;
-                $totalPrincipal += $principalPaid;
-                $totalInterest += $interestPaid;
-                $totalLateFee += $lateFeePaid;
-                
-            } else {
-                // Partial payment
-                $principalRatio = $installment['principal_amount'] / $installmentAmount;
-                $interestRatio = $installment['interest_amount'] / $installmentAmount;
-                
-                $principalPaid = $remainingAmount * $principalRatio;
-                $interestPaid = $remainingAmount * $interestRatio;
-                $lateFeePaid = min($remainingAmount - ($principalPaid + $interestPaid), $lateFee);
-                
-                // Update installment with partial payment
-                $stmt = $db->prepare("
-                    UPDATE loan_installments 
-                    SET paid_amount = paid_amount + ?, status = 'Late'
-                    WHERE id = ?
-                ");
-                $stmt->execute([$remainingAmount, $installment['id']]);
-                
-                $totalPrincipal += $principalPaid;
-                $totalInterest += $interestPaid;
-                $totalLateFee += $lateFeePaid;
-                
-                $remainingAmount = 0;
-                break;
-            }
-        }
-        
-        // Create payment record
-        $stmt = $db->prepare("
-            INSERT INTO loan_payments (
-                loan_id, payment_amount, principal_portion, interest_portion,
-                late_fee_portion, payment_method, reference_number, teller_id
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ");
-        
-        $referenceNumber = 'PAY' . date('YmdHis') . str_pad($loanId, 4, '0', STR_PAD_LEFT);
-        
-        $stmt->execute([
-            $loanId,
-            $paymentAmount,
-            $totalPrincipal,
-            $totalInterest,
-            $totalLateFee,
-            $data['payment_method'] ?? 'Cash',
-            $referenceNumber,
-            1 // teller_id
-        ]);
-        
-        // Update loan outstanding balance
-        $newOutstanding = $loan['outstanding_balance'] - $totalPrincipal;
-        
-        $stmt = $db->prepare("
-            UPDATE loans 
-            SET outstanding_balance = ?, updated_at = CURRENT_TIMESTAMP
-            WHERE id = ?
-        ");
-        $stmt->execute([$newOutstanding, $loanId]);
-        
-        // Check if loan is fully paid
-        if ($newOutstanding <= 0) {
-            $stmt = $db->prepare("
-                UPDATE loans 
-                SET status = 'Paid Off', updated_at = CURRENT_TIMESTAMP
-                WHERE id = ?
+        $this->db->beginTransaction();
+        try {
+            // Update loan status
+            $stmt = $this->db->prepare("
+                UPDATE loans SET status = 'active', disbursement_date = CURDATE() 
+                WHERE id = :id
             ");
-            $stmt->execute([$loanId]);
+            $stmt->execute(['id' => $id]);
+            
+            // Create loan account and disburse
+            $accountNumber = $this->generateAccountNumber();
+            $stmt = $this->db->prepare("
+                INSERT INTO accounts (member_id, account_number, account_type, account_name, balance, status, opened_date)
+                VALUES (:member_id, :account_number, 'pinjaman', :account_name, :balance, 'active', CURDATE())
+            ");
+            
+            $stmt->execute([
+                'member_id' => $loan['member_id'],
+                'account_number' => $accountNumber,
+                'account_name' => 'Pinjaman - ' . $accountNumber,
+                'balance' => $loan['loan_amount']
+            ]);
+            
+            $this->db->commit();
+            
+            $this->logActivity('DISBURSE_LOAN', [
+                'loan_id' => $id,
+                'member_id' => $loan['member_id'],
+                'amount' => $loan['loan_amount']
+            ]);
+            
+            $this->sendSuccess('Loan disbursed successfully');
+            
+        } catch (Exception $e) {
+            $this->db->rollback();
+            $this->sendError('Failed to disburse loan: ' . $e->getMessage());
         }
+    }
+    
+    /**
+     * Generate loan number
+     */
+    private function generateLoanNumber() {
+        $prefix = 'L';
+        $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM loans");
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
         
-        $db->commit();
+        return $prefix . str_pad($count + 1, 6, '0', STR_PAD_LEFT);
+    }
+    
+    /**
+     * Generate account number
+     */
+    private function generateAccountNumber() {
+        $prefix = 'A';
+        $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM accounts");
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
         
-        sendResponse(true, 'Payment processed successfully', [
-            'payment_id' => $db->lastInsertId(),
-            'reference_number' => $referenceNumber,
-            'principal_paid' => $totalPrincipal,
-            'interest_paid' => $totalInterest,
-            'late_fee_paid' => $totalLateFee,
-            'new_outstanding_balance' => $newOutstanding
-        ]);
-        
-    } catch (Exception $e) {
-        $db->rollBack();
-        sendResponse(false, 'Payment processing failed: ' . $e->getMessage(), null, 500);
+        return $prefix . str_pad($count + 1, 6, '0', STR_PAD_LEFT);
     }
 }
 
-/**
- * Get loan portfolio
- */
-function getLoanPortfolio($db) {
-    $stmt = $db->prepare("
-        SELECT 
-            lt.name as loan_type,
-            COUNT(l.id) as total_loans,
-            SUM(l.amount) as total_disbursed,
-            SUM(l.outstanding_balance) as total_outstanding,
-            AVG(l.interest_rate) as avg_interest_rate,
-            COUNT(CASE WHEN l.status = 'Late' THEN 1 END) as late_loans,
-            COUNT(CASE WHEN l.status = 'Default' THEN 1 END) as default_loans,
-            SUM(CASE WHEN l.status = 'Late' OR l.status = 'Default' THEN l.outstanding_balance ELSE 0 END) as npl_amount
-        FROM loans l
-        LEFT JOIN loan_types lt ON l.loan_type_id = lt.id
-        WHERE l.status IN ('Active', 'Late', 'Default')
-        GROUP BY lt.id, lt.name
-        ORDER BY total_disbursed DESC
-    ");
-    $stmt->execute();
-    $portfolio = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Calculate totals
-    $totalLoans = array_sum(array_column($portfolio, 'total_loans'));
-    $totalDisbursed = array_sum(array_column($portfolio, 'total_disbursed'));
-    $totalOutstanding = array_sum(array_column($portfolio, 'total_outstanding'));
-    $totalLate = array_sum(array_column($portfolio, 'late_loans'));
-    $totalDefault = array_sum(array_column($portfolio, 'default_loans'));
-    $totalNPL = array_sum(array_column($portfolio, 'npl_amount'));
-    
-    $nplRatio = $totalOutstanding > 0 ? ($totalNPL / $totalOutstanding) * 100 : 0;
-    
-    sendResponse(true, 'Loan portfolio retrieved', [
-        'by_loan_type' => $portfolio,
-        'summary' => [
-            'total_loans' => $totalLoans,
-            'total_disbursed' => $totalDisbursed,
-            'total_outstanding' => $totalOutstanding,
-            'late_loans' => $totalLate,
-            'default_loans' => $totalDefault,
-            'npl_amount' => $totalNPL,
-            'npl_ratio' => round($nplRatio, 2)
-        ]
-    ]);
-}
-
-/**
- * Calculate loan details
- */
-function calculateLoan($principal, $interestRate, $adminFeeRate, $termMonths, $method) {
-    $adminFee = $principal * $adminFeeRate;
-    
-    switch ($method) {
-        case 'Flat':
-            $totalInterest = $principal * $interestRate * $termMonths;
-            $totalPayment = $principal + $totalInterest + $adminFee;
-            $monthlyInstallment = $totalPayment / $termMonths;
-            break;
-            
-        case 'Effective':
-            $totalPayment = $principal;
-            $remainingBalance = $principal;
-            $totalInterest = 0;
-            
-            for ($i = 1; $i <= $termMonths; $i++) {
-                $monthlyInterest = $remainingBalance * $interestRate;
-                $principalPayment = $principal / $termMonths;
-                $totalInterest += $monthlyInterest;
-                $remainingBalance -= $principalPayment;
-            }
-            
-            $totalPayment = $principal + $totalInterest + $adminFee;
-            $monthlyInstallment = $totalPayment / $termMonths;
-            break;
-            
-        case 'Anuitas':
-            // Annuity formula
-            $r = $interestRate;
-            $n = $termMonths;
-            $monthlyInstallment = $principal * ($r * pow(1 + $r, $n)) / (pow(1 + $r, $n) - 1);
-            $totalPayment = ($monthlyInstallment * $termMonths) + $adminFee;
-            $totalInterest = ($monthlyInstallment * $termMonths) - $principal;
-            break;
-            
-        default:
-            throw new Exception('Invalid calculation method');
-    }
-    
-    return [
-        'admin_fee' => $adminFee,
-        'total_interest' => $totalInterest,
-        'total_payment' => $totalPayment,
-        'monthly_installment' => $monthlyInstallment
-    ];
-}
-
-/**
- * Generate loan number
- */
-function generateLoanNumber($db) {
-    $year = date('Y');
-    
-    $stmt = $db->prepare("
-        SELECT COUNT(*) as count 
-        FROM loans 
-        WHERE YEAR(application_date) = ?
-    ");
-    $stmt->execute([$year]);
-    $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-    
-    return 'LOAN' . $year . str_pad($count + 1, 4, '0', STR_PAD_LEFT);
-}
-
-/**
- * Calculate member credit score
- */
-function calculateMemberCreditScore($db, $memberId, $loanApplicationId = null) {
-    // Get member details
-    $stmt = $db->prepare("SELECT * FROM members WHERE id = ?");
-    $stmt->execute([$memberId]);
-    $member = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if (!$member) {
-        return 0;
-    }
-    
-    $scores = [];
-    
-    // Get scoring criteria
-    $stmt = $db->prepare("SELECT * FROM credit_scoring_criteria WHERE is_active = 1");
-    $stmt->execute();
-    $criteria = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    foreach ($criteria as $criterion) {
-        $score = 0;
-        
-        switch ($criterion['name']) {
-            case 'Membership Duration':
-                $registrationDate = new DateTime($member['registration_date']);
-                $currentDate = new DateTime();
-                $months = $registrationDate->diff($currentDate)->m + ($registrationDate->diff($currentDate)->y * 12);
-                $score = min(100, ($months / 12) * 100); // Max 100 points for 12+ months
-                break;
-                
-            case 'Savings History':
-                $stmt = $db->prepare("
-                    SELECT SUM(balance) as total_savings, COUNT(*) as account_count
-                    FROM accounts 
-                    WHERE member_id = ? AND status = 'Active'
-                ");
-                $stmt->execute([$memberId]);
-                $savings = $stmt->fetch(PDO::FETCH_ASSOC);
-                
-                if ($savings['total_savings'] > 0) {
-                    $score = min(100, ($savings['total_savings'] / 1000000) * 100); // Max 100 points for 1M+ savings
-                }
-                break;
-                
-            case 'Previous Loans':
-                $stmt = $db->prepare("
-                    SELECT COUNT(*) as total_loans, 
-                           COUNT(CASE WHEN status = 'Paid Off' THEN 1 END) as paid_loans,
-                           COUNT(CASE WHEN status IN ('Default', 'Late') THEN 1 END) as problem_loans
-                    FROM loans 
-                    WHERE member_id = ?
-                ");
-                $stmt->execute([$memberId]);
-                $loanHistory = $stmt->fetch(PDO::FETCH_ASSOC);
-                
-                if ($loanHistory['total_loans'] > 0) {
-                    $paidRatio = $loanHistory['paid_loans'] / $loanHistory['total_loans'];
-                    $score = $paidRatio * 100;
-                    
-                    // Penalty for problem loans
-                    if ($loanHistory['problem_loans'] > 0) {
-                        $score -= ($loanHistory['problem_loans'] * 20);
-                    }
-                }
-                break;
-                
-            case 'Income Stability':
-                if ($member['monthly_income'] > 0) {
-                    $score = min(100, ($member['monthly_income'] / 5000000) * 100); // Max 100 points for 5M+ income
-                }
-                break;
-                
-            case 'Collateral Value':
-                // This would be calculated based on collateral for this loan application
-                $score = 50; // Default score
-                break;
-        }
-        
-        $scores[] = [
-            'criteria_id' => $criterion['id'],
-            'score' => max(0, min(100, $score))
-        ];
-    }
-    
-    // Calculate weighted average
-    $totalScore = 0;
-    $totalWeight = 0;
-    
-    foreach ($criteria as $criterion) {
-        $weight = $criterion['weight'];
-        $score = 0;
-        
-        foreach ($scores as $result) {
-            if ($result['criteria_id'] == $criterion['id']) {
-                $score = $result['score'];
-                break;
-            }
-        }
-        
-        $totalScore += ($score * $weight);
-        $totalWeight += $weight;
-    }
-    
-    $finalScore = $totalWeight > 0 ? ($totalScore / $totalWeight) : 0;
-    
-    // Determine risk level
-    $riskLevel = 'Very High';
-    if ($finalScore >= 80) $riskLevel = 'Low';
-    elseif ($finalScore >= 60) $riskLevel = 'Medium';
-    elseif ($finalScore >= 40) $riskLevel = 'High';
-    
-    // Determine recommendation
-    $recommendation = 'Reject';
-    if ($finalScore >= 70) $recommendation = 'Approve';
-    elseif ($finalScore >= 50) $recommendation = 'Manual Review';
-    
-    // Save credit scoring result
-    $stmt = $db->prepare("
-        INSERT INTO credit_scoring_results (
-            member_id, loan_application_id, total_score, risk_level, 
-            recommendation, scored_by
-        ) VALUES (?, ?, ?, ?, ?, ?)
-    ");
-    
-    $stmt->execute([
-        $memberId,
-        $loanApplicationId,
-        $finalScore,
-        $riskLevel,
-        $recommendation,
-        1 // scored_by
-    ]);
-    
-    $scoringResultId = $db->lastInsertId();
-    
-    // Save scoring details
-    foreach ($scores as $score) {
-        $stmt = $db->prepare("
-            INSERT INTO credit_scoring_details (scoring_result_id, criteria_id, score)
-            VALUES (?, ?, ?)
-        ");
-        $stmt->execute([$scoringResultId, $score['criteria_id'], $score['score']]);
-    }
-    
-    return $finalScore;
-}
-
-/**
- * Create installment schedule
- */
-function createInstallmentSchedule($db, $loanId, $loanCalculations) {
-    $stmt = $db->prepare("SELECT term_months, application_date FROM loans WHERE id = ?");
-    $stmt->execute([$loanId]);
-    $loan = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    $monthlyInstallment = $loanCalculations['monthly_installment'];
-    $principalAmount = $loanCalculations['total_payment'] - $loanCalculations['total_interest'];
-    $monthlyPrincipal = $principalAmount / $loan['term_months'];
-    $monthlyInterest = $loanCalculations['total_interest'] / $loan['term_months'];
-    
-    for ($i = 1; $i <= $loan['term_months']; $i++) {
-        $dueDate = date('Y-m-d', strtotime("+$i months", strtotime($loan['application_date'])));
-        
-        $stmt = $db->prepare("
-            INSERT INTO loan_installments (
-                loan_id, installment_number, due_date, principal_amount, 
-                interest_amount, total_amount, status
-            ) VALUES (?, ?, ?, ?, ?, ?, 'Pending')
-        ");
-        
-        $stmt->execute([
-            $loanId,
-            $i,
-            $dueDate,
-            $monthlyPrincipal,
-            $monthlyInterest,
-            $monthlyInstallment
-        ]);
-    }
-}
-
-/**
- * Send JSON response
- */
-function sendResponse($success, $message, $data = null, $httpCode = 200) {
-    http_response_code($httpCode);
-    
-    $response = [
-        'success' => $success,
-        'message' => $message,
-        'data' => $data,
-        'timestamp' => date('Y-m-d H:i:s')
-    ];
-    
-    if (!$success) {
-        $response['errors'] = [];
-    }
-    
-    echo json_encode($response, JSON_PRETTY_PRINT);
-    exit;
-}
+// Handle request
+$api = new LoansAPI();
+$api->handleRequest();
+?>

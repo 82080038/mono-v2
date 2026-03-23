@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Umum - KSP Lam Gabe Jaya</title>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "/mono-v2/../../login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var headerUserName = document.getElementById("headerUserName");
+            if (headerUserName && userName) {
+                headerUserName.textContent = userName;
+            }
+        });
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/enhanced-ui.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .dashboard-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed ~ .dashboard-main {
+            margin-left: 70px;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .report-card {
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+        .report-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="p-3 text-white">
+            <h5 class="mb-0">KSP Lam Gabe Jaya</h5>
+            <small class="text-white-50">Admin Dashboard</small>
+        </div>
+        <nav class="nav flex-column p-3">
+            <a class="nav-link text-white" href="/mono-v2/admin/dashboard.html">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/members.html">
+                <i class="fas fa-users me-2"></i>
+                <span class="sidebar-text">Anggota</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/loans.html">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/admin/guarantee-management.html">
+                <i class="fas fa-shield-alt me-2"></i>
+                <span class="sidebar-text">Penjaminan</span>
+            </a>
+            <a class="nav-link text-white active" href="/mono-v2/admin/laporan-umum.html">
+                <i class="fas fa-clipboard-list me-2"></i>
+                <span class="sidebar-text">Laporan Umum</span>
+            </a>
+            <div class="mt-auto pt-3 border-top border-white-50">
+                <a class="nav-link text-white" href="/mono-v2/admin/reports.html">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    <span class="sidebar-text">Laporan</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/admin/bi-analytics.html">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    <span class="sidebar-text">BI & Analytics</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/admin/system-config.html">
+                    <i class="fas fa-cogs me-2"></i>
+                    <span class="sidebar-text">System Config</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link text-white" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h5 class="mb-0" id="pageTitle">Laporan Umum</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshReportData()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Refresh
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span id="headerUserName">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="main-content p-4">
+            <!-- Report Statistics -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-file-alt text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Total Laporan</h6>
+                                    <div class="h4 mb-0">156</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 12%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Selesai</h6>
+                                    <div class="h4 mb-0">142</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 8%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-clock text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Diproses</h6>
+                                    <div class="h4 mb-0">12</div>
+                                    <small class="text-warning"><i class="fas fa-arrow-up"></i> 3%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-download text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Diunduh</h6>
+                                    <div class="h4 mb-0">89</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 15%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Categories -->
+            <div class="row mb-4">
+                <div class="col-lg-8 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <h6 class="mb-0">Kategori Laporan</h6>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="reportChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <h6 class="mb-0">Status Laporan</h6>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="statusChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Reports -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Laporan Terbaru</h6>
+                        <div class="d-flex gap-2">
+                            <select class="form-select form-select-sm" style="width: auto;" id="categoryFilter">
+                                <option value="">Semua Kategori</option>
+                                <option value="keuangan">Keuangan</option>
+                                <option value="anggota">Anggota</option>
+                                <option value="pinjaman">Pinjaman</option>
+                                <option value="simpanan">Simpanan</option>
+                            </select>
+                            <button class="btn btn-outline-primary btn-sm" onclick="generateReport()">
+                                <i class="fas fa-plus"></i> Buat Laporan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nama Laporan</th>
+                                    <th>Kategori</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-primary">RPT-001</span></td>
+                                    <td>
+                                        <div>
+                                            <div class="fw-semibold">Laporan Bulanan Maret</div>
+                                            <small class="text-muted">Laporan keuangan bulanan</small>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-success">Keuangan</span></td>
+                                    <td>22 Mar 2024</td>
+                                    <td><span class="badge bg-success">Selesai</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="viewReport('RPT-001')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success me-1" onclick="downloadReport('RPT-001')">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="shareReport('RPT-001')">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-primary">RPT-002</span></td>
+                                    <td>
+                                        <div>
+                                            <div class="fw-semibold">Rekap Anggota Q1</div>
+                                            <small class="text-muted">Rekapitulasi anggota kuartal pertama</small>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-info">Anggota</span></td>
+                                    <td>21 Mar 2024</td>
+                                    <td><span class="badge bg-warning">Diproses</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="viewReport('RPT-002')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success me-1" onclick="downloadReport('RPT-002')">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="shareReport('RPT-002')">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-primary">RPT-003</span></td>
+                                    <td>
+                                        <div>
+                                            <div class="fw-semibold">Analisis Pinjaman</div>
+                                            <small class="text-muted">Analisis performa pinjaman</small>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-warning">Pinjaman</span></td>
+                                    <td>20 Mar 2024</td>
+                                    <td><span class="badge bg-success">Selesai</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="viewReport('RPT-003')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success me-1" onclick="downloadReport('RPT-003')">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="shareReport('RPT-003')">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Report functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "/mono-v2/../../login.html";
+        }
+
+        function refreshReportData() {
+            showNotification('Data laporan berhasil diperbarui', 'success');
+        }
+
+        function generateReport() {
+            showNotification('Membuat laporan baru...', 'info');
+        }
+
+        function viewReport(reportId) {
+            showNotification(`Melihat laporan ${reportId}`, 'info');
+        }
+
+        function downloadReport(reportId) {
+            showNotification(`Mengunduh laporan ${reportId}`, 'success');
+        }
+
+        function shareReport(reportId) {
+            showNotification(`Membagikan laporan ${reportId}`, 'info');
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Report Categories Chart
+            const reportCtx = document.getElementById('reportChart').getContext('2d');
+            new Chart(reportCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Keuangan', 'Anggota', 'Pinjaman', 'Simpanan', 'Lainnya'],
+                    datasets: [{
+                        label: 'Jumlah Laporan',
+                        data: [45, 32, 28, 25, 26],
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Status Chart
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Selesai', 'Diproses', 'Draft'],
+                    datasets: [{
+                        data: [142, 12, 2],
+                        backgroundColor: [
+                            'rgba(40, 167, 69, 0.8)',
+                            'rgba(255, 193, 7, 0.8)',
+                            'rgba(23, 162, 184, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Filter functionality
+        document.getElementById('categoryFilter').addEventListener('change', function(e) {
+            const filterValue = e.target.value;
+            showNotification(`Filter kategori: ${filterValue}`, 'info');
+        });
+
+        // Show notification
+        function showNotification(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.createElement('div');
+            container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            container.appendChild(toast);
+            document.body.appendChild(container);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => {
+                container.remove();
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            
+            // Handle sidebar collapse text visibility
+            document.getElementById('sidebar').addEventListener('transitionend', function() {
+                const isCollapsed = this.classList.contains('collapsed');
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                sidebarTexts.forEach(text => {
+                    text.style.display = isCollapsed ? 'none' : 'inline';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+                <p class="text-muted mb-0">Placeholder laporan operasional & ringkasan umum.</p>
+            </div>
+        </div>
+    </div>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
+</body>
+</body>
+</html>

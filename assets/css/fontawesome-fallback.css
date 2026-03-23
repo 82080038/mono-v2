@@ -1,0 +1,89 @@
+/* Font Awesome Fallback - Basic Icons */
+.fa, .fas, .far, .fab, .fal {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+
+/* Basic icon replacements */
+.fa-university::before { content: "🏛️"; }
+.fa-tachometer-alt::before { content: "📊"; }
+.fa-chart-line::before { content: "📈"; }
+.fa-users::before { content: "👥"; }
+.fa-hand-holding-usd::before { content: "💰"; }
+.fa-piggy-bank::before { content: "🐖"; }
+.fa-cog::before { content: "⚙️"; }
+.fa-plus-circle::before { content: "➕"; }
+.fa-minus-circle::before { content: "➖"; }
+.fa-credit-card::before { content: "💳"; }
+.fa-clipboard-list::before { content: "📋"; }
+.fa-calendar-alt::before { content: "📅"; }
+.fa-route::before { content: "🗺️"; }
+.fa-user-friends::before { content: "👨‍👩‍👧‍👦"; }
+.fa-money-bill-wave::before { content: "💵"; }
+.fa-map-marked-alt::before { content: "📍"; }
+.fa-user::before { content: "👤"; }
+.fa-history::before { content: "📜"; }
+.fa-exchange-alt::before { content: "🔄"; }
+.fa-info-circle::before { content: "ℹ️"; }
+.fa-bars::before { content: "☰"; }
+.fa-sync-alt::before { content: "🔄"; }
+.fa-sign-out-alt::before { content: "🚪"; }
+.fa-spinner::before { content: "⏳"; }
+
+/* Common icons */
+.fa-home::before { content: "🏠"; }
+.fa-search::before { content: "🔍"; }
+.fa-edit::before { content: "✏️"; }
+.fa-trash::before { content: "🗑️"; }
+.fa-save::before { content: "💾"; }
+.fa-print::before { content: "🖨️"; }
+.fa-download::before { content: "⬇️"; }
+.fa-upload::before { content: "⬆️"; }
+.fa-envelope::before { content: "✉️"; }
+.fa-phone::before { content: "📞"; }
+.fa-mobile::before { content: "📱"; }
+.fa-globe::before { content: "🌐"; }
+.fa-lock::before { content: "🔒"; }
+.fa-unlock::before { content: "🔓"; }
+.fa-key::before { content: "🔑"; }
+.fa-eye::before { content: "👁️"; }
+.fa-eye-slash::before { content: "🙈"; }
+.fa-check::before { content: "✅"; }
+.fa-times::before { content: "❌"; }
+.fa-plus::before { content: "+"; }
+.fa-minus::before { content: "-"; }
+.fa-arrow-left::before { content: "←"; }
+.fa-arrow-right::before { content: "→"; }
+.fa-arrow-up::before { content: "↑"; }
+.fa-arrow-down::before { content: "↓"; }
+
+/* Size classes */
+.fa-xs { font-size: 0.75em; }
+.fa-sm { font-size: 0.875em; }
+.fa-lg { font-size: 1.25em; }
+.fa-2x { font-size: 2em; }
+.fa-3x { font-size: 3em; }
+.fa-4x { font-size: 4em; }
+.fa-5x { font-size: 5em; }
+
+/* Spacing */
+.fa-fw { width: 1.25em; text-align: center; }
+.fa-pull-left { float: left; margin-right: 0.3em; }
+.fa-pull-right { float: right; margin-left: 0.3em; }
+
+/* Animation */
+.fa-spin { animation: fa-spin 2s infinite linear; }
+@keyframes fa-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Stack for multiple icons */
+.fa-stack { position: relative; display: inline-block; width: 2em; height: 2em; line-height: 2em; vertical-align: middle; }
+.fa-stack-1x, .fa-stack-2x { position: absolute; left: 0; width: 100%; text-align: center; }
+.fa-stack-1x { line-height: inherit; }
+.fa-stack-2x { font-size: 2em; }
+.fa-inverse { color: #fff; }

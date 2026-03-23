@@ -1,0 +1,126 @@
+{
+    "name": "KSP Lam Gabe Jaya",
+    "short_name": "KSP",
+    "description": "Koperasi Simpan Pinjam Digital Terpadu",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#007bff",
+    "orientation": "portrait",
+    "scope": "/",
+    "lang": "id",
+    "dir": "ltr",
+    "categories": ["finance", "business", "productivity"],
+    "icons": [
+        {
+            "src": "/assets/icons/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/assets/icons/icon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/assets/icons/icon-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/assets/icons/icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/assets/icons/icon-152x152.png",
+            "sizes": "152x152",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/assets/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/assets/icons/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/assets/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable any"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/assets/screenshots/desktop-dashboard.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Dashboard desktop view"
+        },
+        {
+            "src": "/assets/screenshots/mobile-dashboard.png",
+            "sizes": "390x844",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Dashboard mobile view"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Dashboard",
+            "short_name": "Dashboard",
+            "description": "Buka dashboard utama",
+            "url": "/main.php",
+            "icons": [
+                {
+                    "src": "/assets/icons/dashboard-96x96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Simpanan",
+            "short_name": "Simpanan",
+            "description": "Lihat simpanan Anda",
+            "url": "/main.php?page=simpanan",
+            "icons": [
+                {
+                    "src": "/assets/icons/savings-96x96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Pinjaman",
+            "short_name": "Pinjaman",
+            "description": "Kelola pinjaman Anda",
+            "url": "/main.php?page=pinjaman",
+            "icons": [
+                {
+                    "src": "/assets/icons/loans-96x96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ],
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "edge_side_panel": {
+        "preferred_width": 400
+    },
+    "launch_handler": {
+        "client_mode": "navigate-existing"
+    }
+}

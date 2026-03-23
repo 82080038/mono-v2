@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Error Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>🔍 JavaScript Error Test</h1>
+        <p>This page will test the JavaScript from main.php for errors</p>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Test Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="testResults"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>JavaScript Errors</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="errorLog"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Capture JavaScript errors
+        let errors = [];
+        let testResults = [];
+        
+        window.addEventListener('error', function(e) {
+            errors.push({
+                message: e.message,
+                filename: e.filename,
+                lineno: e.lineno,
+                colno: e.colno,
+                stack: e.error ? e.error.stack : 'No stack trace'
+            });
+            updateErrorLog();
+        });
+        
+        window.addEventListener('unhandledrejection', function(e) {
+            errors.push({
+                message: 'Unhandled Promise Rejection: ' + e.reason,
+                type: 'unhandledrejection'
+            });
+            updateErrorLog();
+        });
+        
+        function updateErrorLog() {
+            const errorLog = document.getElementById('errorLog');
+            if (errors.length === 0) {
+                errorLog.innerHTML = '<div class="alert alert-success">No JavaScript errors detected!</div>';
+            } else {
+                errorLog.innerHTML = errors.map((error, index) => `
+                    <div class="alert alert-danger">
+                        <strong>Error ${index + 1}:</strong> ${error.message}<br>
+                        <small>Line: ${error.lineno || 'N/A'}, Column: ${error.colno || 'N/A'}</small>
+                        ${error.stack ? '<br><small><pre>' + error.stack + '</pre></small>' : ''}
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function addTestResult(test, passed, message) {
+            testResults.push({ test, passed, message });
+            updateTestResults();
+        }
+        
+        function updateTestResults() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = testResults.map(result => `
+                <div class="alert ${result.passed ? 'alert-success' : 'alert-danger'}">
+                    <strong>${result.test}:</strong> ${result.message}
+                </div>
+            `).join('');
+        }
+        
+        // Test JavaScript functionality
+        function runTests() {
+            addTestResult('Page Load', true, 'Page loaded successfully');
+            
+            // Test for required functions
+            const requiredFunctions = [
+                'showNotification',
+                'navigateTo',
+                'logout',
+                'generateDashboardContent',
+                'generateLaporanContent',
+                'generateNasabahContent'
+            ];
+            
+            requiredFunctions.forEach(func => {
+                try {
+                    if (typeof window[func] === 'function') {
+                        addTestResult(`Function: ${func}`, true, 'Function defined');
+                    } else {
+                        addTestResult(`Function: ${func}`, false, 'Function NOT defined');
+                    }
+                } catch (error) {
+                    addTestResult(`Function: ${func}`, false, 'Error: ' + error.message);
+                }
+            });
+            
+            // Test template literal functionality
+            try {
+                const testTemplate = `Hello ${'World'}!`;
+                addTestResult('Template Literal', true, 'Template literals working');
+            } catch (error) {
+                addTestResult('Template Literal', false, 'Error: ' + error.message);
+            }
+            
+            // Test DOM manipulation
+            try {
+                const testDiv = document.createElement('div');
+                testDiv.innerHTML = '<span>Test</span>';
+                addTestResult('DOM Manipulation', true, 'DOM manipulation working');
+            } catch (error) {
+                addTestResult('DOM Manipulation', false, 'Error: ' + error.message);
+            }
+            
+            // Test event listeners
+            try {
+                document.addEventListener('test', function() {});
+                addTestResult('Event Listeners', true, 'Event listeners working');
+            } catch (error) {
+                addTestResult('Event Listeners', false, 'Error: ' + error.message);
+            }
+        }
+        
+        // Run tests when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(runTests, 100);
+        });
+    </script>
+    
+    <!-- Include the actual JavaScript from main.php -->
+    <?php
+    // Extract and include JavaScript from main.php
+    $mainContent = file_get_contents(__DIR__ . '/main.php');
+    $startPos = strpos($mainContent, '<script>');
+    $endPos = strrpos($mainContent, '</script>');
+    if ($startPos !== false && $endPos !== false) {
+        $jsContent = substr($mainContent, $startPos, $endPos - $startPos + 9);
+        echo $jsContent;
+    }
+    ?>
+</body>
+</html>

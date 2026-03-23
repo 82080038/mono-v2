@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Dashboard - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="manifest" href="/mono-v2/manifest.json">
+    <link href="/mono-v2/assets/css/main.css" rel="stylesheet">
+    <style>
+        .dashboard-card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .category-title {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+        .nav-link.disabled {
+            color: #6c757d !important;
+            cursor: not-allowed;
+        }
+        .error-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Error Container -->
+    <div id="errorContainer" class="error-container"></div>
+    
+    <!-- Alert Container -->
+    <div id="alertContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 9999"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-university me-2"></i>
+                KSP Lam Gabe Jaya
+            </a>
+            
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user me-1"></i>
+                        <span id="userName">User</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dynamic Navigation -->
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column" id="dynamicNavigation">
+                        <!-- Navigation will be rendered here -->
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Dashboard</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="refreshDashboard()">
+                                <i class="fas fa-sync-alt me-1"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Pages -->
+                <div id="dashboardPages">
+                    <!-- Dashboard pages will be rendered here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loadingModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2 mb-0">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/dynamic-dashboard.js"></script>
+    <script>
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                // Create a test token for development
+                const testToken = btoa(JSON.stringify({
+                    user_id: 8,
+                    username: 'member',
+                    name: 'Test User',
+                    role: 'member'
+                }));
+                localStorage.setItem('authToken', testToken);
+                console.log('Created test token:', testToken);
+                return testToken;
+            }
+            console.log('Using existing token:', token);
+            return token;
+        }
+
+        // Get user info from token
+        function getUserInfo(token) {
+            try {
+                // Handle both JWT and simple tokens
+                if (token.includes('.') && token.split('.').length === 3) {
+                    // JWT token format
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    return {
+                        name: payload.name || payload.username || 'User',
+                        role: payload.role || 'member'
+                    };
+                } else {
+                    // Simple token format - get from localStorage
+                    return {
+                        name: localStorage.getItem('userName') || 'User',
+                        role: localStorage.getItem('userRole') || 'member'
+                    };
+                }
+            } catch (error) {
+                console.error('Failed to parse token:', error);
+                // Fallback to localStorage
+                return {
+                    name: localStorage.getItem('userName') || 'User',
+                    role: localStorage.getItem('userRole') || 'member'
+                };
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userName');
+            window.location.href = '/mono-v2/../login.html';
+        }
+
+        // Refresh dashboard
+        function refreshDashboard() {
+            const token = checkAuth();
+            if (token) {
+                const dashboard = new DynamicDashboard();
+                dashboard.initialize(token);
+            }
+        }
+
+        // Initialize page - prevent double initialization
+        let isInitializing = false;
+        document.addEventListener('DOMContentLoaded', function() {
+            if (isInitializing) {
+                console.log('Already initializing, skipping...');
+                return;
+            }
+            isInitializing = true;
+            
+            console.log('Dynamic Dashboard page loaded');
+            
+            const token = checkAuth();
+            console.log('Token from checkAuth:', token);
+            
+            if (token) {
+                const userInfo = getUserInfo(token);
+                console.log('User info:', userInfo);
+                document.getElementById('userName').textContent = userInfo.name;
+                
+                // Delay showing modal to ensure Bootstrap is ready
+                setTimeout(function() {
+                    // Show loading modal
+                    const modalEl = document.getElementById('loadingModal');
+                    const loadingModal = new bootstrap.Modal(modalEl, {
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    loadingModal.show();
+                    
+                    // Force hide after 5 seconds max (safety timeout) - shorter for better UX
+                    const forceHideTimer = setTimeout(function() {
+                        console.log('Force hiding loading modal (safety timeout)');
+                        loadingModal.hide();
+                        modalEl.removeAttribute('aria-hidden');
+                        modalEl.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        document.body.style.overflow = '';
+                        document.body.style.paddingRight = '';
+                        document.body.style.background = ''; // Reset any background styles
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) {
+                            backdrop.remove();
+                            console.log('Backdrop removed by safety timeout');
+                        }
+                        // Remove all modal-related classes and styles
+                        document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+                    }, 5000); // 5 seconds instead of 8
+                    
+                    // Initialize dashboard
+                    if (typeof DynamicDashboard !== 'undefined') {
+                        console.log('DynamicDashboard class found, initializing...');
+                        const dashboard = new DynamicDashboard();
+                        dashboard.initialize(token).then(() => {
+                            console.log('Dashboard initialized successfully');
+                            clearTimeout(forceHideTimer); // Cancel safety timeout
+                            // Force hide modal and backdrop
+                            loadingModal.hide();
+                            modalEl.removeAttribute('aria-hidden');
+                            modalEl.style.display = 'none';
+                            document.body.classList.remove('modal-open');
+                            document.body.style.overflow = '';
+                            document.body.style.paddingRight = '';
+                            document.body.style.background = '';
+                            const backdrop = document.querySelector('.modal-backdrop');
+                            if (backdrop) {
+                                backdrop.remove();
+                                console.log('Backdrop removed after init success');
+                            }
+                            // Remove all modal-related classes and styles
+                            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+                        }).catch((error) => {
+                            console.error('Dashboard initialization failed:', error);
+                            clearTimeout(forceHideTimer); // Cancel safety timeout
+                            // Force hide modal even on error
+                            loadingModal.hide();
+                            modalEl.removeAttribute('aria-hidden');
+                            modalEl.style.display = 'none';
+                            document.body.classList.remove('modal-open');
+                            document.body.style.overflow = '';
+                            document.body.style.paddingRight = '';
+                            document.body.style.background = '';
+                            const backdrop = document.querySelector('.modal-backdrop');
+                            if (backdrop) backdrop.remove();
+                            // Remove all modal-related classes and styles
+                            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+                            // Show error message
+                            const alertContainer = document.getElementById('alertContainer');
+                            if (alertContainer) {
+                                const alert = document.createElement('div');
+                                alert.className = 'alert alert-warning alert-dismissible fade show';
+                                alert.innerHTML = `
+                                    <strong>Dashboard Loading Error:</strong> ${error.message}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                `;
+                                alertContainer.appendChild(alert);
+                            }
+                        });
+                    } else {
+                        console.error('DynamicDashboard class not found');
+                        clearTimeout(forceHideTimer);
+                        loadingModal.hide();
+                        modalEl.removeAttribute('aria-hidden');
+                        modalEl.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        document.body.style.background = '';
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) backdrop.remove();
+                        document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+                        // Show error message
+                        const alertContainer = document.getElementById('alertContainer');
+                        if (alertContainer) {
+                            const alert = document.createElement('div');
+                            alert.className = 'alert alert-danger alert-dismissible fade show';
+                            alert.innerHTML = `
+                                <strong>System Error:</strong> Dynamic dashboard system not loaded properly.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            `;
+                            alertContainer.appendChild(alert);
+                        }
+                    }
+                }, 100); // Small delay to ensure Bootstrap is ready
+            } else {
+                console.error('No token available');
+                window.location.href = '/mono-v2/login.html';
+            }
+        });
+    </script>
+</body>
+</html>

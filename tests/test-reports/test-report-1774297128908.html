@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KSP System Test Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .summary { background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
+        .passed { color: green; }
+        .failed { color: red; }
+        .test-item { margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .test-passed { background: #d4edda; }
+        .test-failed { background: #f8d7da; }
+        .screenshot { max-width: 100px; height: auto; }
+    </style>
+</head>
+<body>
+    <h1>KSP System Test Report</h1>
+    <div class="summary">
+        <h2>Summary</h2>
+        <p><strong>Total Tests:</strong> 4</p>
+        <p><strong>Passed:</strong> <span class="passed">1</span></p>
+        <p><strong>Failed:</strong> <span class="failed">3</span></p>
+        <p><strong>Success Rate:</strong> 25.00%</p>
+        <p><strong>Timestamp:</strong> 2026-03-23T20:18:48.908Z</p>
+    </div>
+    
+    <h2>Test Details</h2>
+    
+        <div class="test-item test-failed">
+            <h3>BOS Dashboard - <span class="failed">FAILED</span></h3>
+            <p><strong>Duration:</strong> undefinedms</p>
+            <p><strong>Error:</strong> Dashboard title not found</p>
+            <p><strong>Screenshot:</strong> <img src="test-screenshots/BOS Dashboard-failed-2026-03-23T20-17-57-379Z.png" class="screenshot"></p>
+        </div>
+    
+        <div class="test-item test-passed">
+            <h3>Teller Dashboard - <span class="passed">PASSED</span></h3>
+            <p><strong>Duration:</strong> 11031ms</p>
+            
+            <p><strong>Screenshot:</strong> <img src="test-screenshots/Teller Dashboard-passed-2026-03-23T20-18-16-813Z.png" class="screenshot"></p>
+        </div>
+    
+        <div class="test-item test-failed">
+            <h3>Mobile Responsiveness - <span class="failed">FAILED</span></h3>
+            <p><strong>Duration:</strong> undefinedms</p>
+            <p><strong>Error:</strong> Mobile responsiveness failed for viewport 375x667</p>
+            <p><strong>Screenshot:</strong> <img src="test-screenshots/Mobile Responsiveness-failed-2026-03-23T20-18-28-433Z.png" class="screenshot"></p>
+        </div>
+    
+        <div class="test-item test-failed">
+            <h3>Form Validation - <span class="failed">FAILED</span></h3>
+            <p><strong>Duration:</strong> undefinedms</p>
+            <p><strong>Error:</strong> Validation should fail for Not a number</p>
+            <p><strong>Screenshot:</strong> <img src="test-screenshots/Form Validation-failed-2026-03-23T20-18-48-569Z.png" class="screenshot"></p>
+        </div>
+    
+    
+    <h2>Recommendations</h2>
+    <ul>
+        <li>Fix failed tests before deploying to production</li><li>Run tests regularly to ensure system stability</li><li>Add more edge case tests for better coverage</li><li>Monitor performance metrics in production</li>
+    </ul>
+</body>
+</html>
+        

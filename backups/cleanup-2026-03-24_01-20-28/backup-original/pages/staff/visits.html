@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Tracking Mantri - KSP Lam Gabe Jaya</title>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "/mono-v2/../../login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var headerUserName = document.getElementById("headerUserName");
+            if (headerUserName && userName) {
+                headerUserName.textContent = userName;
+            }
+        });
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/enhanced-ui.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .dashboard-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed ~ .dashboard-main {
+            margin-left: 70px;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .tracking-card {
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+        .tracking-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        #map {
+            height: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .status-online {
+            color: #28a745;
+            animation: pulse 2s infinite;
+        }
+        .status-offline {
+            color: #dc3545;
+        }
+        .status-busy {
+            color: #ffc107;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .live-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        .live-indicator.online {
+            background-color: #28a745;
+        }
+        .live-indicator.offline {
+            background-color: #dc3545;
+        }
+        .live-indicator.busy {
+            background-color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="p-3 text-white">
+            <h5 class="mb-0">KSP Lam Gabe Jaya</h5>
+            <small class="text-white-50">Admin Dashboard</small>
+        </div>
+        <nav class="nav flex-column p-3">
+            <a class="nav-link text-white" href="/mono-v2/staff/dashboard.html">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/staff/members.html">
+                <i class="fas fa-users me-2"></i>
+                <span class="sidebar-text">Anggota</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/staff/loans.html">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/staff/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/staff/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/staff/guarantee-management.html">
+                <i class="fas fa-shield-alt me-2"></i>
+                <span class="sidebar-text">Penjaminan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/staff/reports.html">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <div class="mt-auto pt-3 border-top border-white-50">
+                <a class="nav-link text-white" href="/mono-v2/staff/bi-analytics.html">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    <span class="sidebar-text">BI & Analytics</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/staff/role-access.html">
+                    <i class="fas fa-user-shield me-2"></i>
+                    <span class="sidebar-text">Role & Akses</span>
+                </a>
+                <a class="nav-link text-white active" href="/mono-v2/staff/live-tracking.html">
+                    <i class="fas fa-map-marked-alt me-2"></i>
+                    <span class="sidebar-text">Live Tracking</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/staff/gps.html">
+                    <i class="fas fa-gps me-2"></i>
+                    <span class="sidebar-text">GPS Management</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link text-white" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h5 class="mb-0" id="pageTitle">Live Tracking Mantri</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshTrackingData()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Refresh
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span id="headerUserName">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="main-content p-4">
+            <!-- Tracking Statistics -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-users text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Total Mantri</h6>
+                                    <div class="h4 mb-0">12</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 2 online</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-map-marker-alt text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Active Visits</h6>
+                                    <div class="h4 mb-0">8</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 3 today</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-route text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Routes Today</h6>
+                                    <div class="h4 mb-0">24</div>
+                                    <small class="text-warning"><i class="fas fa-clock"></i> 5 pending</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-clock text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Avg Duration</h6>
+                                    <div class="h4 mb-0">45m</div>
+                                    <small class="text-info"><i class="fas fa-arrow-down"></i> 5m faster</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Map -->
+            <div class="row mb-4">
+                <div class="col-lg-8 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">
+                                    <span class="live-indicator online"></span>
+                                    Live Map
+                                </h6>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="centerMap()">
+                                        <i class="fas fa-crosshairs"></i> Center
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" onclick="toggleHeatmap()">
+                                        <i class="fas fa-fire"></i> Heatmap
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" onclick="toggleRoutes()">
+                                        <i class="fas fa-route"></i> Routes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <h6 class="mb-0">Active Mantri</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                            <i class="fas fa-user text-success small"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-semibold">Ahmad Wijaya</div>
+                                            <small class="text-muted">Mantri-001</small>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="live-indicator online"></span>
+                                        <small class="text-success">Online</small>
+                                    </div>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-2">
+                                            <i class="fas fa-user text-warning small"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-semibold">Siti Nurhaliza</div>
+                                            <small class="text-muted">Mantri-002</small>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="live-indicator busy"></span>
+                                        <small class="text-warning">Busy</small>
+                                    </div>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-danger bg-opacity-10 rounded-circle p-2 me-2">
+                                            <i class="fas fa-user text-danger small"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-semibold">Budi Santoso</div>
+                                            <small class="text-muted">Mantri-003</small>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="live-indicator offline"></span>
+                                        <small class="text-danger">Offline</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visit Details -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Active Visits</h6>
+                        <div class="d-flex gap-2">
+                            <select class="form-select form-select-sm" style="width: auto;" id="visitStatus">
+                                <option value="">All Status</option>
+                                <option value="ongoing">Ongoing</option>
+                                <option value="completed">Completed</option>
+                                <option value="scheduled">Scheduled</option>
+                            </select>
+                            <button class="btn btn-outline-primary btn-sm" onclick="exportVisitData()">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Mantri</th>
+                                    <th>Member</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                    <th>Duration</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-primary">VT-001</span></td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                                <i class="fas fa-user text-success small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">Ahmad Wijaya</div>
+                                                <small class="text-muted">Mantri-001</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                                <i class="fas fa-user text-primary small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">Diana Putri</div>
+                                                <small class="text-muted">ID: 004</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div class="fw-semibold">Jl. Sudirman No. 123</div>
+                                            <small class="text-muted">Denpasar</small>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-success">Ongoing</span></td>
+                                    <td>25m</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="trackVisit('VT-001')">
+                                            <i class="fas fa-map-marked-alt"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info me-1" onclick="viewDetails('VT-001')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success" onclick="contactMantri('VT-001')">
+                                            <i class="fas fa-phone"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-primary">VT-002</span></td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-2">
+                                                <i class="fas fa-user text-warning small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">Siti Nurhaliza</div>
+                                                <small class="text-muted">Mantri-002</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
+                                                <i class="fas fa-user text-info small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">Eko Prasetyo</div>
+                                                <small class="text-muted">ID: 005</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div class="fw-semibold">Jl. Gatotkaca No. 45</div>
+                                            <small class="text-muted">Badung</small>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-warning">Scheduled</span></td>
+                                    <td>-</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="trackVisit('VT-002')">
+                                            <i class="fas fa-map-marked-alt"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info me-1" onclick="viewDetails('VT-002')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success" onclick="contactMantri('VT-002')">
+                                            <i class="fas fa-phone"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-primary">VT-003</span></td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                                <i class="fas fa-user text-success small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">Ahmad Wijaya</div>
+                                                <small class="text-muted">Mantri-001</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                                <i class="fas fa-user text-success small"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">Rina Marlina</div>
+                                                <small class="text-muted">ID: 006</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div class="fw-semibold">Jl. Teuku Umar No. 78</div>
+                                            <small class="text-muted">Tabanan</small>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-info">Completed</span></td>
+                                    <td>1h 15m</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="trackVisit('VT-003')">
+                                            <i class="fas fa-map-marked-alt"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info me-1" onclick="viewDetails('VT-003')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success" onclick="viewReport('VT-003')">
+                                            <i class="fas fa-file-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <h6 class="mb-0">Quick Actions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="assignVisit()">
+                                <i class="fas fa-user-plus fa-2x mb-2"></i>
+                                <span>Assign Visit</span>
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="createRoute()">
+                                <i class="fas fa-route fa-2x mb-2"></i>
+                                <span>Create Route</span>
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-info w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="sendNotification()">
+                                <i class="fas fa-bell fa-2x mb-2"></i>
+                                <span>Send Alert</span>
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center" onclick="generateReport()">
+                                <i class="fas fa-chart-bar fa-2x mb-2"></i>
+                                <span>Generate Report</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Initialize map
+        let map;
+        let markers = [];
+        
+        function initMap() {
+            map = L.map('map').setView([-8.3405, 115.0920], 12);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            // Add sample markers
+            addSampleMarkers();
+        }
+        
+        function addSampleMarkers() {
+            const locations = [
+                { lat: -8.3405, lng: 115.0920, name: "Ahmad Wijaya", status: "online" },
+                { lat: -8.3500, lng: 115.1000, name: "Siti Nurhaliza", status: "busy" },
+                { lat: -8.3300, lng: 115.0800, name: "Budi Santoso", status: "offline" }
+            ];
+            
+            locations.forEach(loc => {
+                const color = loc.status === 'online' ? 'green' : loc.status === 'busy' ? 'orange' : 'red';
+                const marker = L.marker([loc.lat, loc.lng])
+                    .addTo(map)
+                    .bindPopup(`<b>${loc.name}</b><br>Status: ${loc.status}`);
+                markers.push(marker);
+            });
+        }
+        
+        // Tracking functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "/mono-v2/../../login.html";
+        }
+
+        function refreshTrackingData() {
+            showNotification('Tracking data refreshed', 'success');
+            // Refresh map markers
+            markers.forEach(marker => marker.remove());
+            addSampleMarkers();
+        }
+
+        function centerMap() {
+            map.setView([-8.3405, 115.0920], 12);
+            showNotification('Map centered', 'info');
+        }
+
+        function toggleHeatmap() {
+            showNotification('Heatmap toggled', 'info');
+        }
+
+        function toggleRoutes() {
+            showNotification('Routes toggled', 'info');
+        }
+
+        function trackVisit(visitId) {
+            showNotification(`Tracking visit ${visitId}`, 'info');
+        }
+
+        function viewDetails(visitId) {
+            showNotification(`Viewing details for ${visitId}`, 'info');
+        }
+
+        function contactMantri(visitId) {
+            showNotification(`Contacting mantri for ${visitId}`, 'info');
+        }
+
+        function viewReport(visitId) {
+            showNotification(`Viewing report for ${visitId}`, 'info');
+        }
+
+        function assignVisit() {
+            showNotification('Opening assign visit form...', 'info');
+        }
+
+        function createRoute() {
+            showNotification('Opening route creator...', 'info');
+        }
+
+        function sendNotification() {
+            showNotification('Sending notification to all mantri...', 'success');
+        }
+
+        function generateReport() {
+            showNotification('Generating tracking report...', 'info');
+        }
+
+        function exportVisitData() {
+            showNotification('Exporting visit data...', 'success');
+        }
+
+        // Filter functionality
+        document.getElementById('visitStatus').addEventListener('change', function(e) {
+            const filterValue = e.target.value;
+            showNotification(`Filter status: ${filterValue}`, 'info');
+        });
+
+        // Show notification
+        function showNotification(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.createElement('div');
+            container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            container.appendChild(toast);
+            document.body.appendChild(container);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => {
+                container.remove();
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize map
+            initMap();
+            
+            // Handle sidebar collapse text visibility
+            document.getElementById('sidebar').addEventListener('transitionend', function() {
+                const isCollapsed = this.classList.contains('collapsed');
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                sidebarTexts.forEach(text => {
+                    text.style.display = isCollapsed ? 'none' : 'inline';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+                <p class="text-muted mb-0">Placeholder peta real-time & geofence monitoring.</p>
+            </div>
+        </div>
+    </div>
+
+<script>
+// Register service worker only in production
+if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+</script>
+</body>
+</body>
+</html>

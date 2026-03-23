@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-03-23T20:18:48.908Z",
+  "summary": {
+    "total": 4,
+    "passed": 1,
+    "failed": 3,
+    "successRate": "25.00%"
+  },
+  "details": [
+    {
+      "name": "BOS Dashboard",
+      "status": "FAILED",
+      "error": "Dashboard title not found",
+      "screenshot": "test-screenshots/BOS Dashboard-failed-2026-03-23T20-17-57-379Z.png"
+    },
+    {
+      "name": "Teller Dashboard",
+      "status": "PASSED",
+      "duration": 11031,
+      "screenshot": "test-screenshots/Teller Dashboard-passed-2026-03-23T20-18-16-813Z.png"
+    },
+    {
+      "name": "Mobile Responsiveness",
+      "status": "FAILED",
+      "error": "Mobile responsiveness failed for viewport 375x667",
+      "screenshot": "test-screenshots/Mobile Responsiveness-failed-2026-03-23T20-18-28-433Z.png"
+    },
+    {
+      "name": "Form Validation",
+      "status": "FAILED",
+      "error": "Validation should fail for Not a number",
+      "screenshot": "test-screenshots/Form Validation-failed-2026-03-23T20-18-48-569Z.png"
+    }
+  ],
+  "recommendations": [
+    "Fix failed tests before deploying to production",
+    "Run tests regularly to ensure system stability",
+    "Add more edge case tests for better coverage",
+    "Monitor performance metrics in production"
+  ]
+}

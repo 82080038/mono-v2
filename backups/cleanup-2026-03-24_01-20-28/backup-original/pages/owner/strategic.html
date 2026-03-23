@@ -1,0 +1,184 @@
+<?php
+/**
+ * Owner - Strategic Planning Page
+ * Strategic goals and planning dashboard for business owners
+ */
+
+require_once __DIR__ . "/../../config/error-config.php";
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Planning - KSP Lam Gabe Jaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="manifest" href="/mono-v2/manifest.json">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+        .strategy-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .strategy-card:hover {
+            transform: translateY(-5px);
+        }
+        .goal-item {
+            border-left: 4px solid #667eea;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        .progress-ring {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(#667eea 75%, #e9ecef 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="mb-2"><i class="fas fa-chess me-2"></i>Strategic Planning</h1>
+                    <p class="mb-0 opacity-75">Business goals, KPIs & strategic objectives</p>
+                </div>
+                <a href="/mono-v2/owner/dashboard.html" class="btn btn-light">
+                    <i class="fas fa-arrow-left me-2"></i>Kembali
+                </a>
+            </div>
+        </div>
+
+        <!-- Strategic Goals -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="strategy-card text-center">
+                    <div class="progress-ring mb-3">75%</div>
+                    <h5>Member Growth</h5>
+                    <p class="text-muted">Target: 2,000 members by end of year</p>
+                    <small class="text-success"><i class="fas fa-check-circle me-1"></i>On Track</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="strategy-card text-center">
+                    <div class="progress-ring mb-3" style="background: conic-gradient(#28a745 60%, #e9ecef 0);">60%</div>
+                    <h5>Loan Portfolio</h5>
+                    <p class="text-muted">Target: Rp 1B total disbursement</p>
+                    <small class="text-warning"><i class="fas fa-exclamation-circle me-1"></i>Needs Attention</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="strategy-card text-center">
+                    <div class="progress-ring mb-3" style="background: conic-gradient(#dc3545 90%, #e9ecef 0);">90%</div>
+                    <h5>Collection Rate</h5>
+                    <p class="text-muted">Target: 95% monthly collection</p>
+                    <small class="text-success"><i class="fas fa-check-circle me-1"></i>Excellent</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quarterly Objectives -->
+        <div class="strategy-card">
+            <h5 class="mb-3"><i class="fas fa-bullseye me-2"></i>Quarterly Objectives (Q1 2026)</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="goal-item">
+                        <h6>Expand to 3 New Regions</h6>
+                        <p class="text-muted mb-1">Open branches in: Tangerang, Bekasi, Depok</p>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-primary" style="width: 66%"></div>
+                        </div>
+                        <small class="text-muted">2 of 3 regions completed</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="goal-item">
+                        <h6>Digital Transformation</h6>
+                        <p class="text-muted mb-1">Launch mobile app & online portal</p>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-info" style="width: 80%"></div>
+                        </div>
+                        <small class="text-muted">Beta testing in progress</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Items -->
+        <div class="strategy-card">
+            <h5 class="mb-3"><i class="fas fa-tasks me-2"></i>Strategic Action Items</h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Owner</th>
+                            <th>Deadline</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fas fa-user-plus me-2 text-primary"></i>Recruit 5 Field Officers</td>
+                            <td>HR Manager</td>
+                            <td>Mar 30, 2026</td>
+                            <td><span class="badge bg-warning">In Progress</span></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-shield-alt me-2 text-success"></i>Implement Risk Management System</td>
+                            <td>IT Manager</td>
+                            <td>Apr 15, 2026</td>
+                            <td><span class="badge bg-info">Planning</span></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-chart-line me-2 text-info"></i>Partner with 2 Local Banks</td>
+                            <td>Finance Manager</td>
+                            <td>May 1, 2026</td>
+                            <td><span class="badge bg-secondary">Not Started</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                window.location.href = '/mono-v2/login.html';
+                return;
+            }
+            
+            const userRole = localStorage.getItem('userRole');
+            if (userRole !== 'owner' && userRole !== 'creator') {
+                alert('Access denied. Only Owner can access this page.');
+                window.location.href = '/mono-v2/pages/dynamic-dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>

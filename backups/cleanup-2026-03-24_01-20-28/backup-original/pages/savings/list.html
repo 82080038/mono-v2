@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Simpanan - KSP Lam Gabe Jaya</title>
+    <script>
+        // Check authentication
+        var token = localStorage.getItem("authToken");
+        var role = localStorage.getItem("userRole");
+        var userName = localStorage.getItem("userName");
+        
+        if (!token || !role || !userName) {
+            window.location.href = "/mono-v2/../../login.html";
+        }
+        
+        // Set user info
+        document.addEventListener("DOMContentLoaded", function() {
+            var headerUserName = document.getElementById("headerUserName");
+            if (headerUserName && userName) {
+                headerUserName.textContent = userName;
+            }
+        });
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard-layout.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/dashboard.css" rel="stylesheet">
+    <link href="/mono-v2/assets/css/enhanced-ui.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .dashboard-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed ~ .dashboard-main {
+            margin-left: 70px;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="p-3 text-white">
+            <h5 class="mb-0">KSP Lam Gabe Jaya</h5>
+            <small class="text-white-50">Admin Dashboard</small>
+        </div>
+        <nav class="nav flex-column p-3">
+            <a class="nav-link text-white" href="/mono-v2/savings/dashboard.html">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/savings/members.html">
+                <i class="fas fa-users me-2"></i>
+                <span class="sidebar-text">Anggota</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/savings/loans.html">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white active" href="/mono-v2/savings/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/savings/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/savings/npl.html">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span class="sidebar-text">NPL</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/savings/risk-fraud.html">
+                <i class="fas fa-shield-alt me-2"></i>
+                <span class="sidebar-text">Risiko & Fraud</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/savings/reports.html">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/savings/settings.html">
+                <i class="fas fa-cog me-2"></i>
+                <span class="sidebar-text">Pengaturan</span>
+            </a>
+            <div class="mt-auto pt-3 border-top border-white-50">
+                <a class="nav-link text-white" href="/mono-v2/savings/role-access.html">
+                    <i class="fas fa-user-shield me-2"></i>
+                    <span class="sidebar-text">Role & Akses</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/savings/guarantee-management.html">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    <span class="sidebar-text">Penjaminan</span>
+                </a>
+                <a class="nav-link text-white" href="/mono-v2/savings/database-management.html">
+                    <i class="fas fa-database me-2"></i>
+                    <span class="sidebar-text">Database</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link text-white" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h5 class="mb-0" id="pageTitle">Manajemen Simpanan</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshSavings()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Refresh
+                    </button>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addSavingsModal">
+                        <i class="fas fa-plus me-1"></i>
+                        Tambah Simpanan
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span id="headerUserName">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="main-content p-4">
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-piggy-bank text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Total Simpanan</h6>
+                                    <div class="h4 mb-0" id="totalSavings">Loading...</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 18%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-wallet text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Simpanan Wajib</h6>
+                                    <div class="h4 mb-0" id="mandatorySavings">Loading...</div>
+                                    <small class="text-success"><i class="fas fa-arrow-up"></i> 12%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-coins text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Simpanan Sukarela</h6>
+                                    <div class="h4 mb-0" id="voluntarySavings">Loading...</div>
+                                    <small class="text-warning"><i class="fas fa-minus"></i> 0%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                        <i class="fas fa-chart-line text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0 text-muted">Bunga Bulanan</h6>
+                                    <div class="h4 mb-0" id="monthlyInterest">Loading...</div>
+                                    <small class="text-info"><i class="fas fa-arrow-up"></i> 5%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Cari simpanan..." id="searchSavings">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="filterType">
+                        <option value="">Semua Tipe</option>
+                        <option value="wajib">Wajib</option>
+                        <option value="sukarela">Sukarela</option>
+                        <option value="berjangka">Berjangka</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="filterStatus">
+                        <option value="">Semua Status</option>
+                        <option value="active">Aktif</option>
+                        <option value="inactive">Tidak Aktif</option>
+                        <option value="frozen">Dibekukan</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Savings Table -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Data Simpanan</h6>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-success" onclick="exportData('excel')">
+                                <i class="fas fa-file-excel me-1"></i>Excel
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="exportData('pdf')">
+                                <i class="fas fa-file-pdf me-1"></i>PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="savingsTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Anggota</th>
+                                    <th>Tipe</th>
+                                    <th>Saldo</th>
+                                    <th>Status</th>
+                                    <th>Terakhir Update</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="savingsTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Memuat data simpanan...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Savings Modal -->
+    <div class="modal fade" id="addSavingsModal" tabindex="-1" aria-labelledby="addSavingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSavingsModalLabel">Tambah Simpanan Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addSavingsForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="memberSelect" class="form-label">Pilih Anggota</label>
+                                    <select class="form-select" id="memberSelect" required>
+                                        <option value="">-- Pilih Anggota --</option>
+                                        <option value="M001">John Doe</option>
+                                        <option value="M002">Jane Smith</option>
+                                        <option value="M003">Robert Johnson</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="savingsType" class="form-label">Tipe Simpanan</label>
+                                    <select class="form-select" id="savingsType">
+                                        <option value="wajib">Wajib</option>
+                                        <option value="sukarela">Sukarela</option>
+                                        <option value="berjangka">Berjangka</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="savingsAmount" class="form-label">Jumlah Simpanan</label>
+                                    <input type="number" class="form-control" id="savingsAmount" placeholder="Rp 0" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="interestRate" class="form-label">Suku Bunga (%)</label>
+                                    <input type="number" class="form-control" id="interestRate" placeholder="5" step="0.1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="savingsDescription" class="form-label">Keterangan</label>
+                            <textarea class="form-control" id="savingsDescription" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="addSavings()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Savings management functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "/mono-v2/../../login.html";
+        }
+
+        function refreshSavings() {
+            loadSavingsData();
+        }
+
+        // Load savings data from API
+        function loadSavingsData() {
+            fetch('../../api/savings.php?action=list&test=true')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderSavingsTable(data.data);
+                        updateStatistics(data.statistics);
+                        showNotification('Data berhasil dimuat', 'success');
+                    } else {
+                        showNotification('Gagal memuat data', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading savings data:', error);
+                    showNotification('Terjadi kesalahan saat memuat data', 'error');
+                    // Load mock data for testing
+                    loadMockData();
+                });
+        }
+
+        // Load mock data for testing
+        function loadMockData() {
+            const mockData = [
+                {
+                    id: 'S001',
+                    member_name: 'John Doe',
+                    type: 'wajib',
+                    balance: 2500000,
+                    status: 'active',
+                    last_update: '2024-01-15'
+                },
+                {
+                    id: 'S002',
+                    member_name: 'Jane Smith',
+                    type: 'sukarela',
+                    balance: 5000000,
+                    status: 'active',
+                    last_update: '2024-01-18'
+                },
+                {
+                    id: 'S003',
+                    member_name: 'Robert Johnson',
+                    type: 'berjangka',
+                    balance: 10000000,
+                    status: 'active',
+                    last_update: '2024-01-20'
+                }
+            ];
+            
+            renderSavingsTable(mockData);
+            updateStatistics({
+                total: mockData.reduce((sum, s) => sum + s.balance, 0),
+                mandatory: mockData.filter(s => s.type === 'wajib').reduce((sum, s) => sum + s.balance, 0),
+                voluntary: mockData.filter(s => s.type === 'sukarela').reduce((sum, s) => sum + s.balance, 0),
+                interest: 250000
+            });
+        }
+
+        // Render savings table
+        function renderSavingsTable(savings) {
+            const tbody = document.getElementById('savingsTableBody');
+            tbody.innerHTML = '';
+            
+            savings.forEach(saving => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${saving.id}</td>
+                    <td>${saving.member_name}</td>
+                    <td><span class="badge bg-info">${saving.type}</span></td>
+                    <td>Rp ${saving.balance.toLocaleString('id-ID')}</td>
+                    <td><span class="badge bg-${saving.status === 'active' ? 'success' : saving.status === 'inactive' ? 'danger' : 'warning'}">${saving.status === 'active' ? 'Aktif' : saving.status === 'inactive' ? 'Tidak Aktif' : 'Dibekukan'}</span></td>
+                    <td>${saving.last_update}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="viewSavings('${saving.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning me-1" onclick="editSavings('${saving.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-success me-1" onclick="addDeposit('${saving.id}')">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Update statistics
+        function updateStatistics(stats) {
+            document.getElementById('totalSavings').textContent = formatCurrency(stats.total || 0);
+            document.getElementById('mandatorySavings').textContent = formatCurrency(stats.mandatory || 0);
+            document.getElementById('voluntarySavings').textContent = formatCurrency(stats.voluntary || 0);
+            document.getElementById('monthlyInterest').textContent = formatCurrency(stats.interest || 0);
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            const num = parseFloat(amount);
+            if (num >= 1000000000) {
+                return 'Rp ' + (num / 1000000000).toFixed(1) + 'M';
+            } else if (num >= 1000000) {
+                return 'Rp ' + (num / 1000000).toFixed(1) + 'Jt';
+            } else {
+                return 'Rp ' + num.toLocaleString('id-ID');
+            }
+        }
+
+        // Add savings
+        function addSavings() {
+            const form = document.getElementById('addSavingsForm');
+            const formData = new FormData(form);
+            
+            // Mock implementation
+            showNotification('Simpanan berhasil ditambahkan', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('addSavingsModal')).hide();
+            form.reset();
+            loadSavingsData();
+        }
+
+        // View savings
+        function viewSavings(id) {
+            showNotification(`Melihat detail simpanan ${id}`, 'info');
+        }
+
+        // Edit savings
+        function editSavings(id) {
+            showNotification(`Mengedit simpanan ${id}`, 'info');
+        }
+
+        // Add deposit
+        function addDeposit(id) {
+            showNotification(`Menambah deposit ke simpanan ${id}`, 'info');
+        }
+
+        // Export data
+        function exportData(format) {
+            showNotification(`Mengekspor data dalam format ${format}`, 'info');
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.createElement('div');
+            container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            container.appendChild(toast);
+            document.body.appendChild(container);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => {
+                container.remove();
+            }, 5000);
+        }
+
+        // Search functionality
+        document.getElementById('searchSavings').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#savingsTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavingsData();
+            
+            // Handle sidebar collapse text visibility
+            document.getElementById('sidebar').addEventListener('transitionend', function() {
+                const isCollapsed = this.classList.contains('collapsed');
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                sidebarTexts.forEach(text => {
+                    text.style.display = isCollapsed ? 'none' : 'inline';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                <span class="sidebar-text">Pinjaman</span>
+            </a>
+            <a class="nav-link text-white active" href="/mono-v2/savings/savings.html">
+                <i class="fas fa-piggy-bank me-2"></i>
+                <span class="sidebar-text">Simpanan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/savings/transactions.html">
+                <i class="fas fa-exchange-alt me-2"></i>
+                <span class="sidebar-text">Transaksi</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/savings/reports.html">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span class="sidebar-text">Laporan</span>
+            </a>
+            <a class="nav-link text-white" href="/mono-v2/savings/settings.html">
+                <i class="fas fa-cog me-2"></i>
+                <span class="sidebar-text">Pengaturan</span>
+            </a>
+        </nav>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="d-flex justify-content-between align-items-center p-3">
+                <div>
+                    <h4 class="mb-0">Simpanan</h4>
+                    <small class="text-muted">Manajemen simpanan anggota</small>
+                </div>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-primary btn-sm me-2" onclick="exportSavings()">
+                        <i class="fas fa-download me-1"></i>Export
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-plus me-1"></i>Transaksi
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="openDepositModal()">
+                                <i class="fas fa-plus-circle me-2"></i>Setoran
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="openWithdrawalModal()">
+                                <i class="fas fa-minus-circle me-2"></i>Penarikan
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="openTransferModal()">
+                                <i class="fas fa-exchange-alt me-2"></i>Transfer
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="openNewAccountModal()">
+                                <i class="fas fa-user-plus me-2"></i>Buka Rekening Baru
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-4">
+            <!-- Savings Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Total Simpanan</h6>
+                                    <h3 id="totalSavings">Rp 0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-wallet fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Setoran Bulan Ini</h6>
+                                    <h3 id="monthlyDeposits">Rp 0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-arrow-down fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Penarikan Bulan Ini</h6>
+                                    <h3 id="monthlyWithdrawals">Rp 0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-arrow-up fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Jumlah Rekening</h6>
+                                    <h3 id="totalAccounts">0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Cari Anggota</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <input type="text" class="form-control" id="searchMember" placeholder="Nama atau nomor rekening">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Jenis Simpanan</label>
+                            <select class="form-select" id="savingsType">
+                                <option value="">Semua Jenis</option>
+                                <option value="wajib">Simpanan Wajib</option>
+                                <option value="pokok">Simpanan Pokok</option>
+                                <option value="sukarela">Simpanan Sukarela</option>
+                                <option value="berjangka">Simpanan Berjangka</option>
+                                <option value="deposito">Deposito</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="accountStatus">
+                                <option value="">Semua Status</option>
+                                <option value="Active">Aktif</option>
+                                <option value="Dormant">Dormant</option>
+                                <option value="Frozen">Dibekukan</option>
+                                <option value="Closed">Tutup</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-grid">
+                                <button class="btn btn-primary" onclick="filterSavings()">
+                                    <i class="fas fa-filter me-1"></i>Filter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savings Table -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Daftar Rekening Simpanan</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="savingsTable">
+                            <thead>
+                                <tr>
+                                    <th>No. Rekening</th>
+                                    <th>Nama Anggota</th>
+                                    <th>Jenis Simpanan</th>
+                                    <th>Saldo</th>
+                                    <th>Tanggal Buka</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Savings data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Transaction Modals -->
+    <!-- Deposit Modal -->
+    <div class="modal fade" id="depositModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Setoran Simpanan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="depositForm">
+                        <div class="mb-3">
+                            <label class="form-label">No. Rekening *</label>
+                            <input type="text" class="form-control" name="accountNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jumlah Setoran *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="number" class="form-control" name="amount" min="10000" step="1000" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Metode Pembayaran</label>
+                            <select class="form-select" name="paymentMethod">
+                                <option value="cash">Tunai</option>
+                                <option value="transfer">Transfer</option>
+                                <option value="debit">Debit/Kredit</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Keterangan</label>
+                            <textarea class="form-control" name="notes" rows="2" placeholder="Keterangan transaksi (opsional)"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success" onclick="processDeposit()">
+                        <i class="fas fa-plus-circle me-1"></i>Proses Setoran
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
+    <div class="modal fade" id="withdrawalModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Penarikan Simpanan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="withdrawalForm">
+                        <div class="mb-3">
+                            <label class="form-label">No. Rekening *</label>
+                            <input type="text" class="form-control" name="accountNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jumlah Penarikan *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="number" class="form-control" name="amount" min="10000" step="1000" required>
+                            </div>
+                            <small class="text-muted">Saldo tersedia: <span id="availableBalance">Rp 0</span></small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alasan Penarikan</label>
+                            <select class="form-select" name="reason">
+                                <option value="">Pilih Alasan</option>
+                                <option value="kebutuhan">Kebutuhan Pribadi</option>
+                                <option value="investasi">Investasi</option>
+                                <option value="darurat">Keadaan Darurat</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Keterangan</label>
+                            <textarea class="form-control" name="notes" rows="2" placeholder="Keterangan tambahan (opsional)"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-warning" onclick="processWithdrawal()">
+                        <i class="fas fa-minus-circle me-1"></i>Proses Penarikan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Account Modal -->
+    <div class="modal fade" id="newAccountModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Buka Rekening Simpanan Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newAccountForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Anggota *</label>
+                                <select class="form-select" name="memberId" required>
+                                    <option value="">Pilih Anggota</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Jenis Simpanan *</label>
+                                <select class="form-select" name="accountType" required>
+                                    <option value="">Pilih Jenis</option>
+                                    <option value="wajib">Simpanan Wajib</option>
+                                    <option value="pokok">Simpanan Pokok</option>
+                                    <option value="sukarela">Simpanan Sukarela</option>
+                                    <option value="berjangka">Simpanan Berjangka</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Setoran Awal *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control" name="initialDeposit" min="0" step="1000" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Periode (untuk Simpanan Berjangka)</label>
+                                <select class="form-select" name="period">
+                                    <option value="">Pilih Periode</option>
+                                    <option value="3">3 Bulan</option>
+                                    <option value="6">6 Bulan</option>
+                                    <option value="12">12 Bulan</option>
+                                    <option value="24">24 Bulan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Keterangan</label>
+                            <textarea class="form-control" name="notes" rows="2" placeholder="Keterangan pembukaan rekening (opsional)"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="createNewAccount()">
+                        <i class="fas fa-plus me-1"></i>Buka Rekening
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/assets/js/content-renderer.js"></script>
+    <script src="/assets/js/modal-manager.js"></script>
+    <script>
+        // Sample data for demonstration
+        const sampleSavings = [
+            {
+                accountNumber: 'SA001',
+                memberName: 'Ahmad Wijaya',
+                accountType: 'Simpanan Wajib',
+                balance: 5000000,
+                openDate: '2024-01-15',
+                status: 'Active'
+            },
+            {
+                accountNumber: 'SA002',
+                memberName: 'Siti Nurhaliza',
+                accountType: 'Simpanan Sukarela',
+                balance: 12000000,
+                openDate: '2024-01-20',
+                status: 'Active'
+            },
+            {
+                accountNumber: 'SA003',
+                memberName: 'Budi Santoso',
+                accountType: 'Simpanan Pokok',
+                balance: 1000000,
+                openDate: '2024-01-10',
+                status: 'Dormant'
+            },
+            {
+                accountNumber: 'SA004',
+                memberName: 'Dewi Lestari',
+                accountType: 'Simpanan Berjangka',
+                balance: 25000000,
+                openDate: '2023-12-01',
+                status: 'Active'
+            }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavings();
+            updateSummaryCards();
+            loadMembers();
+        });
+
+        function loadSavings() {
+            const tbody = document.querySelector('#savingsTable tbody');
+            tbody.innerHTML = '';
+            
+            sampleSavings.forEach(saving => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${saving.accountNumber}</td>
+                    <td>${saving.memberName}</td>
+                    <td>${saving.accountType}</td>
+                    <td class="text-end">${formatCurrency(saving.balance)}</td>
+                    <td>${saving.openDate}</td>
+                    <td>
+                        <span class="badge bg-${getStatusColor(saving.status)}">
+                            ${saving.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary" onclick="viewAccount('${saving.accountNumber}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-outline-success" onclick="depositToAccount('${saving.accountNumber}')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-outline-warning" onclick="withdrawFromAccount('${saving.accountNumber}')">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateSummaryCards() {
+            const totalSavings = sampleSavings.reduce((sum, s) => sum + s.balance, 0);
+            const monthlyDeposits = 15000000; // Sample data
+            const monthlyWithdrawals = 5000000; // Sample data
+            
+            document.getElementById('totalSavings').textContent = formatCurrency(totalSavings);
+            document.getElementById('monthlyDeposits').textContent = formatCurrency(monthlyDeposits);
+            document.getElementById('monthlyWithdrawals').textContent = formatCurrency(monthlyWithdrawals);
+            document.getElementById('totalAccounts').textContent = sampleSavings.length;
+        }
+
+        function loadMembers() {
+            const memberSelect = document.querySelector('#newAccountForm select[name="memberId"]');
+            const members = [
+                { id: 1, name: 'Ahmad Wijaya' },
+                { id: 2, name: 'Siti Nurhaliza' },
+                { id: 3, name: 'Budi Santoso' },
+                { id: 4, name: 'Dewi Lestari' }
+            ];
+            
+            members.forEach(member => {
+                const option = document.createElement('option');
+                option.value = member.id;
+                option.textContent = member.name;
+                memberSelect.appendChild(option);
+            });
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'Active': 'success',
+                'Dormant': 'warning',
+                'Frozen': 'danger',
+                'Closed': 'secondary'
+            };
+            return colors[status] || 'secondary';
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function openDepositModal() {
+            const modal = new bootstrap.Modal(document.getElementById('depositModal'));
+            modal.show();
+        }
+
+        function openWithdrawalModal() {
+            const modal = new bootstrap.Modal(document.getElementById('withdrawalModal'));
+            modal.show();
+        }
+
+        function openTransferModal() {
+            showNotification('Fitur transfer akan segera tersedia', 'info');
+        }
+
+        function openNewAccountModal() {
+            const modal = new bootstrap.Modal(document.getElementById('newAccountModal'));
+            modal.show();
+        }
+
+        function processDeposit() {
+            const form = document.getElementById('depositForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            showNotification('Setoran berhasil diproses!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('depositModal')).hide();
+            form.reset();
+            loadSavings();
+            updateSummaryCards();
+        }
+
+        function processWithdrawal() {
+            const form = document.getElementById('withdrawalForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            showNotification('Penarikan berhasil diproses!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('withdrawalModal')).hide();
+            form.reset();
+            loadSavings();
+            updateSummaryCards();
+        }
+
+        function createNewAccount() {
+            const form = document.getElementById('newAccountForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            showNotification('Rekening baru berhasil dibuka!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('newAccountModal')).hide();
+            form.reset();
+            loadSavings();
+            updateSummaryCards();
+        }
+
+        function filterSavings() {
+            const search = document.getElementById('searchMember').value;
+            const type = document.getElementById('savingsType').value;
+            const status = document.getElementById('accountStatus').value;
+            
+            console.log('Filtering savings:', { search, type, status });
+            showNotification('Filter diterapkan', 'info');
+        }
+
+        function viewAccount(accountNumber) {
+            console.log('Viewing account:', accountNumber);
+            showNotification('Melihat detail rekening...', 'info');
+        }
+
+        function depositToAccount(accountNumber) {
+            document.querySelector('#depositForm input[name="accountNumber"]').value = accountNumber;
+            openDepositModal();
+        }
+
+        function withdrawFromAccount(accountNumber) {
+            document.querySelector('#withdrawalForm input[name="accountNumber"]').value = accountNumber;
+            openWithdrawalModal();
+        }
+
+        function exportSavings() {
+            showNotification('Mengekspor data simpanan...', 'success');
+        }
+
+        function showNotification(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

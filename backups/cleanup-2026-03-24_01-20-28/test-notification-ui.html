@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test showNotification Function</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn-test {
+            margin: 10px;
+            min-width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="mb-4">🧪 showNotification Function Test</h1>
+        
+        <div class="alert alert-info">
+            <h5><i class="fas fa-info-circle me-2"></i>Test Instructions</h5>
+            <p>Click each button below to test different notification types. Notifications should appear in the top-right corner and auto-dismiss after 3 seconds.</p>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h5>📢 Notification Types</h5>
+                <button class="btn btn-success btn-test" onclick="testSuccess()">
+                    <i class="fas fa-check-circle me-2"></i>Success Notification
+                </button>
+                <button class="btn btn-danger btn-test" onclick="testError()">
+                    <i class="fas fa-exclamation-circle me-2"></i>Error Notification
+                </button>
+                <button class="btn btn-warning btn-test" onclick="testWarning()">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Warning Notification
+                </button>
+                <button class="btn btn-info btn-test" onclick="testInfo()">
+                    <i class="fas fa-info-circle me-2"></i>Info Notification
+                </button>
+                <button class="btn btn-secondary btn-test" onclick="testDefault()">
+                    <i class="fas fa-bell me-2"></i>Default (no type)
+                </button>
+            </div>
+            <div class="col-md-6">
+                <h5>🧪 Stress Tests</h5>
+                <button class="btn btn-primary btn-test" onclick="testMultiple()">
+                    <i class="fas fa-layer-group me-2"></i>Multiple Notifications
+                </button>
+                <button class="btn btn-outline-primary btn-test" onclick="testLongMessage()">
+                    <i class="fas fa-align-left me-2"></i>Long Message
+                </button>
+                <button class="btn btn-outline-secondary btn-test" onclick="testQuickDismiss()">
+                    <i class="fas fa-mouse-pointer me-2"></i>Quick Dismiss
+                </button>
+                <button class="btn btn-outline-danger btn-test" onclick="clearAll()">
+                    <i class="fas fa-trash me-2"></i>Clear All
+                </button>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <h5>📊 Test Results</h5>
+                <div id="testResults" class="border rounded p-3 bg-light" style="min-height: 100px;">
+                    <small class="text-muted">Test results will appear here...</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Copy the showNotification function from main.php
+        function showNotification(message, type = 'info') {
+            // Create notification container if it doesn't exist
+            let notificationContainer = document.getElementById('notification-container');
+            if (!notificationContainer) {
+                notificationContainer = document.createElement('div');
+                notificationContainer.id = 'notification-container';
+                notificationContainer.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 9999;
+                    max-width: 350px;
+                `;
+                document.body.appendChild(notificationContainer);
+            }
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            const notificationId = 'notification-' + Date.now();
+            notification.id = notificationId;
+            
+            // Set notification styles based on type
+            const typeStyles = {
+                success: {
+                    bg: '#28a745',
+                    border: '#1e7e34',
+                    icon: 'fa-check-circle'
+                },
+                error: {
+                    bg: '#dc3545',
+                    border: '#bd2130',
+                    icon: 'fa-exclamation-circle'
+                },
+                warning: {
+                    bg: '#ffc107',
+                    border: '#e0a800',
+                    icon: 'fa-exclamation-triangle'
+                },
+                info: {
+                    bg: '#17a2b8',
+                    border: '#117a8b',
+                    icon: 'fa-info-circle'
+                }
+            };
+            
+            const style = typeStyles[type] || typeStyles.info;
+            
+            notification.style.cssText = `
+                background-color: ${style.bg};
+                border: 1px solid ${style.border};
+                color: white;
+                padding: 12px 16px;
+                margin-bottom: 10px;
+                border-radius: 6px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+                animation: slideInRight 0.3s ease-out;
+                cursor: pointer;
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas ${style.icon} me-2"></i>
+                <span>${message}</span>
+                <button class="ms-auto btn btn-sm btn-link text-white p-0" style="opacity: 0.8;">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Add CSS animation if not already added
+            if (!document.getElementById('notification-styles')) {
+                const styleSheet = document.createElement('style');
+                styleSheet.id = 'notification-styles';
+                styleSheet.textContent = `
+                    @keyframes slideInRight {
+                        from {
+                            transform: translateX(100%);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                    }
+                    @keyframes slideOutRight {
+                        from {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                        to {
+                            transform: translateX(100%);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(styleSheet);
+            }
+            
+            // Add click handler to close notification
+            notification.addEventListener('click', function() {
+                removeNotification(notificationId);
+            });
+            
+            // Add to container
+            notificationContainer.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                removeNotification(notificationId);
+            }, 3000);
+        }
+        
+        // Remove notification function
+        function removeNotification(notificationId) {
+            const notification = document.getElementById(notificationId);
+            if (notification) {
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }
+        }
+        
+        // Test functions
+        function testSuccess() {
+            showNotification('✅ Operation completed successfully!', 'success');
+            addResult('Success notification sent');
+        }
+        
+        function testError() {
+            showNotification('❌ An error occurred while processing your request', 'error');
+            addResult('Error notification sent');
+        }
+        
+        function testWarning() {
+            showNotification('⚠️ Please review your input before proceeding', 'warning');
+            addResult('Warning notification sent');
+        }
+        
+        function testInfo() {
+            showNotification('ℹ️ System update available', 'info');
+            addResult('Info notification sent');
+        }
+        
+        function testDefault() {
+            showNotification('🔔 Default notification without type specified');
+            addResult('Default notification sent');
+        }
+        
+        function testMultiple() {
+            showNotification('First notification', 'info');
+            setTimeout(() => showNotification('Second notification', 'success'), 500);
+            setTimeout(() => showNotification('Third notification', 'warning'), 1000);
+            setTimeout(() => showNotification('Fourth notification', 'error'), 1500);
+            addResult('Multiple notifications sent');
+        }
+        
+        function testLongMessage() {
+            const longMessage = 'This is a very long notification message to test how the system handles extended text content. It should wrap properly and maintain readability while still looking professional and well-formatted in the notification container.';
+            showNotification(longMessage, 'info');
+            addResult('Long message notification sent');
+        }
+        
+        function testQuickDismiss() {
+            showNotification('Click me quickly to dismiss!', 'info');
+            setTimeout(() => {
+                showNotification('This one will auto-dismiss', 'success');
+            }, 1000);
+            addResult('Quick dismiss test started');
+        }
+        
+        function clearAll() {
+            const container = document.getElementById('notification-container');
+            if (container) {
+                container.innerHTML = '';
+                addResult('All notifications cleared');
+            }
+        }
+        
+        function addResult(message) {
+            const results = document.getElementById('testResults');
+            const timestamp = new Date().toLocaleTimeString();
+            const result = document.createElement('div');
+            result.className = 'mb-1';
+            result.innerHTML = `<small><strong>[${timestamp}]</strong> ${message}</small>`;
+            results.appendChild(result);
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            addResult('Test page loaded - showNotification function ready');
+        });
+    </script>
+</body>
+</html>
