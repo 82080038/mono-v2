@@ -5,7 +5,7 @@
  */
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: http://localhost');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
@@ -29,6 +29,8 @@ function validateInput($data, $type = 'string') {
             return preg_match('/^[a-zA-Z]+$/', $data) ? $data : false;
         case 'alphanum':
             return preg_match('/^[a-zA-Z0-9]+$/', $data) ? $data : false;
+        case 'identifier':
+            return preg_match('/^[a-zA-Z0-9_]+$/', $data) ? $data : false;
         default:
             return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
     }
@@ -56,7 +58,7 @@ try {
     $db = Config::getDatabase();
     
     // Validate action parameter
-    $action = validateInput($_GET['action'] ?? '', 'alphanum');
+    $action = validateInput($_GET['action'] ?? $_POST['action'] ?? '', 'identifier');
     if (!$action) {
         sendResponse(false, 'Invalid action parameter', null, 400);
         exit;

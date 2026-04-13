@@ -3,9 +3,10 @@
  * Sticky Header dan Independent Scrollbars
  */
 
-/* Reset body untuk full height layout */
-body,
-html {
+/* Reset body untuk full height layout — hanya aktif jika ada .dashboard-wrapper */
+.dashboard-wrapper ~ * { display: none; } /* safety: suppressed */
+html:has(.dashboard-wrapper),
+body:has(.dashboard-wrapper) {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -25,7 +26,7 @@ html {
     position: sticky;
     top: 0;
     z-index: 1030;
-    background: #0d6efd;
+    background: var(--primary-color, #0d6efd);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
     height: 56px;
@@ -48,14 +49,14 @@ html {
 
 /* Header datetime styling */
 .header-datetime {
-    font-family: 'Courier New', monospace;
+    font-family: var(--font-family-sans-serif, 'Segoe UI', sans-serif);
     font-size: 0.75rem;
     white-space: nowrap;
 }
 
 /* Centered datetime styling */
 .header-datetime-center {
-    font-family: 'Courier New', monospace;
+    font-family: var(--font-family-sans-serif, 'Segoe UI', sans-serif);
     font-size: 1rem;
     white-space: nowrap;
     position: absolute;
@@ -256,12 +257,12 @@ html {
 
 .dashboard-sidebar .nav-link:hover {
     background: #e9ecef;
-    color: #0d6efd;
+    color: var(--primary-color, #0d6efd);
     text-decoration: none;
 }
 
 .dashboard-sidebar .nav-link.active {
-    background: #0d6efd;
+    background: var(--primary-color, #0d6efd);
     color: white;
 }
 
@@ -474,32 +475,8 @@ html {
     letter-spacing: 0.5px;
 }
 
-/* Loading states */
+/* Loading states — defined in main.css; ini hanya override warna spinner */
 .loading {
     opacity: 0.6;
     pointer-events: none;
-}
-
-.loading::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid #0d6efd;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
 }

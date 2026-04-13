@@ -6,9 +6,9 @@
     <title>Manajemen Pinjaman - KSP Lam Gabe Jaya</title>
     
     <!-- Bootstrap CSS -->
-    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-icons.css" rel="stylesheet">
-    <link href="../assets/css/main.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
     
     <style>
         .loan-card {
@@ -31,15 +31,15 @@
         }
         
         .loan-card.status-approved {
-            border-left-color: #17a2b8;
+            border-left-color: #0dcaf0;
         }
         
         .loan-card.status-disbursed {
-            border-left-color: #28a745;
+            border-left-color: #198754;
         }
         
         .loan-card.status-active {
-            border-left-color: #007bff;
+            border-left-color: #0d6efd;
         }
         
         .loan-card.status-late {
@@ -60,7 +60,7 @@
         .loan-number {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #0066cc;
+            color: #0d6efd;
             margin-bottom: 5px;
         }
         
@@ -72,7 +72,7 @@
         .loan-amount {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #28a745;
+            color: #198754;
             text-align: center;
             padding: 15px;
             background: #f8f9fa;
@@ -97,7 +97,7 @@
         .stat-value {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #0066cc;
+            color: #0d6efd;
         }
         
         .stat-label {
@@ -155,16 +155,16 @@
         }
         
         .quick-action-btn:hover {
-            border-color: #0066cc;
+            border-color: #0d6efd;
             background: #f0f8ff;
-            color: #0066cc;
+            color: #0d6efd;
             transform: translateY(-2px);
         }
         
         .quick-action-icon {
             font-size: 2rem;
             margin-bottom: 10px;
-            color: #0066cc;
+            color: #0d6efd;
         }
         
         .modal-header {
@@ -208,12 +208,12 @@
         }
         
         .filter-tab:hover {
-            color: #0066cc;
+            color: #0d6efd;
         }
         
         .filter-tab.active {
-            color: #0066cc;
-            border-bottom-color: #0066cc;
+            color: #0d6efd;
+            border-bottom-color: #0d6efd;
             font-weight: 600;
         }
         
@@ -262,7 +262,7 @@
         }
         
         .credit-score-high {
-            background: #28a745;
+            background: #198754;
             color: white;
         }
         
@@ -284,7 +284,7 @@
             border-bottom: none;
             font-weight: bold;
             font-size: 1.1rem;
-            color: #0066cc;
+            color: #0d6efd;
         }
         
         .installment-schedule {
@@ -329,7 +329,7 @@
                     <a href="dashboard.html" class="text-white me-3">
                         <i class="bi bi-arrow-left"></i>
                     </a>
-                    <h4 class="mb-0">Manajemen Pinjaman</h4>
+                    <h1 class="h4 mb-0">Manajemen Pinjaman</h1>
                 </div>
                 <div>
                     <button class="btn btn-light" onclick="refreshData()">
@@ -615,7 +615,7 @@
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JavaScript -->
     <script>
@@ -688,7 +688,7 @@
 
         // Load loans
         async function loadLoans() {
-            const response = await fetch('../api/loans.php?action=get_loans&limit=100');
+            const response = await fetch('../../api/loans.php?action=get_loans&limit=100');
             const result = await response.json();
             
             if (result.success) {
@@ -700,7 +700,7 @@
 
         // Load loan types
         async function loadLoanTypes() {
-            const response = await fetch('../api/loans.php?action=get_loan_types');
+            const response = await fetch('../../api/loans.php?action=get_loan_types');
             const result = await response.json();
             
             if (result.success) {
@@ -712,7 +712,7 @@
 
         // Load members
         async function loadMembers() {
-            const response = await fetch('../api/members.php?action=get_members&limit=100');
+            const response = await fetch('../../api/members.php?action=get_members&limit=100');
             const result = await response.json();
             
             if (result.success) {
@@ -1052,7 +1052,7 @@
             showLoading(true);
             
             try {
-                const response = await fetch('../api/loans.php?action=apply_loan', {
+                const response = await fetch('../../api/loans.php?action=apply_loan', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1252,7 +1252,7 @@
             showLoading(true);
             
             try {
-                const response = await fetch('../api/loans.php?action=approve_loan', {
+                const response = await fetch('../../api/loans.php?action=approve_loan', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

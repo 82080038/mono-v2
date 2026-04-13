@@ -20,7 +20,7 @@ class Config {
     const APP_ENV = 'production'; // development, staging, production
     
     // Security Configuration
-    const JWT_SECRET = 'your-super-secret-jwt-key-change-in-production';
+    const JWT_SECRET = 'ksp-lgj-v2-s3cr3t-jwt-k3y-2026-xZ9mQpR4nL7wK2vB';
     const JWT_EXPIRE_HOURS = 24;
     const PASSWORD_MIN_LENGTH = 8;
     const MAX_LOGIN_ATTEMPTS = 5;

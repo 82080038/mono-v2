@@ -1,0 +1,23 @@
+{
+  "name": "ksp-lamgabejaya-e2e-tests",
+  "version": "1.0.0",
+  "description": "Puppeteer E2E tests for KSP Lam Gabe Jaya v2.0",
+  "scripts": {
+    "test": "jest --runInBand --forceExit",
+    "test:verbose": "jest --runInBand --forceExit --verbose",
+    "test:report": "jest --runInBand --forceExit --json --outputFile=results/test-results.json",
+    "run": "npm run test:report"
+  },
+  "jest": {
+    "testTimeout": 30000,
+    "testMatch": [
+      "**/tests/*.test.js"
+    ],
+    "testEnvironment": "node",
+    "verbose": true
+  },
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "puppeteer": "^24.40.0"
+  }
+}

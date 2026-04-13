@@ -16,7 +16,7 @@ $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
 
 // Set headers
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: http://localhost');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 

@@ -13,7 +13,7 @@ define('APP_URL', 'http://localhost/mono-v2');
 define('APP_TIMEZONE', 'Asia/Jakarta');
 
 // Security Configuration
-define('JWT_SECRET', 'your-super-secret-jwt-key-change-in-production');
+define('JWT_SECRET', 'ksp-lgj-v2-s3cr3t-jwt-k3y-2026-xZ9mQpR4nL7wK2vB');
 define('JWT_ALGORITHM', 'HS256');
 define('TOKEN_EXPIRY', 3600); // 1 hour in seconds
 define('REFRESH_TOKEN_EXPIRY', 604800); // 7 days in seconds
@@ -25,7 +25,7 @@ define('LOGIN_LOCKOUT_TIME', 900); // 15 minutes
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'ksp_lamgabejaya_v2');
 define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_PASS', 'root');
 define('DB_CHARSET', 'utf8mb4');
 define('DB_COLLATION', 'utf8mb4_unicode_ci');
 
@@ -68,7 +68,7 @@ define('CURRENCY_SYMBOL', 'Rp');
 define('CURRENCY_DECIMAL_PLACES', 0);
 
 // Status Options
-define('USER_ROLES', ['super_admin', 'admin', 'mantri', 'member']);
+define('USER_ROLES', ['Super Admin', 'Admin', 'Manager', 'Teller', 'Staff']);
 define('LOAN_STATUSES', ['pending', 'approved', 'rejected', 'disbursed', 'completed', 'defaulted']);
 define('TRANSACTION_TYPES', ['deposit', 'withdrawal', 'loan_payment', 'loan_disbursement', 'interest_payment']);
 define('TRANSACTION_STATUSES', ['pending', 'completed', 'failed', 'cancelled']);

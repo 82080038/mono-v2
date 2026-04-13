@@ -6,7 +6,7 @@
  */
 
 // Enable CORS
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -65,13 +65,12 @@ try {
             break;
         default:
             $response['message'] = 'Method not allowed';
-            echo json_encode($response);
+            http_response_code(405);
             break;
     }
 } catch (Exception $e) {
     $response['success'] = false;
     $response['message'] = 'Error: ' . $e->getMessage();
-    echo json_encode($response);
 }
 
 // Send JSON response
@@ -106,7 +105,7 @@ function handlePostRequest($db, &$response) {
                 handleRegister($db, $response);
                 break;
             case 'logout':
-                handleLogout($db, $response);
+                handleLogout($response);
                 break;
             case 'refresh':
                 handleRefreshToken($db, $response);
@@ -140,34 +139,35 @@ function handleLogin($pdo, &$response) {
         http_response_code(400);
         return;
     }
-    
-    // Validate password length
     if (strlen($password) < 8) {
         $response['message'] = 'Password minimal 8 karakter';
         $response['errors'][] = 'Password minimal 8 karakter';
         http_response_code(400);
         return;
     }
-    
+
+    // Rate limiting — cek apakah akun terkunci
+    if (isAccountLocked($username, $pdo)) {
+        $response['message'] = 'Akun terkunci sementara. Coba lagi dalam 15 menit.';
+        http_response_code(429);
+        return;
+    }
+
     // Query user from database
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? OR username = ?");
     $stmt->execute([$username, $username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if (!$user) {
-        $response['message'] = 'User tidak ditemukan';
-        $response['errors'][] = 'User tidak ditemukan';
+
+    if (!$user || !password_verify($password, $user['password'])) {
+        incrementLoginAttempts($username, $pdo);
+        $response['message'] = 'Username atau password salah';
+        $response['errors'][] = 'Kredensial tidak valid';
         http_response_code(401);
         return;
     }
-    
-    // Verify password
-    if (!password_verify($password, $user['password'])) {
-        $response['message'] = 'Password salah';
-        $response['errors'][] = 'Password salah';
-        http_response_code(401);
-        return;
-    }
+
+    // Reset login attempts setelah berhasil
+    clearLoginAttempts($username, $pdo);
     
     // Check if user is active
     if ($user['is_active'] != 1) {
@@ -218,6 +218,42 @@ function handleLogout(&$response) {
     $response['success'] = true;
     $response['message'] = 'Logout berhasil';
     http_response_code(200);
+}
+
+/**
+ * Handle token refresh
+ */
+function handleRefreshToken($pdo, &$response) {
+    $token = getTokenFromRequest();
+    if (!$token) {
+        $response['message'] = 'Token tidak ditemukan';
+        http_response_code(401);
+        return;
+    }
+    $payload = validateJWT($token);
+    if (!$payload) {
+        $response['message'] = 'Token tidak valid atau kadaluarsa';
+        http_response_code(401);
+        return;
+    }
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ? AND is_active = 1");
+        $stmt->execute([$payload['user_id']]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$user) {
+            $response['message'] = 'User tidak ditemukan';
+            http_response_code(404);
+            return;
+        }
+        blacklistToken($token);
+        $newToken = generateJWT($user);
+        $response['success'] = true;
+        $response['message'] = 'Token diperbarui';
+        $response['data']    = ['token' => $newToken];
+    } catch (PDOException $e) {
+        $response['message'] = 'Database error';
+        http_response_code(500);
+    }
 }
 
 /**
@@ -448,10 +484,21 @@ function handleAuthCheck($pdo, &$response) {
         return;
     }
     
-    // Validate token (simplified for testing)
+    $payload = validateJWT($token);
+    if (!$payload) {
+        $response['success'] = false;
+        $response['message'] = 'Token tidak valid atau kadaluarsa';
+        http_response_code(401);
+        return;
+    }
     $response['success'] = true;
     $response['message'] = 'Token is valid';
-    $response['data'] = ['token_status' => 'valid'];
+    $response['data'] = [
+        'token_status' => 'valid',
+        'user_id'      => $payload['user_id'] ?? null,
+        'role'         => $payload['role'] ?? 'Unknown',
+        'expires_at'   => date('Y-m-d H:i:s', $payload['exp'] ?? 0)
+    ];
 }
 
 /**
@@ -467,15 +514,39 @@ function handleGetUser($pdo, &$response) {
         return;
     }
     
-    // For testing, return sample user info
-    $response['success'] = true;
-    $response['message'] = 'User info retrieved';
-    $response['data'] = [
-        'id' => 1,
-        'username' => 'test_user',
-        'role' => 'admin',
-        'status' => 'active'
-    ];
+    $payload = validateJWT($token);
+    if (!$payload) {
+        $response['success'] = false;
+        $response['message'] = 'Token tidak valid';
+        http_response_code(401);
+        return;
+    }
+    try {
+        $stmt = $pdo->prepare("SELECT id, username, full_name, email, role, is_active, last_login FROM users WHERE id = ?");
+        $stmt->execute([$payload['user_id']]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$user) {
+            $response['success'] = false;
+            $response['message'] = 'User tidak ditemukan';
+            http_response_code(404);
+            return;
+        }
+        $response['success'] = true;
+        $response['message'] = 'User info retrieved';
+        $response['data'] = [
+            'id'         => $user['id'],
+            'username'   => $user['username'],
+            'name'       => $user['full_name'],
+            'email'      => $user['email'],
+            'role'       => $user['role'],
+            'is_active'  => $user['is_active'],
+            'last_login' => $user['last_login']
+        ];
+    } catch (PDOException $e) {
+        $response['success'] = false;
+        $response['message'] = 'Database error';
+        http_response_code(500);
+    }
 }
 
 /**
@@ -533,7 +604,7 @@ function validateRegistrationInput($name, $email, $password, $confirmPassword, $
         $errors[] = 'Nomor telepon tidak valid';
     }
     
-    $validRoles = ['member', 'mantri', 'admin', 'super_admin'];
+    $validRoles = ['Super Admin', 'Admin', 'Manager', 'Teller', 'Staff'];
     if (!in_array($role, $validRoles)) {
         $errors[] = 'Role tidak valid';
     }
@@ -545,7 +616,7 @@ function validateRegistrationInput($name, $email, $password, $confirmPassword, $
  * Find user by email
  */
 function findUserByEmail($email, $db) {
-    $query = "SELECT * FROM users WHERE email = :email AND deleted_at IS NULL";
+    $query = "SELECT * FROM users WHERE email = :email";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':email', $email);
     $stmt->execute();
@@ -557,7 +628,7 @@ function findUserByEmail($email, $db) {
  * Check if email exists
  */
 function emailExists($email, $db) {
-    $query = "SELECT COUNT(*) as count FROM users WHERE email = :email AND deleted_at IS NULL";
+    $query = "SELECT COUNT(*) as count FROM users WHERE email = :email";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':email', $email);
     $stmt->execute();
@@ -573,33 +644,12 @@ function verifyPassword($password, $hashedPassword) {
     return password_verify($password, $hashedPassword);
 }
 
-/**
- * Generate JWT token
- */
-function generateJWTToken($user) {
-    $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
-    $payload = json_encode([
-        'user_id' => $user['id'],
-        'email' => $user['email'],
-        'role' => $user['role'],
-        'iat' => time(),
-        'exp' => time() + TOKEN_EXPIRY
-    ]);
-    
-    $base64Header = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
-    $base64Payload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
-    
-    $signature = hash_hmac('sha256', $base64Header . "." . $base64Payload, JWT_SECRET, true);
-    $base64Signature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
-    
-    return $base64Header . "." . $base64Payload . "." . $base64Signature;
-}
 
 /**
  * Create new user
  */
 function createUser($name, $email, $password, $phone, $role, $db) {
-    $query = "INSERT INTO users (name, email, password, phone, role, is_active, created_at) 
+    $query = "INSERT INTO users (full_name, email, password, phone_number, role, is_active, created_at) 
               VALUES (:name, :email, :password, :phone, :role, 1, NOW())";
     
     $stmt = $db->prepare($query);
@@ -620,7 +670,7 @@ function createUser($name, $email, $password, $phone, $role, $db) {
  * Get user by ID
  */
 function getUserById($userId, $db) {
-    $query = "SELECT * FROM users WHERE id = :id AND deleted_at IS NULL";
+    $query = "SELECT * FROM users WHERE id = :id";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':id', $userId);
     $stmt->execute();
@@ -751,80 +801,79 @@ function sendResetEmail($email, $token) {
 }
 
 /**
- * Generate JWT token (simplified for testing)
+ * Generate JWT token (HMAC-SHA256 signed)
  */
 function generateJWT($user) {
-    // For testing purposes, create a simple token
-    $payload = [
+    $header  = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(json_encode(['typ' => 'JWT', 'alg' => 'HS256'])));
+    $payload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(json_encode([
         'user_id' => $user['id'],
-        'name' => $user['full_name'] ?? $user['username'] ?? 'Unknown',
-        'email' => $user['email'],
-        'role' => $user['role'],
-        'iat' => time(),
-        'exp' => time() + (24 * 60 * 60) // 24 hours
-    ];
-    
-    // For testing, return a simple encoded token
-    return base64_encode(json_encode($payload));
+        'name'    => $user['full_name'] ?? $user['username'] ?? 'Unknown',
+        'email'   => $user['email'],
+        'role'    => $user['role'],
+        'iat'     => time(),
+        'exp'     => time() + (Config::JWT_EXPIRE_HOURS * 3600)
+    ])));
+    $signature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(
+        hash_hmac('sha256', $header . '.' . $payload, Config::JWT_SECRET, true)
+    ));
+    return $header . '.' . $payload . '.' . $signature;
 }
 
 /**
- * Validate JWT token (simplified for testing)
+ * Validate JWT token (verify HMAC-SHA256 signature)
  */
 function validateJWT($token) {
     try {
-        // First check if token is blacklisted
         if (isTokenBlacklisted($token)) {
             return false;
         }
-        
-        $payload = json_decode(base64_decode($token), true);
-        if (!$payload || !isset($payload['exp']) || $payload['exp'] < time()) {
+        $parts = explode('.', $token);
+        if (count($parts) !== 3) {
             return false;
         }
-        return $payload;
+        [$header, $payload, $signature] = $parts;
+        $expected = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(
+            hash_hmac('sha256', $header . '.' . $payload, Config::JWT_SECRET, true)
+        ));
+        if (!hash_equals($expected, $signature)) {
+            return false;
+        }
+        $decoded = json_decode(base64_decode(str_replace(['-', '_'], ['+', '/'], $payload)), true);
+        if (!$decoded || !isset($decoded['exp']) || $decoded['exp'] < time()) {
+            return false;
+        }
+        return $decoded;
     } catch (Exception $e) {
         return false;
     }
 }
 
 /**
- * Blacklist token (simple implementation using session)
+ * Get PDO connection for token operations
+ */
+function getTokenPdo() {
+    return new PDO(
+        "mysql:host=" . Config::DB_HOST . ";port=3306;dbname=" . Config::DB_NAME . ";charset=utf8mb4",
+        Config::DB_USER,
+        Config::DB_PASS,
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+    );
+}
+
+/**
+ * Blacklist token on logout
  */
 function blacklistToken($token) {
     try {
-        // Create blacklist table if not exists
-        $pdo = new PDO(
-            "mysql:host=127.0.0.1;port=3306;dbname=ksp_lamgabejaya_v2;charset=utf8mb4",
-            'root',
-            'root',
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-        );
-        
-        // Create blacklist table if not exists
-        $pdo->exec("CREATE TABLE IF NOT EXISTS token_blacklist (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            token VARCHAR(500) NOT NULL,
-            blacklisted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            expires_at TIMESTAMP NULL,
-            INDEX idx_token (token),
-            INDEX idx_expires (expires_at)
-        )");
-        
-        // Get token payload to check expiry
-        $payload = json_decode(base64_decode($token), true);
+        $pdo      = getTokenPdo();
+        $parts    = explode('.', $token);
+        $rawPayload = isset($parts[1]) ? base64_decode(str_replace(['-', '_'], ['+', '/'], $parts[1])) : '';
+        $payload  = json_decode($rawPayload, true);
         $expiresAt = isset($payload['exp']) ? date('Y-m-d H:i:s', $payload['exp']) : null;
-        
-        // Insert token into blacklist
         $stmt = $pdo->prepare("INSERT IGNORE INTO token_blacklist (token, expires_at) VALUES (?, ?)");
         $stmt->execute([$token, $expiresAt]);
-        
-        // Clean up expired tokens
         $pdo->exec("DELETE FROM token_blacklist WHERE expires_at < NOW()");
-        
-        error_log("Token blacklisted: $token");
         return true;
-        
     } catch (Exception $e) {
         error_log("Failed to blacklist token: " . $e->getMessage());
         return false;
@@ -836,21 +885,12 @@ function blacklistToken($token) {
  */
 function isTokenBlacklisted($token) {
     try {
-        $pdo = new PDO(
-            "mysql:host=127.0.0.1;port=3306;dbname=ksp_lamgabejaya_v2;charset=utf8mb4",
-            'root',
-            'root',
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-        );
-        
-        $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM token_blacklist WHERE token = ? AND (expires_at IS NULL OR expires_at > NOW())");
+        $pdo  = getTokenPdo();
+        $stmt = $pdo->prepare("SELECT COUNT(*) as cnt FROM token_blacklist WHERE token = ? AND (expires_at IS NULL OR expires_at > NOW())");
         $stmt->execute([$token]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        return $result['count'] > 0;
-        
+        return ($result['cnt'] ?? 0) > 0;
     } catch (Exception $e) {
-        // If blacklist table doesn't exist, assume token is not blacklisted
         return false;
     }
 }

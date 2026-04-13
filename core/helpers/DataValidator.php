@@ -270,14 +270,14 @@ class DataValidator {
                     case 'int':
                         if (!is_numeric($value)) {
                             $errors[$field] = "{$field} must be a number";
-                            continue;
+                            continue 2;
                         }
                         $validated[$field] = (int)$value;
                         break;
                     case 'float':
                         if (!is_numeric($value)) {
                             $errors[$field] = "{$field} must be a number";
-                            continue;
+                            continue 2;
                         }
                         $validated[$field] = (float)$value;
                         break;
@@ -293,7 +293,7 @@ class DataValidator {
                     case 'email':
                         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
                             $errors[$field] = "{$field} must be a valid email";
-                            continue;
+                            continue 2;
                         }
                         $validated[$field] = $value;
                         break;

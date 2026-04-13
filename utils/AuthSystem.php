@@ -104,7 +104,7 @@ class AuthSystem {
         $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
         $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
         
-        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, 'your-secret-key', true);
+        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, Config::JWT_SECRET, true);
         $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
         
         return $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
@@ -139,14 +139,11 @@ class AuthSystem {
     
     public function hasPermission($userRole, $requiredPermission) {
         $permissions = [
-            'super_admin' => ['all'],
-            'admin' => ['users', 'members', 'loans', 'reports', 'settings'],
-            'mantri' => ['field_data', 'gps_tracking', 'collection', 'verification'],
-            'member' => ['profile', 'accounts', 'transactions', 'applications'],
-            'kasir' => ['payments', 'cash_management'],
-            'teller' => ['accounts', 'loans', 'credit'],
-            'surveyor' => ['surveys', 'verification', 'field_data'],
-            'collector' => ['collection', 'overdue', 'reports']
+            'Super Admin' => ['all'],
+            'Admin'       => ['users', 'members', 'loans', 'reports', 'settings'],
+            'Manager'     => ['members', 'loans', 'reports', 'settings', 'approvals'],
+            'Teller'      => ['accounts', 'loans', 'savings', 'payments'],
+            'Staff'       => ['members', 'accounts', 'transactions']
         ];
         
         if (!isset($permissions[$userRole])) {

@@ -129,49 +129,49 @@
                         <div class="row g-2">
                             <div class="col-6">
                                 <button class="btn btn-outline-primary btn-sm w-100 quick-login-btn"
-                                    data-email="Admin User" data-password="password" data-role="Admin">
+                                    data-email="admin" data-password="password" data-role="Admin">
                                     <i class="fas fa-crown me-1"></i>
                                     Admin
                                 </button>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-outline-success btn-sm w-100 quick-login-btn"
-                                    data-email="Mantri User" data-password="password" data-role="Mantri">
+                                    data-email="manager1" data-password="password" data-role="Manager">
                                     <i class="fas fa-user-shield me-1"></i>
                                     Mantri
                                 </button>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-outline-info btn-sm w-100 quick-login-btn"
-                                    data-email="Member User" data-password="password" data-role="Member">
+                                    data-email="teller1" data-password="password" data-role="Teller">
                                     <i class="fas fa-user-tie me-1"></i>
                                     Member
                                 </button>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-outline-warning btn-sm w-100 quick-login-btn"
-                                    data-email="Kasir User" data-password="password" data-role="Kasir">
+                                    data-email="teller1" data-password="password" data-role="Kasir">
                                     <i class="fas fa-users me-1"></i>
                                     Kasir
                                 </button>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-outline-secondary btn-sm w-100 quick-login-btn"
-                                    data-email="Teller User" data-password="password" data-role="Teller">
+                                    data-email="teller1" data-password="password" data-role="Teller">
                                     <i class="fas fa-cash-register me-1"></i>
                                     Teller
                                 </button>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-outline-dark btn-sm w-100 quick-login-btn"
-                                    data-email="Surveyor User" data-password="password" data-role="Surveyor">
+                                    data-email="admin" data-password="password" data-role="Surveyor">
                                     <i class="fas fa-hand-holding-usd me-1"></i>
                                     Surveyor
                                 </button>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-outline-primary btn-sm w-100 quick-login-btn"
-                                    data-email="Collector User" data-password="password" data-role="Collector">
+                                    data-email="admin" data-password="password" data-role="Collector">
                                     <i class="fas fa-clipboard-list me-1"></i>
                                     Collector
                                 </button>
@@ -418,9 +418,14 @@
                         loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Memproses';
                     }
 
-                    // Auto submit login form
+                    // Auto submit login form — enable dulu loginBtn lalu click
                     setTimeout(() => {
-                        loginForm.dispatchEvent(new Event('submit'));
+                        if (loginBtn) {
+                            loginBtn.disabled = false;
+                            loginBtn.click();
+                        } else {
+                            loginForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+                        }
                         // restore button state after short delay
                         setTimeout(() => {
                             this.innerHTML = originalText;
@@ -437,6 +442,28 @@
                 });
             });
         });
+
+        function showForgotPassword() {
+            const modalEl = document.getElementById('forgotPasswordModal');
+            if (modalEl && typeof bootstrap !== 'undefined') {
+                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                modal.show();
+            }
+        }
+
+        function showRegister() {
+            showAlert('Fitur pendaftaran mandiri belum tersedia. Hubungi administrator.', 'info');
+        }
+
+        function sendResetLink() {
+            const email = document.getElementById('resetEmail')?.value;
+            if (!email) { showAlert('Email harus diisi', 'danger'); return; }
+            showAlert('Link reset kata sandi telah dikirim ke ' + email, 'success');
+            const modalEl = document.getElementById('forgotPasswordModal');
+            if (modalEl && typeof bootstrap !== 'undefined') {
+                bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+            }
+        }
 
         function showAlert(message, type = 'info') {
             const alertContainer = document.querySelector('.alert-container');

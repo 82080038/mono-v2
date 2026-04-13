@@ -1,0 +1,933 @@
+{
+  "timestamp": "2026-04-13T10:57:18.036227",
+  "passed": 185,
+  "failed": 0,
+  "skipped": 10,
+  "tests": [
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Form #loginForm ada",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Input email/username ada",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Input password ada",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Tombol Masuk ada",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Toggle visibility password ada",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Checkbox Ingat Saya ada",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Quick-login buttons ada",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Alert container ada",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Judul halaman mengandung KSP/Masuk",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Ada 7 quick-login buttons (min 4)",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Mengetik di form berfungsi",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Password field bertipe 'password' secara default",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Toggle: password \u2192 text \u2192 password",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Checkbox Ingat Saya dapat diklik",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Submit form kosong tidak redirect",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Submit password pendek tidak redirect",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Modal lupa kata sandi terbuka",
+      "r": "PASS"
+    },
+    {
+      "s": "01 \u2014 Login Page UI",
+      "n": "Form reset password ada di modal",
+      "r": "PASS"
+    },
+    {
+      "s": "02 \u2014 Alur Login & Session Management",
+      "n": "Login password salah tetap di halaman login",
+      "r": "PASS"
+    },
+    {
+      "s": "02 \u2014 Alur Login & Session Management",
+      "n": "Alert sukses muncul setelah login berhasil",
+      "r": "PASS"
+    },
+    {
+      "s": "02 \u2014 Alur Login & Session Management",
+      "n": "Token tersimpan di browser storage",
+      "r": "PASS"
+    },
+    {
+      "s": "02 \u2014 Alur Login & Session Management",
+      "n": "userData tersimpan di browser storage",
+      "r": "PASS"
+    },
+    {
+      "s": "02 \u2014 Alur Login & Session Management",
+      "n": "userData memiliki field role",
+      "r": "PASS"
+    },
+    {
+      "s": "02 \u2014 Alur Login & Session Management",
+      "n": "Redirect ke dashboard berhasil",
+      "r": "PASS"
+    },
+    {
+      "s": "02 \u2014 Alur Login & Session Management",
+      "n": "Konten dashboard terload setelah redirect",
+      "r": "PASS"
+    },
+    {
+      "s": "02 \u2014 Alur Login & Session Management",
+      "n": "Quick-login mengisi emailInput dengan benar",
+      "r": "PASS"
+    },
+    {
+      "s": "02 \u2014 Alur Login & Session Management",
+      "n": "Quick-login \u2192 submit \u2192 redirect dashboard berhasil",
+      "r": "PASS"
+    },
+    {
+      "s": "03 \u2014 Admin Dashboard",
+      "n": "HTTP 200 admin dashboard",
+      "r": "PASS"
+    },
+    {
+      "s": "03 \u2014 Admin Dashboard",
+      "n": "Header/navbar ada",
+      "r": "PASS"
+    },
+    {
+      "s": "03 \u2014 Admin Dashboard",
+      "n": "Sidebar navigasi ada",
+      "r": "PASS"
+    },
+    {
+      "s": "03 \u2014 Admin Dashboard",
+      "n": "Nama KSP ada di halaman",
+      "r": "PASS"
+    },
+    {
+      "s": "03 \u2014 Admin Dashboard",
+      "n": "Card statistik ada (6 cards)",
+      "r": "PASS"
+    },
+    {
+      "s": "03 \u2014 Admin Dashboard",
+      "n": "Chart container ada",
+      "r": "PASS"
+    },
+    {
+      "s": "03 \u2014 Admin Dashboard",
+      "n": "Navigasi sidebar ada (4 links)",
+      "r": "PASS"
+    },
+    {
+      "s": "03 \u2014 Admin Dashboard",
+      "n": "Elemen info user ada di header",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "HTTP 200 loan-management",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Input pencarian ada",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Filter tipe pinjaman ada",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Container daftar pinjaman ada",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Modal aplikasi pinjaman ada",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Form aplikasi pinjaman ada",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Data pinjaman berhasil dimuat dari API",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Input pencarian berfungsi",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Dropdown filter memiliki 5 opsi",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Modal aplikasi pinjaman terbuka",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Form field: Field Anggota",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Form field: Field Tipe",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Form field: Field Jumlah",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Form field: Field Tenor",
+      "r": "PASS"
+    },
+    {
+      "s": "04 \u2014 Manajemen Pinjaman",
+      "n": "Validasi form pinjaman berfungsi (field invalid terdeteksi)",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "HTTP 200 member-registration",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Step 1 ada",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Step 2 ada",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Step 3 ada",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Step 4 ada",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Form registrasi ada",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Field Tipe Anggota ada",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Field Nama Lengkap ada",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Field NIK ada",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Input nama lengkap berhasil",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Input NIK berhasil",
+      "r": "PASS"
+    },
+    {
+      "s": "05 \u2014 Registrasi Anggota (Multi-step Form)",
+      "n": "Progress indicator ada",
+      "r": "PASS"
+    },
+    {
+      "s": "06 \u2014 Manajemen Simpanan",
+      "n": "HTTP 200 savings-management",
+      "r": "PASS"
+    },
+    {
+      "s": "06 \u2014 Manajemen Simpanan",
+      "n": "Pencarian rekening ada",
+      "r": "PASS"
+    },
+    {
+      "s": "06 \u2014 Manajemen Simpanan",
+      "n": "Filter tipe simpanan ada",
+      "r": "PASS"
+    },
+    {
+      "s": "06 \u2014 Manajemen Simpanan",
+      "n": "Container daftar rekening ada",
+      "r": "PASS"
+    },
+    {
+      "s": "06 \u2014 Manajemen Simpanan",
+      "n": "Modal setoran ada",
+      "r": "PASS"
+    },
+    {
+      "s": "06 \u2014 Manajemen Simpanan",
+      "n": "Modal penarikan ada",
+      "r": "PASS"
+    },
+    {
+      "s": "06 \u2014 Manajemen Simpanan",
+      "n": "Data simpanan berhasil dimuat",
+      "r": "PASS"
+    },
+    {
+      "s": "06 \u2014 Manajemen Simpanan",
+      "n": "Panel transaksi terakhir ada",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Anggota \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Laporan \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Pengaturan \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Pengguna \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Simpanan \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Pinjaman \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Verifikasi \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Audit Log \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Laporan Umum \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Laporan SHU \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Konfigurasi \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Role Akses \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "07 \u2014 Halaman Admin (Load & Struktur)",
+      "n": "Live Tracking \u2192 HTTP 200 dengan konten",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Teller Complete \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "  Teller Complete: elemen statistik kunci ada (4)",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Kasir \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Mantri \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Collector \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Surveyor \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Staff Complete \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "  Staff Complete: elemen statistik kunci ada (4)",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Staff Dashboard \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Teller Basic \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Transaksi Harian \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Target Harian \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Setoran QR \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Rute Kunjungan \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "08 \u2014 Dashboard Staff (Semua Role)",
+      "n": "Cetak Struk \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Login valid \u2192 HTTP 200",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Login valid \u2192 success: true",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "JWT memiliki 3 bagian",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "JWT header alg=HS256",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "JWT payload memiliki user_id",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "JWT payload memiliki role",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "JWT payload memiliki exp",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "JWT payload memiliki iat",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Response login memiliki field 'id'",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Response login memiliki field 'name'",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Response login memiliki field 'email'",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Response login memiliki field 'role'",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Validate token valid \u2192 success",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Validate \u2192 ada user_id di data",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Password salah \u2192401",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "User tidak ada \u2192401/429 (401)",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Field kosong \u2192400",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Password pendek \u2192400",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Token palsu \u2192 401",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Tanpa token \u2192 401",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Tampered JWT ditolak (HMAC check \u2713)",
+      "r": "PASS"
+    },
+    {
+      "s": "09 \u2014 API Authentication Lengkap",
+      "n": "Rate limiting aktif setelah 3x gagal (429)",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Loans get_loan_types \u2192 4 item",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Loans get_loans \u2192 success (data bukan list)",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Members get_member_types \u2192 5 item",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Members get_members \u2192 success (data bukan list)",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Savings get_account_types \u2192 5 item",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Savings get_accounts \u2192 success (data bukan list)",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Action tidak valid \u2192 400",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Loan type memiliki field 'id'",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Loan type memiliki field 'name'",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Loan type memiliki field 'interest_rate'",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Member type memiliki field 'id'",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Member type memiliki field 'name'",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Account type memiliki field 'id'",
+      "r": "PASS"
+    },
+    {
+      "s": "10 \u2014 API Data (Loans / Members / Savings)",
+      "n": "Account type memiliki field 'name'",
+      "r": "PASS"
+    },
+    {
+      "s": "11 \u2014 Navigasi & Sidebar",
+      "n": "Sidebar memiliki 7 link navigasi",
+      "r": "PASS"
+    },
+    {
+      "s": "11 \u2014 Navigasi & Sidebar",
+      "n": "Ada nav-link.active di sidebar",
+      "r": "PASS"
+    },
+    {
+      "s": "11 \u2014 Navigasi & Sidebar",
+      "n": "Mobile sidebar toggle berfungsi",
+      "r": "PASS"
+    },
+    {
+      "s": "11 \u2014 Navigasi & Sidebar",
+      "n": "Header brand/logo ada",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Login form visible di Desktop  1280\u00d7720",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Load < 5s di Desktop  1280\u00d7720",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Admin dashboard tampil di Desktop  1280\u00d7720",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Login form visible di Laptop   1024\u00d7768",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Load < 5s di Laptop   1024\u00d7768",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Admin dashboard tampil di Laptop   1024\u00d7768",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Login form visible di Tablet    768\u00d71024",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Load < 5s di Tablet    768\u00d71024",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Admin dashboard tampil di Tablet    768\u00d71024",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Login form visible di Mobile    375\u00d7812",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Load < 5s di Mobile    375\u00d7812",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Admin dashboard tampil di Mobile    375\u00d7812",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Login form visible di Mobile SM 320\u00d7568",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Load < 5s di Mobile SM 320\u00d7568",
+      "r": "PASS"
+    },
+    {
+      "s": "12 \u2014 Responsivitas (3 Viewport)",
+      "n": "Admin dashboard tampil di Mobile SM 320\u00d7568",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Login: meta charset UTF-8",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Login: meta viewport ada",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Login: tag <title> ada",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Login: heading ada (h1-h3)",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Login: ada 4 label form",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Tombol login punya teks jelas",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Login: semua 0 gambar memiliki alt text",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Dashboard: meta charset UTF-8",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Dashboard: meta viewport ada",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Dashboard: tag <title> ada",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Dashboard: heading ada (h1-h3)",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Dashboard: semua 0 gambar memiliki alt text",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Pinjaman: meta charset UTF-8",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Pinjaman: meta viewport ada",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Pinjaman: tag <title> ada",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Pinjaman: heading ada (h1-h3)",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Pinjaman: semua 0 gambar memiliki alt text",
+      "r": "PASS"
+    },
+    {
+      "s": "13 \u2014 Aksesibilitas Dasar",
+      "n": "Tab navigation berfungsi (fokus: passwordInput)",
+      "r": "PASS"
+    },
+    {
+      "s": "14 \u2014 Performa Halaman",
+      "n": "Login < 3s",
+      "r": "PASS"
+    },
+    {
+      "s": "14 \u2014 Performa Halaman",
+      "n": "Admin Dashboard < 4s",
+      "r": "PASS"
+    },
+    {
+      "s": "14 \u2014 Performa Halaman",
+      "n": "Loan Management < 5s",
+      "r": "PASS"
+    },
+    {
+      "s": "14 \u2014 Performa Halaman",
+      "n": "Member Registration < 5s",
+      "r": "PASS"
+    },
+    {
+      "s": "14 \u2014 Performa Halaman",
+      "n": "Savings Management < 5s",
+      "r": "PASS"
+    },
+    {
+      "s": "14 \u2014 Performa Halaman",
+      "n": "Teller Dashboard < 4s",
+      "r": "PASS"
+    },
+    {
+      "s": "14 \u2014 Performa Halaman",
+      "n": "Staff Dashboard < 4s",
+      "r": "PASS"
+    },
+    {
+      "s": "14 \u2014 Performa Halaman",
+      "n": "Login page bebas JS error kritis",
+      "r": "PASS"
+    },
+    {
+      "s": "14 \u2014 Performa Halaman",
+      "n": "Loan management bebas JS error kritis",
+      "r": "PASS"
+    },
+    {
+      "s": "15 \u2014 Keamanan Dasar",
+      "n": "XSS di input form tidak dieksekusi",
+      "r": "PASS"
+    },
+    {
+      "s": "15 \u2014 Keamanan Dasar",
+      "n": "SQL injection di form tidak berhasil login",
+      "r": "PASS"
+    },
+    {
+      "s": "15 \u2014 Keamanan Dasar",
+      "n": "API menolak SQL injection (success=false)",
+      "r": "PASS"
+    },
+    {
+      "s": "15 \u2014 Keamanan Dasar",
+      "n": "API mengembalikan JSON response",
+      "r": "PASS"
+    },
+    {
+      "s": "15 \u2014 Keamanan Dasar",
+      "n": "Response error tidak mengekspos data sensitif",
+      "r": "PASS"
+    }
+  ]
+}
