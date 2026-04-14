@@ -1,0 +1,476 @@
+{
+  "timestamp": "2026-04-14T12:04:40.069Z",
+  "passed": 52,
+  "failed": 0,
+  "total": 52,
+  "results": [
+    {
+      "name": "accounting",
+      "url": "http://localhost/mono-v2/pages/admin/accounting.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "analytics",
+      "url": "http://localhost/mono-v2/pages/admin/analytics.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "approval-workflow",
+      "url": "http://localhost/mono-v2/pages/admin/approval-workflow.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "audit-log",
+      "url": "http://localhost/mono-v2/pages/admin/audit-log.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "backup-restore",
+      "url": "http://localhost/mono-v2/pages/admin/backup-restore.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "bi-analytics",
+      "url": "http://localhost/mono-v2/pages/admin/bi-analytics.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "capacity",
+      "url": "http://localhost/mono-v2/pages/admin/capacity.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "dashboard",
+      "url": "http://localhost/mono-v2/pages/admin/dashboard.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "dashboard-v2",
+      "url": "http://localhost/mono-v2/pages/admin/dashboard-v2.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "laporan-shu",
+      "url": "http://localhost/mono-v2/pages/admin/laporan-shu.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "laporan-umum",
+      "url": "http://localhost/mono-v2/pages/admin/laporan-umum.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "live-tracking",
+      "url": "http://localhost/mono-v2/pages/admin/live-tracking.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "loan-management",
+      "url": "http://localhost/mono-v2/pages/admin/loan-management.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "loans",
+      "url": "http://localhost/mono-v2/pages/admin/loans.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "member-registration",
+      "url": "http://localhost/mono-v2/pages/admin/member-registration.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "members",
+      "url": "http://localhost/mono-v2/pages/admin/members.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "npl",
+      "url": "http://localhost/mono-v2/pages/admin/npl.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "reports",
+      "url": "http://localhost/mono-v2/pages/admin/reports.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "risk-fraud",
+      "url": "http://localhost/mono-v2/pages/admin/risk-fraud.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "role-access",
+      "url": "http://localhost/mono-v2/pages/admin/role-access.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "savings-management",
+      "url": "http://localhost/mono-v2/pages/admin/savings-management.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "savings",
+      "url": "http://localhost/mono-v2/pages/admin/savings.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "settings",
+      "url": "http://localhost/mono-v2/pages/admin/settings.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "system-config",
+      "url": "http://localhost/mono-v2/pages/admin/system-config.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "users",
+      "url": "http://localhost/mono-v2/pages/admin/users.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "verifikasi",
+      "url": "http://localhost/mono-v2/pages/admin/verifikasi.php",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "member/dashboard",
+      "url": "http://localhost/mono-v2/pages/member/dashboard.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "member/ajukan-pinjaman",
+      "url": "http://localhost/mono-v2/pages/member/ajukan-pinjaman.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "member/buku-kas",
+      "url": "http://localhost/mono-v2/pages/member/buku-kas.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "member/pembayaran",
+      "url": "http://localhost/mono-v2/pages/member/pembayaran.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "member/pinjaman-saya",
+      "url": "http://localhost/mono-v2/pages/member/pinjaman-saya.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "member/poin-reward",
+      "url": "http://localhost/mono-v2/pages/member/poin-reward.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "member/riwayat",
+      "url": "http://localhost/mono-v2/pages/member/riwayat.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "member/simpanan-saya",
+      "url": "http://localhost/mono-v2/pages/member/simpanan-saya.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/dashboard",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/dashboard-complete",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard-complete.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/dashboard-teller-complete",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard-teller-complete.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/dashboard-kasir",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard-kasir.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/dashboard-mantri",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard-mantri.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/dashboard-surveyor",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard-surveyor.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/dashboard-teller",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard-teller.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/dashboard-collector",
+      "url": "http://localhost/mono-v2/pages/staff/dashboard-collector.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/cetak-struk",
+      "url": "http://localhost/mono-v2/pages/staff/cetak-struk.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/gps-log",
+      "url": "http://localhost/mono-v2/pages/staff/gps-log.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/loans",
+      "url": "http://localhost/mono-v2/pages/staff/loans.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/members",
+      "url": "http://localhost/mono-v2/pages/staff/members.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/offline-sync",
+      "url": "http://localhost/mono-v2/pages/staff/offline-sync.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/route",
+      "url": "http://localhost/mono-v2/pages/staff/route.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/savings",
+      "url": "http://localhost/mono-v2/pages/staff/savings.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/setoran-qr",
+      "url": "http://localhost/mono-v2/pages/staff/setoran-qr.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/target-harian",
+      "url": "http://localhost/mono-v2/pages/staff/target-harian.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    },
+    {
+      "name": "staff/transaksi-harian",
+      "url": "http://localhost/mono-v2/pages/staff/transaksi-harian.html",
+      "issues": [],
+      "httpCode": 200,
+      "jsErrors": [],
+      "warnings": [],
+      "status": "PASS"
+    }
+  ]
+}

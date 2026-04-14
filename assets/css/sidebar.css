@@ -1,0 +1,64 @@
+/* ── Sidebar shared styles ─────────────────────────────────── */
+:root {
+    --sidebar-w:      260px;
+    --sidebar-bg:     #1a2035;
+    --sidebar-active: #2563eb;
+}
+
+body { overflow-x: hidden; }
+
+#sidebar {
+    width: var(--sidebar-w); min-height: 100vh;
+    background: var(--sidebar-bg); position: fixed; top: 0; left: 0; z-index: 1040;
+    display: flex; flex-direction: column; transition: transform .25s ease;
+}
+#sidebar .brand {
+    padding: 1.25rem 1rem; border-bottom: 1px solid rgba(255,255,255,.08);
+    display: flex; align-items: center; gap: .75rem;
+}
+#sidebar .brand-icon {
+    width: 36px; height: 36px; border-radius: 8px; background: #2563eb;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+#sidebar .brand-text { color: #fff; font-weight: 700; font-size: 1rem; line-height: 1.2; }
+#sidebar .brand-text small { font-size: .7rem; font-weight: 400; opacity: .6; display: block; }
+
+.nav-section {
+    padding: .5rem 1rem .25rem; font-size: .7rem; text-transform: uppercase;
+    letter-spacing: .08em; color: rgba(255,255,255,.35); margin-top: .5rem;
+}
+
+#sidebar .nav-link {
+    color: rgba(255,255,255,.7); padding: .55rem 1rem; border-radius: 8px;
+    margin: .05rem .5rem; font-size: .875rem; display: flex; align-items: center; gap: .65rem;
+    transition: background .15s, color .15s;
+}
+#sidebar .nav-link:hover  { background: rgba(255,255,255,.08); color: #fff; }
+#sidebar .nav-link.active { background: var(--sidebar-active); color: #fff; }
+#sidebar .nav-link i      { width: 18px; text-align: center; opacity: .8; flex-shrink: 0; }
+#sidebar .nav-link .badge { font-size: .65rem; margin-left: auto; }
+
+#userCard {
+    margin: auto 1rem 1rem; padding: .75rem; border-radius: 10px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+}
+
+/* ── Main content ── */
+#mainContent {
+    margin-left: var(--sidebar-w); min-height: 100vh;
+    background: #f4f6fb; transition: margin-left .25s ease;
+}
+.topbar {
+    background: #fff; padding: .75rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; gap: 1rem;
+}
+.topbar-title { font-weight: 700; font-size: 1.1rem; color: #1e293b; }
+.topbar .breadcrumb { margin: 0; font-size: .8rem; }
+.page-body { padding: 1.5rem; }
+
+@media (max-width: 991px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.show { transform: none; }
+    #mainContent { margin-left: 0; }
+}
